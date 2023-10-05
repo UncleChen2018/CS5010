@@ -5,26 +5,26 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
 public class Character {
   private String name;
   private int health;
-  private Space locatedSpaceIndex;
+  private int locatedSpaceIndex;
   
 
   /**
    * @param locatedSpaceIndex the locatedSpaceIndex to set
    */
-  public void setLocatedSpaceIndex(Space locatedSpaceIndex) {
+  public void setLocatedSpaceIndex(int locatedSpaceIndex) {
     this.locatedSpaceIndex = locatedSpaceIndex;
   }
 
   
   // TODO how to make the character in space 0
   public Character(String roleName, int fullHealth) {
-    // TODO Auto-generated constructor stub
     name = roleName;
     health = fullHealth;
+    locatedSpaceIndex = 0;
   }
   
-  public void moveToSpace(Space toSpace) {
-    locatedSpaceIndex = toSpace;
+  public void moveToSpace(int toSpaceIndex) {
+    locatedSpaceIndex = toSpaceIndex;
   }
 
 
