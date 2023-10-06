@@ -3,8 +3,8 @@ package world;
 import java.util.ArrayList;
 
 /**
- * Rooms in the world, with index, rectangle coordinate it can be represented, room name,
- * arrays of containing item, neighbor rooms and other visible rooms. 
+ * Rooms in the world, with index, rectangle coordinate it can be represented,
+ * room name, arrays of containing item, neighbor rooms and other visible rooms.
  */
 public class RoomSpace {
 
@@ -17,6 +17,16 @@ public class RoomSpace {
   private ArrayList<RoomSpace> neighboRoomSpaces;
   private ArrayList<RoomSpace> visbleRoomSpaces;
 
+  /**
+   * Initialize room in the world.
+   * 
+   * @param spaceIndex the index of the room
+   * @param rowStart   the row where the room start.
+   * @param colStart   the column where the room start.
+   * @param rowEnd     the row where the room end.
+   * @param colEnd     the column where the room end.
+   * @param name       the room's name.
+   */
   public RoomSpace(int spaceIndex, int rowStart, int colStart, int rowEnd, int colEnd,
       String name) {
     this.spaceIndex = spaceIndex;
@@ -75,6 +85,12 @@ public class RoomSpace {
     return visbleRoomSpaces;
   }
 
+  /**
+   * Give a string that describes the name, items and visible spaces from the
+   * room.
+   * 
+   * @return a formated String containing the information as mentioned.
+   */
   public String getSpaceInfo() {
     String retString = String.format("%s, with items: %s. visible space: %s", name, itemList,
         visbleRoomSpaces);

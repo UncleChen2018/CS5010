@@ -11,7 +11,7 @@
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <file path="/CS5010MileStone/res/map.txt"/>
         <javaElement handleIdentifier="=CS5010MileStone/src"/>
-        <folder path="/CS5010MileStone/res"/>
     </selectedElements>
 </jardesc>

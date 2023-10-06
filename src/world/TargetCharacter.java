@@ -9,32 +9,33 @@ public class TargetCharacter {
   private int health;
   private int locatedRoomIndex;
 
+  /**
+   * Initialize the target character.
+   * 
+   * @param roleName   name of the character.
+   * @param fullHealth the character's max health.
+   */
   public TargetCharacter(String roleName, int fullHealth) {
     name = roleName;
     health = fullHealth;
     locatedRoomIndex = 0;
   }
 
-
   public String getName() {
     return name;
   }
-
 
   public int getHealth() {
     return health;
   }
 
-
   public void setHealth(int health) {
     this.health = health;
   }
 
- 
   public int getLocatedRoomIndex() {
     return locatedRoomIndex;
   }
-
 
   public void setLocatedRoomIndex(int locatedSpaceIndex) {
     this.locatedRoomIndex = locatedSpaceIndex;

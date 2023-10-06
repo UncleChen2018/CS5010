@@ -8,6 +8,12 @@ public class Item {
   private final String itemName;
   private int itemLocationIndex;
 
+  /**
+   * Initialize item.
+   * @param itemName name of the item.
+   * @param itemDamage damage of the item.
+   * @param itemLocationIndex current located at which room.
+   */
   public Item(String itemName, int itemDamage, int itemLocationIndex) {
     this.itemDamage = itemDamage;
     this.itemName = itemName;

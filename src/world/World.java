@@ -8,6 +8,11 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * The world contains all room, target character and items. It can create those
+ * parts and initialize their status, as well as manipulate them later. It also
+ * give representation of the world map in the buffered image for view models.
+ */
 public class World {
   private String worldName;
   private int rowSize;
@@ -29,7 +34,11 @@ public class World {
     room.addItem(item);
   }
 
-  // setup world
+  /**
+   * Set up new world using data from a readable source.
+   * 
+   * @param source file or string match certain format.
+   */
   public void setupNewWorld(Readable source) {
     roomList = new ArrayList<RoomSpace>();
     itemList = new ArrayList<Item>();
@@ -110,8 +119,14 @@ public class World {
 
     int[] rectOne = one.getRoomRect();
     int[] rectTwo = two.getRoomRect();
-    int x1a = rectOne[0], y1a = rectOne[1], x2a = rectOne[2], y2a = rectOne[3];
-    int x1b = rectTwo[0], y1b = rectTwo[1], x2b = rectTwo[2], y2b = rectTwo[3];
+    int x1a = rectOne[0];
+    int y1a = rectOne[1];
+    int x2a = rectOne[2];
+    int y2a = rectOne[3];
+    int x1b = rectTwo[0];
+    int y1b = rectTwo[1];
+    int x2b = rectTwo[2];
+    int y2b = rectTwo[3];
 
     if (x1a == x2b || x2a == x1b) {
 
@@ -125,12 +140,26 @@ public class World {
     return result;
   }
 
-  public boolean isVisible(RoomSpace one, RoomSpace two) {
+  /**
+   * Judge if two room two can be visible from room one. Being visible means they
+   * have overlap on X or Y axis.
+   * 
+   * @param one vision start from room one.
+   * @param two the other room to be judged if is visible.
+   * @return if it's true that from room one, we can see room two.
+   */
+  private static boolean isVisible(RoomSpace one, RoomSpace two) {
     // if two room has X or Y overlap, consider them visible to each other
     int[] rectOne = one.getRoomRect();
     int[] rectTwo = two.getRoomRect();
-    int x1a = rectOne[0], y1a = rectOne[1], x2a = rectOne[2] + 1, y2a = rectOne[3] + 1;
-    int x1b = rectTwo[0], y1b = rectTwo[1], x2b = rectTwo[2] + 1, y2b = rectTwo[3] + 1;
+    int x1a = rectOne[0];
+    int y1a = rectOne[1];
+    int x2a = rectOne[2] + 1;
+    int y2a = rectOne[3] + 1;
+    int x1b = rectTwo[0];
+    int y1b = rectTwo[1];
+    int x2b = rectTwo[2] + 1;
+    int y2b = rectTwo[3] + 1;
 
     return isOverlap(y1a, y2a, y1b, y2b) || isOverlap(x1a, x2a, x1b, x2b);
   }
@@ -146,12 +175,14 @@ public class World {
   }
 
   /**
-   * @param scale:       get the image bigger, the pixels for a single unit of the
-   *                     world.
+   * Draw the map to image, according to the scaling and padding argument.
    * 
-   * @param leftPadding: blank space to the left of the world border.
-   * @param topPadding:  blank space to the top of the world border
-   * @return
+   * @param scale       get the image bigger, the pixels for a single unit of the
+   *                    world.
+   * 
+   * @param leftPadding blank space to the left of the world border.
+   * @param topPadding  blank space to the top of the world border
+   * @return buffered image later can be used to output.
    */
   public BufferedImage drawWorld(int scale, int leftPadding, int topPadding) {
     int width = colSize;
@@ -230,12 +261,14 @@ public class World {
   }
 
   /**
+   * Print out the room info in a formatted way.
+   * 
    * @param index the index of the room array
    */
   public void printRoomInfo(int index) {
     RoomSpace room = getRoomSpace(index);
     System.out
-        .println(String.format("-- Room No.%d: %s's information --", index, room.getSpaceName()));
+        .println(String.format("[Room No.%d: %s's information]", index, room.getSpaceName()));
     System.out.println(String.format("Neighbors: %s", room.getNeighbors()));
     System.out.println(String.format("Visible: %s", room.getVisibles()));
     System.out.println(String.format("Items: %s", room.getSpaceItem()));
@@ -245,8 +278,8 @@ public class World {
     return itemList;
   }
 
-  public void printItemInfo() {
-    System.out.println(itemList);
+  public void printItemInfo(int index) {
+    System.out.println(itemList.get(index));
   }
 
 }
