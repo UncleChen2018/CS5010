@@ -1,70 +1,54 @@
 package world;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.CharBuffer;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-
-import javax.swing.text.AbstractDocument.Content;
 
 public class World {
   private String worldName;
-  private static World theWorld;
   private int rowSize;
   private int colSize;
 
-  public Character targetCharacter;
-  public ArrayList<RoomSpace> spaceList;
-  public ArrayList<Item> itemList;
-  
-  
-  // TODO set neighbors to all rooms 
-  public void setNeighbors() {
-    // if two room share the same wall,then they are neighbor
-    // every room has 4 wall, top: (x1, y1--> y2); right: (x1->x2, y2); bottom: (x2,y1->y2); left: (x1->x2, y1)
-    // overlay can only happen: one's top with 
-    // a. must have at lest one of same element in  (x1,y1,x2,y2)
-    
-    
-    
-  
+  private TargetCharacter targetCharacter;
+  private ArrayList<RoomSpace> roomList;
+  private ArrayList<Item> itemList;
+
+  public World() {
   }
 
-  public static World getWorldInstance() {
-    if (theWorld == null) {
-      theWorld = new World();
-    }
-    return theWorld;
+  // initialize the world using source.
+  public World(Readable source) {
+    setupNewWorld(source);
   }
 
-  // implement readable
+  private void addItemToRoom(Item item, RoomSpace room) {
+    room.addItem(item);
+  }
 
   // setup world
-  public void setupWorld(Readable source) {
-    spaceList = new ArrayList<RoomSpace>();
+  public void setupNewWorld(Readable source) {
+    roomList = new ArrayList<RoomSpace>();
     itemList = new ArrayList<Item>();
-    
+
     Scanner scanner = new Scanner(source);
+
     // parse the World
-    System.out.println("enter");
     this.rowSize = scanner.nextInt();
-    
     this.colSize = scanner.nextInt();
     this.worldName = scanner.nextLine().trim();
-    
-    System.out.println(worldName);
 
     // parse the target character
     int fullHealth = scanner.nextInt();
     String roleName = scanner.nextLine().trim();
-    this.targetCharacter = new Character(roleName, fullHealth);
+    this.targetCharacter = new TargetCharacter(roleName, fullHealth);
 
     // parse the space number;
     int spaceNumber = scanner.nextInt();
-    System.out.println(spaceNumber);
+
     // Fill the space array list
     for (int i = 0; i < spaceNumber; i++) {
       int row1 = scanner.nextInt();
@@ -72,10 +56,8 @@ public class World {
       int row2 = scanner.nextInt();
       int col2 = scanner.nextInt();
       String roomName = scanner.nextLine().trim();
-      spaceList.add(new RoomSpace(i, row1, col1, row2, col2, roomName));
-      System.out.println(spaceList.get(i));
+      roomList.add(new RoomSpace(i, row1, col1, row2, col2, roomName));
     }
-    System.out.println(spaceList.get(0));
 
     // parse the item number;
     int itemNumber = scanner.nextInt();
@@ -83,35 +65,188 @@ public class World {
       int spaceIndex = scanner.nextInt();
       int damage = scanner.nextInt();
       String itemName = scanner.nextLine().trim();
-      Item newItem = new Item(itemName, damage);
-      //System.out.println(String.format("Item: %s, damage: %d, roomIndex: %d", itemName, damage, spaceIndex));
+      Item newItem = new Item(itemName, damage, spaceIndex);
       itemList.add(newItem);
-      //System.out.println(itemList.get(i));  
-      newItem.addToRoom(spaceList.get(spaceIndex));
+      addItemToRoom(newItem, getRoomSpace(spaceIndex));
     }
-
-    System.out.println(spaceList.get(0).displaySpaceInfo());
-    System.out.println(spaceList.toString().replace("~", "\n"));
     scanner.close();
 
+    // fill the neighbors and visible room list
+    for (int i = 0; i < roomList.size(); i++) {
+      RoomSpace thisSpace = roomList.get(i);
+      for (int j = 0; j < roomList.size(); j++) {
+        if (i == j) {
+          continue;
+        }
+        RoomSpace otherSpace = roomList.get(j);
+        if (isNeighbor(thisSpace, otherSpace)) {
+          thisSpace.getNeighbors().add(otherSpace);
+        }
+        if (isVisible(thisSpace, otherSpace)) {
+          thisSpace.getVisibles().add(otherSpace);
+        }
+      }
+    }
   }
-  
+
+  // test if [beg1,end1] and [beg2, end2] has over lap
+  private static boolean isOverlap(int beg1, int end1, int beg2, int end2) {
+    // test if either beg2 or end2 fall out of range
+    if (beg2 >= end1 || end2 <= beg1) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  private static boolean isNeighbor(RoomSpace one, RoomSpace two) {
+    boolean result = false;
+    // if two room share the same wall,then they are neighbor
+    // every room has 4 wall, top: (x1, y1--> y2); right: (x1->x2, y2); bottom:
+    // (x2,y1->y2); left: (x1->x2, y1)
+    // overlap can happen, 1) top-bottom: x1a = x2b or x2a = x1b, then test if Y
+    // overlap
+    // 2) right-left: y2a = y1b or y1a = y2b, then test if X overlap
+
+    int[] rectOne = one.getRoomRect();
+    int[] rectTwo = two.getRoomRect();
+    int x1a = rectOne[0], y1a = rectOne[1], x2a = rectOne[2], y2a = rectOne[3];
+    int x1b = rectTwo[0], y1b = rectTwo[1], x2b = rectTwo[2], y2b = rectTwo[3];
+
+    if (x1a == x2b || x2a == x1b) {
+
+      return isOverlap(y1a, y2a, y1b, y2b);
+    }
+
+    if (y1a == y2b || y2a == y1b) {
+      return isOverlap(x1a, x2a, x1b, x2b);
+    }
+
+    return result;
+  }
+
+  public boolean isVisible(RoomSpace one, RoomSpace two) {
+    // if two room has X or Y overlap, consider them visible to each other
+    int[] rectOne = one.getRoomRect();
+    int[] rectTwo = two.getRoomRect();
+    int x1a = rectOne[0], y1a = rectOne[1], x2a = rectOne[2] + 1, y2a = rectOne[3] + 1;
+    int x1b = rectTwo[0], y1b = rectTwo[1], x2b = rectTwo[2] + 1, y2b = rectTwo[3] + 1;
+
+    return isOverlap(y1a, y2a, y1b, y2b) || isOverlap(x1a, x2a, x1b, x2b);
+  }
+
   // rerun {row, col} of the world.
-  public int[] getWorldSize() {
-    int[] sizeArray = {rowSize,colSize} ;
-    return sizeArray;
-  }
-  
+
   public ArrayList<RoomSpace> getWorldSpace() {
-    return spaceList;
-  }
-
-  public void setWorldName() {
-
+    return roomList;
   }
 
   public String getWorldName() {
     return worldName;
+  }
+
+  /**
+   * @param scale:       get the image bigger, the pixels for a single unit of the
+   *                     world.
+   * 
+   * @param leftPadding: blank space to the left of the world border.
+   * @param topPadding:  blank space to the top of the world border
+   * @return
+   */
+  public BufferedImage drawWorld(int scale, int leftPadding, int topPadding) {
+    int width = colSize;
+    int height = rowSize;
+
+    int graphWidth = width + leftPadding * 2;
+    int graphHeight = height + topPadding * 2;
+    BufferedImage image = new BufferedImage(graphWidth * scale, graphHeight * scale,
+        BufferedImage.TYPE_INT_ARGB);
+
+    Graphics graph = image.getGraphics();
+    graph.setColor(Color.WHITE);
+    graph.fillRect(0, 0, graphWidth * scale, graphHeight * scale);
+
+    graph.setColor(Color.BLACK);
+    Font font = new Font("SansSerif", Font.BOLD, 12); // Font name, style, size
+    graph.setFont(font);
+
+    graph.drawRect(leftPadding * scale, topPadding * scale, width * scale, height * scale);
+
+    for (RoomSpace room : roomList) {
+      // apply paddings and scaling to draw room's rectangel
+      int x1 = room.getRoomRect()[1] + leftPadding;
+      int y1 = room.getRoomRect()[0] + topPadding;
+      int x2 = room.getRoomRect()[3] + leftPadding;
+      int y2 = room.getRoomRect()[2] + topPadding;
+      int rectX = x1 * scale;
+      int rectY = y1 * scale;
+      int rectWidth = (x2 - x1) * scale;
+      int rectHeight = (y2 - y1) * scale;
+      graph.drawRect(rectX, rectY, rectWidth, rectHeight);
+      // set the font to the middle of the rectangle and draw it
+      FontMetrics fontMetrics = graph.getFontMetrics();
+      // int textWidth = fontMetrics.stringWidth(room.getSpaceName());
+      int textHeight = fontMetrics.getHeight();
+      // 5 is a proper offset to guarantee the text not over lap with tht
+      int textX = rectX + 5;
+      int textY = rectY + (rectHeight - textHeight) / 2 + fontMetrics.getAscent();
+      graph.drawString(room.getSpaceName(), textX, textY);
+    }
+
+    // At last, draw the world name on top
+
+    // Use another font to draw the world title
+    Font fontTitle = new Font("SansSerif", Font.ITALIC, 40); // Font name, style, size
+    graph.setFont(fontTitle);
+    FontMetrics fontMetrics = graph.getFontMetrics();
+    int textWidth = fontMetrics.stringWidth(worldName);
+
+    int textX = (graphWidth * scale - textWidth) / 2;
+
+    graph.drawString(worldName, textX, topPadding * scale - fontMetrics.getDescent());
+
+    graph.dispose();
+    return image;
+  }
+
+  @Override
+  public String toString() {
+    String worldInfo = String.format("%s: %d rooms, with %d items,target charater %s.", worldName,
+        roomList.size(), itemList.size(), targetCharacter.getName());
+    return worldInfo;
+  }
+
+  public void moveTargetNextRoom() {
+    int curRoom = targetCharacter.getLocatedRoomIndex();
+    targetCharacter.setLocatedRoomIndex((curRoom + 1) % roomList.size());
+  }
+
+  public TargetCharacter getTarget() {
+    return targetCharacter;
+  }
+
+  public RoomSpace getRoomSpace(int index) {
+    return roomList.get(index);
+  }
+
+  /**
+   * @param index the index of the room array
+   */
+  public void printRoomInfo(int index) {
+    RoomSpace room = getRoomSpace(index);
+    System.out
+        .println(String.format("-- Room No.%d: %s's information --", index, room.getSpaceName()));
+    System.out.println(String.format("Neighbors: %s", room.getNeighbors()));
+    System.out.println(String.format("Visible: %s", room.getVisibles()));
+    System.out.println(String.format("Items: %s", room.getSpaceItem()));
+  }
+
+  public ArrayList<Item> getItems() {
+    return itemList;
+  }
+
+  public void printItemInfo() {
+    System.out.println(itemList);
   }
 
 }

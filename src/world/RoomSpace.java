@@ -1,31 +1,42 @@
 package world;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class RoomSpace implements Space {
+/**
+ * Rooms in the world, with index, rectangle coordinate it can be represented, room name,
+ * arrays of containing item, neighbor rooms and other visible rooms. 
+ */
+public class RoomSpace {
 
   private int spaceIndex;
-  private int x1;
-  private int y1;
-  private int x2;
-  private int y2;
-
+  private int[] rectCordinate; // the coordinate of the room rectangle
   private String name;
-  private ArrayList<Item> itemList;
 
-  public RoomSpace(int spaceIndex, int x1, int y1, int x2, int y2, String name) {
+  // Not final here, later may need to change
+  private ArrayList<Item> itemList;
+  private ArrayList<RoomSpace> neighboRoomSpaces;
+  private ArrayList<RoomSpace> visbleRoomSpaces;
+
+  public RoomSpace(int spaceIndex, int rowStart, int colStart, int rowEnd, int colEnd,
+      String name) {
     this.spaceIndex = spaceIndex;
-    this.x1 = x1;
-    this.y1 = y1;
-    this.x2 = x2;
-    this.y2 = y2;
+    rectCordinate = new int[4];
+    rectCordinate[0] = rowStart;
+    rectCordinate[1] = colStart;
+    rectCordinate[2] = rowEnd + 1; //
+    rectCordinate[3] = colEnd + 1;
     this.name = name;
     this.itemList = new ArrayList<Item>();
+    this.neighboRoomSpaces = new ArrayList<RoomSpace>();
+    this.visbleRoomSpaces = new ArrayList<RoomSpace>();
   }
 
-  public void addItem(Item item) {
-    itemList.add(item);
+  public void addNeighbor(RoomSpace neighbor) {
+    neighboRoomSpaces.add(neighbor);
+  }
+
+  public void addVisible(RoomSpace visible) {
+    visbleRoomSpaces.add(visible);
   }
 
   public String getSpaceName() {
@@ -36,33 +47,38 @@ public class RoomSpace implements Space {
     return spaceIndex;
   }
 
+  public void addItem(Item item) {
+    itemList.add(item);
+    item.setItemLocationIndex(spaceIndex);
+  }
+
   public ArrayList<Item> getSpaceItem() {
     return itemList;
   }
-  
-  
+
   public int[] getRoomRect() {
-    int []rect = {x1,y1,x2,y2};
-    return rect;
+    return rectCordinate;
   }
 
   @Override
   public String toString() {
-
-    return String.format("No.%2d %s, coordinate(%d, %d, %d, %d), with items: %s", spaceIndex, name,
-        x1, y1, x2, y2, itemList);
+    return name;
   }
 
-  @Override
-  public Space[] getNeighbors() {
-    // TODO Auto-generated method stub
-    return null;
+  // return the neighbors list
+  public ArrayList<RoomSpace> getNeighbors() {
+    return neighboRoomSpaces;
   }
 
-  @Override
-  public String displaySpaceInfo() {
-    System.out.println(String.format("%s, with items: %s", name, itemList));
-    return String.format("%s, with items: %s.", name, itemList);
+  // return the visible list
+  public ArrayList<RoomSpace> getVisibles() {
+    return visbleRoomSpaces;
+  }
+
+  public String getSpaceInfo() {
+    String retString = String.format("%s, with items: %s. visible space: %s", name, itemList,
+        visbleRoomSpaces);
+    return retString;
   }
 
 }

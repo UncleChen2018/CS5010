@@ -1,31 +1,24 @@
 package world;
 
 public class Item {
-  private int itemDamage;
-  private String itemName;
+  private final int itemDamage;
+  private final String itemName;
   private int itemLocationIndex;
   
 
-  public Item(String itemName, int itemDamage) {
+  public Item(String itemName, int itemDamage, int itemLocationIndex) {
     this.itemDamage = itemDamage;
     this.itemName = itemName;
+    this.itemLocationIndex = itemLocationIndex;
   }
   
-  public void addToRoom(RoomSpace toSpace) {
-    toSpace.addItem(this);
-  }
-
+  @Override
   public String toString() {
-    return itemName;
+    return String.format("%s: with damage: %d, in room No. %d", itemName, itemDamage, itemLocationIndex);
   }
 
   public int getItemDamage() {
     return itemDamage;
-  }
-
-
-  public void setItemDamage(int itemDamage) {
-    this.itemDamage = itemDamage;
   }
 
 
@@ -34,21 +27,12 @@ public class Item {
   }
 
 
-  public void setItemName(String itemName) {
-    this.itemName = itemName;
-  }
-
-
   public int getItemLocationIndex() {
     return itemLocationIndex;
   }
-
-
-  public void setItemLocationIndex(int itemLocationIndex) {
-    this.itemLocationIndex = itemLocationIndex;
+  
+  public void setItemLocationIndex(int index) {
+    this.itemLocationIndex = index;
   }
-  
-  
-  
 
 }
