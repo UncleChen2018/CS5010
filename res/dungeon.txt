@@ -24,7 +24,7 @@
 10 10 10 12 Shadow Nexus
 11 0 12 4 Soulforge
 11 18 12 22 Gloom Hollow
-23
+22
 10 8 Magma Blade
 3 5 Frostbite Axe
 11 7 Verdant Staff
