@@ -27,25 +27,24 @@
 23
 10 8 Magma Blade
 3 5 Frostbite Axe
-21 7 Verdant Staff
-4 4 Arcane Orb
+11 7 Verdant Staff
+10 4 Arcane Orb
 6 6 Eagle Eye Bow
-14 3 Shadow Dagger
-17 9 Celestial Scepter
+6 3 Shadow Dagger
+6 9 Celestial Scepter
 1 10 Thunderstrike Hammer
 8 7 Serpent's Fang
-11 2 Silverlight Saber
+3 2 Silverlight Saber
 5 6 Enchanted Bow
 13 4 Nature's Wrath
 2 9 Stormcaller Wand
 18 5 Moonshadow Blade
-9 8 Ironbark Shield
-20 3 Duskbringer Scythe
+1 8 Ironbark Shield
+0 3 Duskbringer Scythe
 15 2 Spiritcaller Flute
 16 10 Inferno Gauntlets
 7 4 Frostfire Staff
 12 7 Tempest Blade
 19 5 Viper's Bite
 0 8 Dawnbreaker Mace
-22 6 Soulreaper Scythe
 

@@ -4,8 +4,8 @@
 1. **Open the directory ./res**. There are three files:
 
    1. **Driver.jar,** which is used to run the demo.
-   2. **map.txt**, the plain txt file which store the sample data of the world. Can also offer other files.
-   3. **WorldMap.png**, a sample picture representation that is generated according to the world data. Which will be overwrite automatically if you successfully runs the jar. Can also save in other name.
+   2. **map.txt**, the plain txt file which store the sample data of the world. Can also offer other files (like *dungeon.txt*).
+   3. **WorldMap.png**, a sample picture representation that is generated according to the world data. Which will be overwrite automatically if you successfully runs the jar. Can also save in other name (like dungeon.png).
 
 2. **Execute the jar,** there are two ways.
 
@@ -24,6 +24,6 @@
       2. Then, you can choose whether to save it to a png file. You can also name the file, if not , it by default will be saved in the WorldMap.png.
       3. Interact with the menu to display various of information about the world, target character moving, the room and the item.
       4. Note: since the  visibility is not clearly defined, the logic here is two room has overlap either in X or Y axis, assuming all walls between them are transparent. 
-   
       
-   
+      
+
