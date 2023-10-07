@@ -58,7 +58,7 @@ public class Driver {
     frame.getContentPane().add(new JLabel(new ImageIcon(image)));
     frame.pack();
     frame.setVisible(true);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
     System.out
         .println("Save the map to png file? Press Enter to continue, any other key to pass... ");
@@ -77,7 +77,7 @@ public class Driver {
           fileString = userInput + ".png";
           ImageIO.write(image, "png", new File(fileString));
         }
-        System.out.println(fileString + "succssfully saved");
+        System.out.println(fileString + " succssfully saved");
       } catch (IOException e) {
         e.printStackTrace();
         System.out.println("Saving failed. Try to restart the program. Enter any key to quit...");
@@ -172,8 +172,7 @@ public class Driver {
 
       if ("5".equals(userInput)) {
         System.out.println("Hope you have fun in this world, any key to exit...");
-        System.out.println("Remember to close the map display window to return to command line");
-        scanner.nextLine();
+        System.out.println("Remember to close the map window to return to command line...");
         break;
       }
 

@@ -190,6 +190,7 @@ public class World {
 
     int graphWidth = width + leftPadding * 2;
     int graphHeight = height + topPadding * 2;
+
     BufferedImage image = new BufferedImage(graphWidth * scale, graphHeight * scale,
         BufferedImage.TYPE_INT_ARGB);
 
@@ -267,8 +268,7 @@ public class World {
    */
   public void printRoomInfo(int index) {
     RoomSpace room = getRoomSpace(index);
-    System.out
-        .println(String.format("[Room No.%d: %s's information]", index, room.getSpaceName()));
+    System.out.println(String.format("[Room No.%d: %s's information]", index, room.getSpaceName()));
     System.out.println(String.format("Neighbors: %s", room.getNeighbors()));
     System.out.println(String.format("Visible: %s", room.getVisibles()));
     System.out.println(String.format("Items: %s", room.getSpaceItem()));
