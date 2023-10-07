@@ -25,5 +25,6 @@
       3. Interact with the menu to display various of information about the world, target character moving, the room and the item.
       4. Note: since the  visibility is not clearly defined, the logic here is two room has overlap either in X or Y axis, assuming all walls between them are transparent. 
       
-      
+
+git hub: https://github.com/UncleChen2018/CS5010MileStone
 
