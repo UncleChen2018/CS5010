@@ -28,4 +28,6 @@ replay_pid*
 .project
 /bin/
 .checkstyle
+.jardesc
+
 
