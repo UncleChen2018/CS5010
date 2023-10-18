@@ -7,7 +7,7 @@ package model;
  * 
  */
 public abstract class MovableCharacter implements Movable {
-  protected String name;
+  protected final String name;
   protected int location;
   
   
@@ -16,17 +16,9 @@ public abstract class MovableCharacter implements Movable {
     this.location = location;
   }
 
-  /**
-   * 
-   */
-  public MovableCharacter() {
-    // TODO Auto-generated constructor stub
-  }
-
   @Override
-  public void setToSpace(int spaceIndex) {
-    // TODO Auto-generated method stub
-    
+  public void setLocation(int spaceIndex) {
+    this.location = spaceIndex;
   }
 
   @Override
@@ -51,12 +43,5 @@ public abstract class MovableCharacter implements Movable {
     return location;
   }
 
-  public void setLocation(int location) {
-    this.location = location;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
 
 }

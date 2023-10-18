@@ -249,8 +249,8 @@ public class World {
   }
 
   public void moveTargetNextRoom() {
-    int curRoom = targetCharacter.getLocatedRoomIndex();
-    targetCharacter.setLocatedRoomIndex((curRoom + 1) % roomList.size());
+    int curRoom = targetCharacter.getLocation();
+    targetCharacter.setLocation((curRoom + 1) % roomList.size());
   }
 
   public TargetCharacter getTarget() {

@@ -5,9 +5,8 @@ package model;
  * locations.
  */
 public class TargetCharacter extends MovableCharacter{
-  private final String name;
   private int health;
-  private int loaction;
+  static int INITIAL_LOCATION = 0;
 
   /**
    * Initialize the target character.
@@ -16,9 +15,8 @@ public class TargetCharacter extends MovableCharacter{
    * @param fullHealth the character's max health.
    */
   public TargetCharacter(String roleName, int fullHealth) {
-    name = roleName;
+    super(roleName, INITIAL_LOCATION);
     health = fullHealth;
-    loaction = 0;
   }
 
   public String getName() {
@@ -33,18 +31,11 @@ public class TargetCharacter extends MovableCharacter{
     this.health = health;
   }
 
-  public int getLocatedRoomIndex() {
-    return loaction;
-  }
-
-  public void setLocatedRoomIndex(int locatedSpaceIndex) {
-    this.loaction = locatedSpaceIndex;
-  }
 
   @Override
   public String toString() {
     String targerInfo = String.format("%s: with health point: %d, room index: %d.", name, health,
-        loaction);
+        super.location);
     return targerInfo;
   }
 

@@ -33,14 +33,14 @@ public class TargetCharacterTest {
   @Test
   public void testGetLocatedRoomIndex() {
     TargetCharacter character = new TargetCharacter("Dr. Hyde", 100);
-    assertEquals(0, character.getLocatedRoomIndex());
+    assertEquals(0, character.getLocation());
   }
 
   @Test
   public void testSetLocatedRoomIndex() {
     TargetCharacter character = new TargetCharacter("Dr. Strange", 30);
-    character.setLocatedRoomIndex(5);
-    assertEquals(5, character.getLocatedRoomIndex());
+    character.setLocation(5);
+    assertEquals(5, character.getLocation());
   }
 
   @Test

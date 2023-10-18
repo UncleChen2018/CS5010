@@ -63,9 +63,9 @@ public class WorldTest {
   public void testMoveTargetNextRoom() {
 
     TargetCharacter target = world.getTarget();
-    int initialRoomIndex = target.getLocatedRoomIndex();
+    int initialRoomIndex = target.getLocation();
     world.moveTargetNextRoom();
-    int newRoomIndex = target.getLocatedRoomIndex();
+    int newRoomIndex = target.getLocation();
 
     assertEquals((initialRoomIndex + 1) % world.getWorldSpace().size(), newRoomIndex);
   }

@@ -5,7 +5,8 @@ package model;
  * This mean they can exists temperately in only one place.
  */
 public interface Movable {
-  void setToSpace(int spaceIndex);
+  void setLocation(int spaceIndex);
+  int getLocation();
   RoomSpace getCurrentSpace();
   void moveNext();
   String getName();
