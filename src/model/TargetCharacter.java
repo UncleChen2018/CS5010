@@ -4,10 +4,10 @@ package model;
  * The target person, with name, health, and current location. Can move to other
  * locations.
  */
-public class TargetCharacter {
+public class TargetCharacter extends MovableCharacter{
   private final String name;
   private int health;
-  private int locatedRoomIndex;
+  private int loaction;
 
   /**
    * Initialize the target character.
@@ -18,7 +18,7 @@ public class TargetCharacter {
   public TargetCharacter(String roleName, int fullHealth) {
     name = roleName;
     health = fullHealth;
-    locatedRoomIndex = 0;
+    loaction = 0;
   }
 
   public String getName() {
@@ -34,17 +34,17 @@ public class TargetCharacter {
   }
 
   public int getLocatedRoomIndex() {
-    return locatedRoomIndex;
+    return loaction;
   }
 
   public void setLocatedRoomIndex(int locatedSpaceIndex) {
-    this.locatedRoomIndex = locatedSpaceIndex;
+    this.loaction = locatedSpaceIndex;
   }
 
   @Override
   public String toString() {
     String targerInfo = String.format("%s: with health point: %d, room index: %d.", name, health,
-        locatedRoomIndex);
+        loaction);
     return targerInfo;
   }
 
