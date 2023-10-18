@@ -1,4 +1,4 @@
-package world;
+package model;
 
 /**
  * The target person, with name, health, and current location. Can move to other

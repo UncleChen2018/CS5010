@@ -1,4 +1,4 @@
-package world;
+package model;
 
 /**
  * Items in the world. Store its damage, name, and room index where it's now in.
