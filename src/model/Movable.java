@@ -7,7 +7,5 @@ package model;
 public interface Movable {
   void setLocation(int spaceIndex);
   int getLocation();
-  RoomSpace getCurrentSpace();
-  void moveNext();
   String getName();
 }

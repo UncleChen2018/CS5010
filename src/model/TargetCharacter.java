@@ -33,10 +33,8 @@ public class TargetCharacter extends MovableCharacter{
 
 
   @Override
-  public String toString() {
-    String targerInfo = String.format("%s: with health point: %d, room index: %d.", name, health,
-        super.location);
-    return targerInfo;
+  public String toString() {   
+    return String.format("Target [name = \"%s\", location = %d, health = %d]", name, location, health);
   }
 
 }

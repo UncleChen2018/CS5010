@@ -21,17 +21,6 @@ public abstract class MovableCharacter implements Movable {
     this.location = spaceIndex;
   }
 
-  @Override
-  public RoomSpace getCurrentSpace() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public void moveNext() {
-    // TODO Auto-generated method stub
-    
-  }
 
   @Override
   public String getName() {
@@ -42,6 +31,13 @@ public abstract class MovableCharacter implements Movable {
   public int getLocation() {
     return location;
   }
+
+  @Override
+  public String toString() {
+    return String.format("MovableCharacter [name = \"%s\", location = %d]", name, location);
+  }
+  
+  
 
 
 }
