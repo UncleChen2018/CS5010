@@ -1,10 +1,15 @@
-package world;
+package model;
 
 import static org.junit.Assert.assertEquals;
 
 import java.io.StringReader;
 import org.junit.Before;
 import org.junit.Test;
+
+import model.Item;
+import model.RoomSpace;
+import model.TargetCharacter;
+import model.World;
 
 /**
  * Test class for world. Most part is to check if it is correctly set up.

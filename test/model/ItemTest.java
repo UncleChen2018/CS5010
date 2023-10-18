@@ -1,8 +1,10 @@
-package world;
+package model;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import model.Item;
 
 /**
  * Test class for item. Most part are getters and setters.
