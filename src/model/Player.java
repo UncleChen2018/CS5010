@@ -12,11 +12,16 @@ public class Player extends MovableCharacter {
     COMPUTER
   }
 
-  public Player(String name, int location, int itemCapacity) {
+  public Player(String name, int location, int itemCapacity, boolean isHumanControl) {
     super(name, location);
     ITEM_CAPACITY = itemCapacity;
     itemList = new ArrayList<Item>(ITEM_CAPACITY);
+    if(isHumanControl) {
     controlType = ControlType.HUMAN;
+    }
+    else {
+      controlType = ControlType.COMPUTER;
+    }
   }
 
   public void addItem(Item item) {

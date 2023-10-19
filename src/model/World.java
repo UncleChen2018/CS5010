@@ -1,11 +1,15 @@
 package model;
 
+import static org.junit.Assert.assertThrows;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 /**
@@ -21,6 +25,7 @@ public class World implements GameModel {
   private TargetCharacter targetCharacter;
   private ArrayList<RoomSpace> roomList;
   private ArrayList<Item> itemList;
+  Queue<Player> playerQueue = new LinkedList<>();
 
   public World() {
   }
@@ -184,10 +189,11 @@ public class World implements GameModel {
    * @param topPadding  blank space to the top of the world border
    * @return buffered image later can be used to output.
    */
-  
+
   public BufferedImage drawWorld() {
     return drawWorld(20, 5, 5);
   }
+
   public BufferedImage drawWorld(int scale, int leftPadding, int topPadding) {
     int width = colSize;
     int height = rowSize;
@@ -284,6 +290,23 @@ public class World implements GameModel {
 
   public void printItemInfo(int index) {
     System.out.println(itemList.get(index).getDetails());
+  }
+
+  /**
+   * Add a new player to the queue of the model, if the name already exist, throws
+   * IllegalArgumentException
+   */
+
+  @Override
+  public void addNewPlayer(String name, int initLocation, int capacity, boolean isHumanControl)
+      throws IllegalArgumentException {
+    for (Player player : playerQueue) {
+      if (player.getName().equals(name)) {
+        throw new IllegalArgumentException(
+            String.format("Name % \"s\" already exits, choose another name", name));
+      }
+    }
+    playerQueue.add(new Player(name, initLocation, capacity, isHumanControl));
   }
 
 }
