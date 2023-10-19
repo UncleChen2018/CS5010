@@ -119,7 +119,7 @@ public class Driver {
               break;
             }
             System.out.println("[Target Info]");
-            System.out.println(myWorld.getTarget());
+            System.out.println(myWorld.getTarget().getDetails());
             for (int i = 0; i < moves; i++) {
               myWorld.moveTargetNextRoom();
             }

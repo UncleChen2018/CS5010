@@ -10,7 +10,6 @@ public class Player extends MovableCharacter {
   private enum ControlType {
     HUMAN,
     COMPUTER
-    
   }
 
   public Player(String name, int location, int itemCapacity) {
@@ -48,12 +47,10 @@ public class Player extends MovableCharacter {
   }
 
 
-  @Override
-  public String toString() {
+  public String getDetails() {
     return String.format("Player [name = \"%s\", location = %d, controlType = %s, itemCapacity = %d, itemList = %s]",
         name, location, controlType, ITEM_CAPACITY, itemList);
   }
-
 
 
 }

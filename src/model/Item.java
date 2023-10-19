@@ -28,7 +28,7 @@ public class Item {
   }
 
 
-  public String printItem() {
+  public String getDetails() {
     if (owner != null) {
       return String.format("Item [itemName = \"%s\", itemDamage = %d, owner = \"%s\"]", 
           itemName, itemDamage, owner.getName());

@@ -279,7 +279,7 @@ public class World {
   }
 
   public void printItemInfo(int index) {
-    System.out.println(itemList.get(index).printItem());
+    System.out.println(itemList.get(index).getDetails());
   }
 
 }

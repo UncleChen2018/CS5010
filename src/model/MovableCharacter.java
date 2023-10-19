@@ -34,9 +34,12 @@ public abstract class MovableCharacter implements Movable {
 
   @Override
   public String toString() {
-    return String.format("MovableCharacter [name = \"%s\", location = %d]", name, location);
+    return this.name;
   }
   
+  public String getDetails() {
+    return String.format("MovableCharacter [name = \"%s\", location = %d]", name, location);
+  }
   
 
 

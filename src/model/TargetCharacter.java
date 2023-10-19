@@ -32,9 +32,7 @@ public class TargetCharacter extends MovableCharacter{
   }
 
 
-  @Override
-  public String toString() {   
+  public String getDetails() {   
     return String.format("Target [name = \"%s\", location = %d, health = %d]", name, location, health);
   }
-
 }
