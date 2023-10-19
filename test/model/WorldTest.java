@@ -56,7 +56,7 @@ public class WorldTest {
     Item item = world.getItems().get(0);
     assertEquals("Crepe Pan", item.getItemName());
     assertEquals(3, item.getItemDamage());
-    assertEquals(8, item.getItemLocationIndex());
+    assertEquals(8, item.getStoredLoacation());
   }
 
   @Test

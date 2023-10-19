@@ -26,14 +26,14 @@ public class ItemTest {
   @Test
   public void testGetItemLocationIndex() {
     Item item = new Item("Potion", 0, 3);
-    assertEquals(3, item.getItemLocationIndex());
+    assertEquals(3, item.getStoredLoacation());
   }
 
   @Test
   public void testSetItemLocationIndex() {
     Item item = new Item("Axe", 15, 4);
-    item.setItemLocationIndex(5);
-    assertEquals(5, item.getItemLocationIndex());
+    item.setStoredLoacation(5);
+    assertEquals(5, item.getStoredLoacation());
   }
 
   @Test

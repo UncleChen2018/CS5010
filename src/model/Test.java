@@ -11,6 +11,11 @@ public class Test {
     player.switchToComputerPlay();
     System.out.println(player);
     System.out.println(player.isComputerPlayer());
+    
+    Item item = new Item("da fe ji", 99, 10);
+    System.out.println(item);
+    item.setOwner(player);
+    System.out.println(item);
 
   }
 

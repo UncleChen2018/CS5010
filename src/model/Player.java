@@ -10,6 +10,7 @@ public class Player extends MovableCharacter {
   private enum ControlType {
     HUMAN,
     COMPUTER
+    
   }
 
   public Player(String name, int location, int itemCapacity) {

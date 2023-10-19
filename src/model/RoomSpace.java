@@ -59,7 +59,7 @@ public class RoomSpace {
 
   public void addItem(Item item) {
     itemList.add(item);
-    item.setItemLocationIndex(spaceIndex);
+    item.setStoredLoacation(spaceIndex);
   }
 
   public ArrayList<Item> getSpaceItem() {
