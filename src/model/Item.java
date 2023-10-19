@@ -27,8 +27,8 @@ public class Item {
     this.owner = null; // No one owns it at the start.
   }
 
-  @Override
-  public String toString() {
+
+  public String printItem() {
     if (owner != null) {
       return String.format("Item [itemName = \"%s\", itemDamage = %d, owner = \"%s\"]", 
           itemName, itemDamage, owner.getName());
@@ -38,7 +38,11 @@ public class Item {
           itemName, itemDamage, storedLocation);
     }
   }
-
+  @Override
+  public String toString() {
+    return getItemName();
+  }
+  
   public int getItemDamage() {
     return itemDamage;
   }
