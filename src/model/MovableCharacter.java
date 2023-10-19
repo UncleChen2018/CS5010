@@ -34,7 +34,7 @@ public abstract class MovableCharacter implements Movable {
 
   @Override
   public String toString() {
-    return this.name;
+    return String.format("\"%s\"",name);
   }
   
   public String getDetails() {

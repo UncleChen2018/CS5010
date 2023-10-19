@@ -9,13 +9,16 @@ public class Test {
     System.out.println(player);
 
     player.switchToComputerPlay();
-    System.out.println(player);
+    System.out.println(player.getDetails());
     System.out.println(player.isComputerPlayer());
+    player.getDetails();
     
     Item item = new Item("da fe ji", 99, 10);
-    System.out.println(item);
+    System.out.println(item.getDetails());
     item.setOwner(player);
-    System.out.println(item);
+    System.out.println(item.getDetails());
+    player.addItem(item);
+    System.out.println(player.getDetails());
 
   }
 

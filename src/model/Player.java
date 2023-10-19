@@ -48,7 +48,7 @@ public class Player extends MovableCharacter {
 
 
   public String getDetails() {
-    return String.format("Player [name = \"%s\", location = %d, controlType = %s, itemCapacity = %d, itemList = %s]",
+    return String.format("Player [name = %s, location = %d, controlType = %s, itemCapacity = %d, itemList = %s]",
         name, location, controlType, ITEM_CAPACITY, itemList);
   }
 

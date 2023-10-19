@@ -40,7 +40,7 @@ public class Item {
   }
   @Override
   public String toString() {
-    return getItemName();
+    return String.format("\"%s\"",itemName);
   }
   
   public int getItemDamage() {
