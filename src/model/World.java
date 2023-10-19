@@ -13,7 +13,7 @@ import java.util.Scanner;
  * parts and initialize their status, as well as manipulate them later. It also
  * give representation of the world map in the buffered image for view models.
  */
-public class World {
+public class World implements GameModel {
   private String worldName;
   private int rowSize;
   private int colSize;
@@ -184,6 +184,10 @@ public class World {
    * @param topPadding  blank space to the top of the world border
    * @return buffered image later can be used to output.
    */
+  
+  public BufferedImage drawWorld() {
+    return drawWorld(20, 5, 5);
+  }
   public BufferedImage drawWorld(int scale, int leftPadding, int topPadding) {
     int width = colSize;
     int height = rowSize;

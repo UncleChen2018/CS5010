@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.image.BufferedImage;
+
 /**
  * The game model interface. Including setup a brand new world, (including
  * rooms, target, character, player) and all methods that are used to get the
@@ -8,4 +10,6 @@ package model;
  */
 public interface GameModel {
   void setupNewWorld(Readable source);
+  BufferedImage drawWorld();
+  
 }
