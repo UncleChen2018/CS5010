@@ -5,7 +5,7 @@ package model;
 public class Test {
 
   public static void main(String[] args) {
-    Player player = new Player("Jimmy", 10, 2,true);
+    Player player = new Player("Jimmy", 10, 2,true, 0);
     System.out.println(player);
 
     player.switchToComputerPlay();
