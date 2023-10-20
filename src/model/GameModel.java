@@ -10,10 +10,11 @@ import java.awt.image.BufferedImage;
  */
 public interface GameModel {
   void setupNewWorld(Readable source);
+
   BufferedImage drawWorld();
-  void addNewPlayer(String name, int initLocation, int capacity, boolean isHumanControl) throws IllegalArgumentException;
-
-
   
-  
+  public int getPlayerTurn(String name);
+
+  void addNewPlayer(String name, int initLocation, int capacity, boolean isHumanControl)
+      throws IllegalArgumentException;
 }

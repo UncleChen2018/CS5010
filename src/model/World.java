@@ -25,7 +25,7 @@ public class World implements GameModel {
   private TargetCharacter targetCharacter;
   private ArrayList<RoomSpace> roomList;
   private ArrayList<Item> itemList;
-  Queue<Player> playerQueue = new LinkedList<>();
+  private ArrayList<Player> playerList;
 
   public World() {
   }
@@ -300,13 +300,24 @@ public class World implements GameModel {
   @Override
   public void addNewPlayer(String name, int initLocation, int capacity, boolean isHumanControl)
       throws IllegalArgumentException {
-    for (Player player : playerQueue) {
+    for (Player player : playerList) {
       if (player.getName().equals(name)) {
         throw new IllegalArgumentException(
             String.format("Name % \"s\" already exits, choose another name", name));
       }
     }
-    playerQueue.add(new Player(name, initLocation, capacity, isHumanControl));
+    playerList.add(new Player(name, initLocation, capacity, isHumanControl));
+  }
+
+  //Return the player index by name, if no such, return -1
+  public int getPlayerTurn(String name){
+    int Turn = -1;
+    for (int i = 0; i < playerList.size(); i++) {
+      if (playerList.get(i).getName().equals(name)) {
+        Turn = i;
+      }
+    }
+    return Turn;
   }
 
 }
