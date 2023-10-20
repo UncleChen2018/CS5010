@@ -13,8 +13,14 @@ public interface GameModel {
 
   BufferedImage drawWorld();
   
-  public int getPlayerTurn(String name);
-
+  String getDetails();
+  String getName();
+  
+  int getPlayerCount();
+  public void setPlayerLocation(int playerNumber, int location);
+  public int getPlayerTurn(String name);  
   void addNewPlayer(String name, int initLocation, int capacity, boolean isHumanControl)
       throws IllegalArgumentException;
+  
+  int getRoomCount();
 }

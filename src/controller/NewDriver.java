@@ -34,8 +34,9 @@ public class NewDriver {
       System.out.println(e);
       return;
     }
-
-    System.out.println("New driver successfully run");
+    
+    System.out.println("==================================================");
+    System.out.println("New driver successfully run. Goodbye!.");
 
   }
 

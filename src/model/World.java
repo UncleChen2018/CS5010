@@ -1,15 +1,11 @@
 package model;
 
-import static org.junit.Assert.assertThrows;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 
 /**
@@ -47,6 +43,7 @@ public class World implements GameModel {
   public void setupNewWorld(Readable source) {
     roomList = new ArrayList<RoomSpace>();
     itemList = new ArrayList<Item>();
+    playerList = new ArrayList<Player>();
 
     Scanner scanner = new Scanner(source);
 
@@ -194,7 +191,7 @@ public class World implements GameModel {
     return drawWorld(20, 5, 5);
   }
 
-  public BufferedImage drawWorld(int scale, int leftPadding, int topPadding) {
+  private BufferedImage drawWorld(int scale, int leftPadding, int topPadding) {
     int width = colSize;
     int height = rowSize;
 
@@ -253,9 +250,29 @@ public class World implements GameModel {
 
   @Override
   public String toString() {
-    String worldInfo = String.format("%s: %d rooms, with %d items,target charater %s.", worldName,
-        roomList.size(), itemList.size(), targetCharacter.getName());
+    return worldName;
+  }
+
+  @Override
+  public String getName() {
+    return worldName;
+  }
+
+  @Override
+  public String getDetails() {
+    String worldInfo = String.format(
+        "World [World name = %s, room number =  %d, item number = %d, target charater = %s, player number = %d].",
+        worldName, roomList.size(), itemList.size(), targetCharacter.getName(), playerList.size());
     return worldInfo;
+  }
+
+  public void setPlayerLocation(int playerIndex, int location) throws IndexOutOfBoundsException {
+    try {
+      playerList.get(playerIndex).setLocation(location);
+    } catch (IndexOutOfBoundsException e) {
+      throw new IndexOutOfBoundsException(
+          String.format("Player number %d is not exist", playerIndex));
+    }
   }
 
   public void moveTargetNextRoom() {
@@ -292,6 +309,11 @@ public class World implements GameModel {
     System.out.println(itemList.get(index).getDetails());
   }
 
+  @Override
+  public int getPlayerCount() {
+    return playerList.size();
+  }
+
   /**
    * Add a new player to the queue of the model, if the name already exist, throws
    * IllegalArgumentException
@@ -300,17 +322,18 @@ public class World implements GameModel {
   @Override
   public void addNewPlayer(String name, int initLocation, int capacity, boolean isHumanControl)
       throws IllegalArgumentException {
-    for (Player player : playerList) {
-      if (player.getName().equals(name)) {
-        throw new IllegalArgumentException(
-            String.format("Name % \"s\" already exits, choose another name", name));
-      }
+    if (initLocation < 0 || initLocation > roomList.size()) {
+      throw new IllegalArgumentException(String.format("Wrong location index %d", initLocation));
     }
-    playerList.add(new Player(name, initLocation, capacity, isHumanControl));
+    if (capacity <= 0) {
+      throw new IllegalArgumentException("Capacity must be at least one");
+    }
+
+    playerList.add(new Player(name, initLocation, capacity, isHumanControl, playerList.size()));
   }
 
-  //Return the player index by name, if no such, return -1
-  public int getPlayerTurn(String name){
+  // Return the player index by name, if no such, return -1
+  public int getPlayerTurn(String name) {
     int Turn = -1;
     for (int i = 0; i < playerList.size(); i++) {
       if (playerList.get(i).getName().equals(name)) {
@@ -318,6 +341,12 @@ public class World implements GameModel {
       }
     }
     return Turn;
+  }
+
+  @Override
+  public int getRoomCount() {
+    // TODO Auto-generated method stub
+    return roomList.size();
   }
 
 }

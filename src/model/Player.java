@@ -6,13 +6,14 @@ public class Player extends MovableCharacter {
   private final int ITEM_CAPACITY;
   private ArrayList<Item> itemList;
   private ControlType controlType;
+  private int playerID;   // every player has unique id from 0
   
   private enum ControlType {
     HUMAN,
     COMPUTER
   }
 
-  public Player(String name, int location, int itemCapacity, boolean isHumanControl) {
+  public Player(String name, int location, int itemCapacity, boolean isHumanControl, int id) {
     super(name, location);
     ITEM_CAPACITY = itemCapacity;
     itemList = new ArrayList<Item>(ITEM_CAPACITY);
@@ -22,6 +23,7 @@ public class Player extends MovableCharacter {
     else {
       controlType = ControlType.COMPUTER;
     }
+    playerID = id;
   }
 
   public void addItem(Item item) {

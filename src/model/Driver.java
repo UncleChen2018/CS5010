@@ -52,7 +52,7 @@ public class Driver {
     // print something to show the world works.
     // show the world
 
-    BufferedImage image = myWorld.drawWorld(20, 5, 5);
+    BufferedImage image = myWorld.drawWorld();
 
     JFrame frame = new JFrame();
     frame.getContentPane().add(new JLabel(new ImageIcon(image)));
@@ -106,7 +106,7 @@ public class Driver {
 
       if ("1".equals(userInput)) {
         System.out.println("[Word Info]");
-        System.out.println(myWorld);
+        System.out.println(myWorld.getDetails());
       }
       if ("2".equals(userInput)) {
         while (true) {

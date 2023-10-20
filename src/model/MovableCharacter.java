@@ -34,11 +34,11 @@ public abstract class MovableCharacter implements Movable {
 
   @Override
   public String toString() {
-    return String.format("\"%s\"",name);
+    return String.format(name);
   }
   
   public String getDetails() {
-    return String.format("MovableCharacter [name = \"%s\", location = %d]", name, location);
+    return String.format("MovableCharacter [name = %s, location = %d]", name, location);
   }
   
 
