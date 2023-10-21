@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package controller;
 
 import java.io.IOException;
@@ -5,16 +8,20 @@ import java.util.Scanner;
 
 import model.GameModel;
 
-public class PickUpItem extends TurnBaseCommand {
-  private int playerId;
+/**
+ * 
+ */
+public class LookAround extends TurnBaseCommand {
 
-  public PickUpItem(int playerId) {
+  /**
+   * 
+   */
+  public LookAround(int playerId) {
     super(playerId);
   }
 
   @Override
   public void execute(GameModel model, Scanner scan, Appendable out) throws IOException {
-
     while (true) {
       int curLocation = model.getPlayerLocation(playerId);
       out.append(model.queryRoomItem(curLocation));
@@ -38,7 +45,6 @@ public class PickUpItem extends TurnBaseCommand {
         out.append(e.getMessage()).append("\n");
       }
     }
-
   }
 
   @Override

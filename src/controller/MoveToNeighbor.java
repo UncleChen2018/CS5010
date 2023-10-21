@@ -7,11 +7,9 @@ import model.GameModel;
 
 public class MoveToNeighbor extends TurnBaseCommand {
 
-  private int playerId;
 
   public MoveToNeighbor(int playerId) {
-    super();
-    this.playerId = playerId;
+    super(playerId);
   }
 
   @Override

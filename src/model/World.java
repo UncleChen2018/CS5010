@@ -76,7 +76,7 @@ public class World implements GameModel {
       int spaceIndex = scanner.nextInt();
       int damage = scanner.nextInt();
       String itemName = scanner.nextLine().trim();
-      Item newItem = new Item(i,itemName, damage, spaceIndex);
+      Item newItem = new Item(i, itemName, damage, spaceIndex);
       itemList.add(newItem);
       addItemToRoom(newItem, getRoomSpace(spaceIndex));
     }
@@ -286,14 +286,14 @@ public class World implements GameModel {
     roomList.get(destLocation).addCharacer(player);
   }
 
-  //also check that the room is 
+  // also check that the room is
   public void moveTargetNextRoom() {
     int curLocation = targetCharacter.getLocation();
-    int nextLocation = (curLocation + 1)% roomList.size();
+    int nextLocation = (curLocation + 1) % roomList.size();
     targetCharacter.setLocation(nextLocation);
-    //move character from previous room
+    // move character from previous room
     roomList.get(curLocation).setTargetOut();
-    //also put character into the room 
+    // also put character into the room
     roomList.get(nextLocation).setTargetIn();
   }
 
@@ -349,7 +349,6 @@ public class World implements GameModel {
     playerList.add(new Player(name, initLocation, capacity, isHumanControl, playerList.size()));
   }
 
-
   @Override
   public int getRoomCount() {
     // TODO Auto-generated method stub
@@ -380,27 +379,27 @@ public class World implements GameModel {
   public int getCurrentPlayer(int turn) {
     return turn % getPlayerCount();
   }
-  
-  // get item info from cetain room
+
+  // get item info from certain room
   public String queryRoomItem(int location) {
     StringBuilder stringBuilder = new StringBuilder();
-    for(Item item:roomList.get(location).getSpaceItem()) {
+    for (Item item : roomList.get(location).getSpaceItem()) {
       stringBuilder.append(item.getDetails()).append("\n");
     }
-    if(stringBuilder.length() == 0) {
+    if (stringBuilder.length() == 0) {
       stringBuilder.append("No item.\n");
     }
-   return stringBuilder.toString();
+    return stringBuilder.toString();
   }
 
   public int getItemLocation(int itemId) {
-    if(itemId<0 || itemId>itemList.size()) {
-      throw new IndexOutOfBoundsException(String.format("Invalid item id %d.",itemId));
+    if (itemId < 0 || itemId > itemList.size()) {
+      throw new IndexOutOfBoundsException(String.format("Invalid item id %d.", itemId));
     }
     return itemList.get(itemId).getStoredLoacation();
   }
-  
-  //let player pick up item from current room.
+
+  // let player pick up item from current room.
   public void pickUpitem(int playerId, int itemId) {
     Player player = playerList.get(playerId);
     RoomSpace roomSpace = roomList.get(player.getLocation());
@@ -412,6 +411,5 @@ public class World implements GameModel {
     // item location to -1
     item.setStoredLoacation(-1);
   }
-  
-  
+
 }
