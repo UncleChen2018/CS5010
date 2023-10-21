@@ -5,19 +5,16 @@ import java.util.Scanner;
 
 import model.GameModel;
 
-public class MoveToNeighbor extends TurnBaseCommand {
-
+public class PickUpItem extends TurnBaseCommand {
   private int playerId;
 
-  public MoveToNeighbor(int playerId) {
+  public PickUpItem(int playerId) {
     super();
     this.playerId = playerId;
   }
 
   @Override
-  public void execute(GameModel model, Scanner scan, Appendable out)
-      throws IllegalArgumentException, IOException {
-
+  public void execute(GameModel model, Scanner scan, Appendable out) throws IOException {
     while (true) {
       out.append("Enter the room index to move to\n");
       String line = scan.nextLine().trim();
@@ -39,6 +36,7 @@ public class MoveToNeighbor extends TurnBaseCommand {
         out.append(e.getMessage()).append("\n");
       }
     }
+
   }
 
   @Override

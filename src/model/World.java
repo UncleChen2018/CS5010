@@ -286,9 +286,15 @@ public class World implements GameModel {
     roomList.get(destLocation).addCharacer(player);
   }
 
+  //also check that the room is 
   public void moveTargetNextRoom() {
-    int curRoom = targetCharacter.getLocation();
-    targetCharacter.setLocation((curRoom + 1) % roomList.size());
+    int curLocation = targetCharacter.getLocation();
+    int nextLocation = (curLocation + 1)% roomList.size();
+    targetCharacter.setLocation(nextLocation);
+    //move character from previous room
+    roomList.get(curLocation).setTargetOut();
+    //also put character into the room 
+    roomList.get(nextLocation).setTargetIn();
   }
 
   public TargetCharacter getTarget() {

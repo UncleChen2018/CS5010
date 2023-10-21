@@ -17,7 +17,7 @@ public class RoomSpace {
   private ArrayList<RoomSpace> neighboRoomSpaces;
   private ArrayList<RoomSpace> visbleRoomSpaces;
   private ArrayList<Movable> characterList;
-  private boolean targetIn;
+  private boolean isTargetIn;
 
   /**
    * Initialize room in the world.
@@ -42,6 +42,7 @@ public class RoomSpace {
     this.neighboRoomSpaces = new ArrayList<RoomSpace>();
     this.visbleRoomSpaces = new ArrayList<RoomSpace>();
     this.characterList = new ArrayList<Movable>();
+    isTargetIn = false;
   }
 
   public void addNeighbor(RoomSpace neighbor) {
@@ -110,6 +111,18 @@ public class RoomSpace {
   
   public void removeCharacter(Movable character) {
     characterList.remove(character);
+  }
+  
+  public void setTargetIn() {
+    this.isTargetIn = true;
+  }
+  
+  public void setTargetOut() {
+    this.isTargetIn = false;
+  }
+  
+  public boolean hasTarget() {
+    return isTargetIn;
   }
 
 }

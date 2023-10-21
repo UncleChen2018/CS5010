@@ -86,6 +86,7 @@ public class CommandController implements GameController {
             cmd = new MoveToNeighbor(activePlayer);
             break;
           case "2":
+            break;
             
           default:
             out.append("Invalid choice, try again").append("\n");
