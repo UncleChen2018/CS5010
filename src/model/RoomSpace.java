@@ -16,6 +16,8 @@ public class RoomSpace {
   private ArrayList<Item> itemList;
   private ArrayList<RoomSpace> neighboRoomSpaces;
   private ArrayList<RoomSpace> visbleRoomSpaces;
+  private ArrayList<Movable> characterList;
+  private boolean targetIn;
 
   /**
    * Initialize room in the world.
@@ -39,6 +41,7 @@ public class RoomSpace {
     this.itemList = new ArrayList<Item>();
     this.neighboRoomSpaces = new ArrayList<RoomSpace>();
     this.visbleRoomSpaces = new ArrayList<RoomSpace>();
+    this.characterList = new ArrayList<Movable>();
   }
 
   public void addNeighbor(RoomSpace neighbor) {
@@ -95,6 +98,18 @@ public class RoomSpace {
     String retString = String.format("%s, with items: %s. visible space: %s", name, itemList,
         visbleRoomSpaces);
     return retString;
+  }
+  
+  public ArrayList<Movable> getCharacterList() {
+    return this.characterList;
+  }
+  
+  public void addCharacer(Movable character) {
+    characterList.add(character);
+  }
+  
+  public void removeCharacter(Movable character) {
+    characterList.remove(character);
   }
 
 }

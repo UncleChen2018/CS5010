@@ -17,7 +17,10 @@ public interface GameModel {
   String getName();
   
   int getPlayerCount();
-  public void setPlayerLocation(int playerNumber, int location);
+  void setPlayerLocation(int playerNumber, int location);
+  int getPlayerLocation(int playerId);
+  boolean isNeighbor(int quest, int base);
+  
   public int getPlayerTurn(String name);  
   void addNewPlayer(String name, int initLocation, int capacity, boolean isHumanControl)
       throws IllegalArgumentException;

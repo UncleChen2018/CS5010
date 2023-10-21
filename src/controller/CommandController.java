@@ -77,9 +77,23 @@ public class CommandController implements GameController {
       out.append("Settting finished, game started.\n");
       // TODO construct the turns
       while (currentTurn < MAX_TURN) {
+        SimpleCommand cmd = null;
         int activePlayer = currentTurn % model.getPlayerCount();
         displayGameMenu(activePlayer);
+        switch (line = scan.nextLine().trim()) {
+          case "1":
+            // TODO add interactive;
+            cmd = new MoveToNeighbor(activePlayer, activePlayer, scan, out);
+            break;
+          default:
+            break;
+        }
+        if (cmd != null) {
+          cmd.execute(model);
+          cmd = null;
+        }
       }
+
       frame.dispose();
 
     } catch (IOException ioe) {

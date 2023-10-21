@@ -266,13 +266,24 @@ public class World implements GameModel {
     return worldInfo;
   }
 
-  public void setPlayerLocation(int playerIndex, int location) throws IndexOutOfBoundsException {
-    try {
-      playerList.get(playerIndex).setLocation(location);
-    } catch (IndexOutOfBoundsException e) {
-      throw new IndexOutOfBoundsException(
-          String.format("Player number %d is not exist", playerIndex));
+  private boolean isPlayerIdValid(int id) {
+    return id >= 0 && id < playerList.size();
+  }
+
+  // set the player to the right position, with the room info updated too.
+  public void setPlayerLocation(int playerIndex, int destLocation) {
+    if (!isPlayerIdValid(playerIndex) || !isLocationValid(destLocation)) {
+      throw new IllegalArgumentException(
+          String.format("Illegal argument: player %d, location %d", playerIndex, destLocation));
     }
+    Player player = playerList.get(playerIndex);
+    int originLocaion = player.getLocation();
+    // change player position to new
+    player.setLocation(destLocation);
+    // remove from the origin room
+    roomList.get(originLocaion).removeCharacter(player);
+    // add to the dest room
+    roomList.get(destLocation).addCharacer(player);
   }
 
   public void moveTargetNextRoom() {
@@ -347,6 +358,26 @@ public class World implements GameModel {
   public int getRoomCount() {
     // TODO Auto-generated method stub
     return roomList.size();
+  }
+
+  @Override
+  public int getPlayerLocation(int playerId) {
+    Player player = playerList.get(playerId);
+    return player.getLocation();
+  }
+
+  private boolean isLocationValid(int roomIndex) {
+    return roomIndex > 0 && roomIndex < roomList.size();
+
+  }
+
+  @Override
+  public boolean isNeighbor(int quest, int base) {
+    if (isLocationValid(base) && isLocationValid(quest)) {
+      return roomList.get(base).getNeighbors().contains(roomList.get(quest));
+    } else {
+      throw new IllegalArgumentException("Room index not valid");
+    }
   }
 
 }
