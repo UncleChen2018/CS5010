@@ -3,30 +3,50 @@ package controller;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.xml.stream.events.EndDocument;
+
 import model.GameModel;
 
 public class MoveToNeighbor extends TurnBaseCommand {
 
   private int playerId;
-  private int destinationIndex;
-  public MoveToNeighbor(int playerId, int roomIndex, Scanner scan, Appendable out) {
+  
+  public MoveToNeighbor(int playerId, Scanner scan, Appendable out) {
     super(scan, out);
     this.playerId = playerId;
-    this.destinationIndex = roomIndex;
   }
 
 
   @Override
-  public void execute(GameModel model) throws IllegalArgumentException {
-    int playerLocation = model.getPlayerLocation(playerId);
-    //Must check the roomIndex is legal such the destination is in the player's neighbor.
-    if(model.isNeighbor(destinationIndex, playerLocation)) {
-        model.setPlayerLocation(playerId, destinationIndex);
+  public void execute(GameModel model) throws IllegalArgumentException, IOException {
+   
+    while(true)
+    {
+    out.append("Enter the room index to move to\n");
+    String line = scan.nextLine().trim();
+    try {
+      int location = Integer.parseInt(line);
+      int playerLocation = model.getPlayerLocation(playerId);
+      if(model.isNeighbor(location, playerLocation)) {
+          model.setPlayerLocation(playerId, location);
+          out.append("Move to neighbor successfully.\n");
+          turnEnd();
+          break;
+      }
+      else {
+        out.append("Not a valid neighbor, move failed,\n");
+      }
+     
+    } catch (NumberFormatException e) {
+      out.append("Wrong format for an integer, try gain.\n");
+    } catch (IndexOutOfBoundsException e) {
+      out.append(e.getMessage()).append("\n");
     }
-    else {
-      throw new IllegalArgumentException("Not a valid neighbor, move failed");
-    }
-
+    
+    
+  }
+    
+    
   }
 
   @Override
@@ -39,6 +59,21 @@ public class MoveToNeighbor extends TurnBaseCommand {
   protected void turnEnd() {
     // TODO Auto-generated method stub
 
+  }
+  
+  private int scanUntilInt() throws IOException{
+    int ret;
+    
+    while(true) {
+      String line = scan.nextLine().trim();
+      try {
+        ret = Integer.parseInt(line);
+        break;
+      } catch (NumberFormatException e) {
+        out.append("Wrong input for an integer, try gain.\n");
+    }
+  }
+    return ret;
   }
 
 }

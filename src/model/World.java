@@ -367,7 +367,9 @@ public class World implements GameModel {
   }
 
   private boolean isLocationValid(int roomIndex) {
-    return roomIndex > 0 && roomIndex < roomList.size();
+    System.out.println(String.format("check %d in roomsizt %d",roomIndex, roomList.size()));
+    System.out.println(roomIndex >= 0 && roomIndex < roomList.size());
+    return roomIndex >= 0 && roomIndex < roomList.size();
 
   }
 
@@ -376,7 +378,7 @@ public class World implements GameModel {
     if (isLocationValid(base) && isLocationValid(quest)) {
       return roomList.get(base).getNeighbors().contains(roomList.get(quest));
     } else {
-      throw new IllegalArgumentException("Room index not valid");
+      throw new IndexOutOfBoundsException("In check neighbor, at least room index not valid");
     }
   }
 

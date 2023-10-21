@@ -81,15 +81,20 @@ public class CommandController implements GameController {
         int activePlayer = currentTurn % model.getPlayerCount();
         displayGameMenu(activePlayer);
         switch (line = scan.nextLine().trim()) {
-          case "1":
-            // TODO add interactive;
-            cmd = new MoveToNeighbor(activePlayer, activePlayer, scan, out);
+          case "1":        
+            cmd = new MoveToNeighbor(activePlayer, scan, out);
             break;
           default:
             break;
         }
         if (cmd != null) {
+          try {
           cmd.execute(model);
+          currentTurn += 1;
+          }
+          catch (IllegalArgumentException e) {
+            out.append(e.getMessage()).append("\n");
+          }
           cmd = null;
         }
       }
@@ -151,6 +156,7 @@ public class CommandController implements GameController {
     out.append(String.format("%s succssfully saved", fileString)).append("\n");
   }
 
+  // Add player.
   private void addPlayer() throws IOException {
     String line;
     int playerId = model.getPlayerCount();
