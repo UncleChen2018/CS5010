@@ -3,7 +3,6 @@ package controller;
 import java.io.IOException;
 import java.util.Scanner;
 
-import javax.xml.stream.events.EndDocument;
 
 import model.GameModel;
 
@@ -11,14 +10,14 @@ public class MoveToNeighbor extends TurnBaseCommand {
 
   private int playerId;
   
-  public MoveToNeighbor(int playerId, Scanner scan, Appendable out) {
-    super(scan, out);
+  public MoveToNeighbor(int playerId) {
+    super();
     this.playerId = playerId;
   }
 
 
   @Override
-  public void execute(GameModel model) throws IllegalArgumentException, IOException {
+  public void execute(GameModel model, Scanner scan, Appendable out) throws IllegalArgumentException, IOException {
    
     while(true)
     {
@@ -61,19 +60,6 @@ public class MoveToNeighbor extends TurnBaseCommand {
 
   }
   
-  private int scanUntilInt() throws IOException{
-    int ret;
-    
-    while(true) {
-      String line = scan.nextLine().trim();
-      try {
-        ret = Integer.parseInt(line);
-        break;
-      } catch (NumberFormatException e) {
-        out.append("Wrong input for an integer, try gain.\n");
-    }
-  }
-    return ret;
-  }
+
 
 }

@@ -75,21 +75,25 @@ public class CommandController implements GameController {
         line = scan.nextLine().trim();
       }
       out.append("Settting finished, game started.\n");
-      // TODO construct the turns
+      // TODO construct the turns, should think about the interaction.
       while (currentTurn < MAX_TURN) {
         SimpleCommand cmd = null;
-        int activePlayer = currentTurn % model.getPlayerCount();
+        int activePlayer = model.getCurrentPlayer(currentTurn);
         displayGameMenu(activePlayer);
         switch (line = scan.nextLine().trim()) {
+          //TODO change the constructor of command, in, out should be in the execute.
           case "1":        
-            cmd = new MoveToNeighbor(activePlayer, scan, out);
+            cmd = new MoveToNeighbor(activePlayer);
             break;
+          case "2":
+            
           default:
+            out.append("Invalid choice, try again").append("\n");
             break;
         }
         if (cmd != null) {
           try {
-          cmd.execute(model);
+          cmd.execute(model,scan,out);
           currentTurn += 1;
           }
           catch (IllegalArgumentException e) {
@@ -105,21 +109,10 @@ public class CommandController implements GameController {
       throw new IllegalStateException("Append failed", ioe);
     }
 
-    // TODO build a menu to show the world and set player
-
-//    try {
-//      String element = scan.next();
-//      out.append("Hello world, " + element);
-//    } catch (IOException ioe) {
-//      throw new IllegalStateException("Append failed", ioe);
-//    }
-//        
-//    while(currentTurn<MAX_TURN) {
-//      FFFmakeTurns();
-//    }
 
   }
 
+  // help method, display information for certain player.
   private void displayGameMenu(int playerId) throws IOException {
     out.append(String.format("Player %d's turn, please select one of the option below", playerId))
         .append("\n");

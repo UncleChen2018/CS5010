@@ -343,16 +343,6 @@ public class World implements GameModel {
     playerList.add(new Player(name, initLocation, capacity, isHumanControl, playerList.size()));
   }
 
-  // Return the player index by name, if no such, return -1
-  public int getPlayerTurn(String name) {
-    int Turn = -1;
-    for (int i = 0; i < playerList.size(); i++) {
-      if (playerList.get(i).getName().equals(name)) {
-        Turn = i;
-      }
-    }
-    return Turn;
-  }
 
   @Override
   public int getRoomCount() {
@@ -367,8 +357,6 @@ public class World implements GameModel {
   }
 
   private boolean isLocationValid(int roomIndex) {
-    System.out.println(String.format("check %d in roomsizt %d",roomIndex, roomList.size()));
-    System.out.println(roomIndex >= 0 && roomIndex < roomList.size());
     return roomIndex >= 0 && roomIndex < roomList.size();
 
   }
@@ -380,6 +368,11 @@ public class World implements GameModel {
     } else {
       throw new IndexOutOfBoundsException("In check neighbor, at least room index not valid");
     }
+  }
+
+  @Override
+  public int getCurrentPlayer(int turn) {
+    return turn % getPlayerCount();
   }
 
 }
