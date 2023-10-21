@@ -76,4 +76,10 @@ public interface GameModel {
    * @return the room number.
    */
   int getRoomCount();
+
+  /**
+   * Move target to the next room. Target will move according to the index of
+   * room.
+   */
+  void moveTargetNextRoom();
 }
