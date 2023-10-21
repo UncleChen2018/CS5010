@@ -86,6 +86,7 @@ public class CommandController implements GameController {
             cmd = new MoveToNeighbor(activePlayer);
             break;
           case "2":
+            cmd = new PickUpItem(activePlayer);
             break;
             
           default:

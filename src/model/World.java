@@ -384,7 +384,7 @@ public class World implements GameModel {
   // get item info from cetain room
   public String queryRoomItem(int location) {
     StringBuilder stringBuilder = new StringBuilder();
-    for(Item item:itemList) {
+    for(Item item:roomList.get(location).getSpaceItem()) {
       stringBuilder.append(item.getDetails()).append("\n");
     }
     if(stringBuilder.length() == 0) {
@@ -393,4 +393,25 @@ public class World implements GameModel {
    return stringBuilder.toString();
   }
 
+  public int getItemLocation(int itemId) {
+    if(itemId<0 || itemId>itemList.size()) {
+      throw new IndexOutOfBoundsException(String.format("Invalid item id %d.",itemId));
+    }
+    return itemList.get(itemId).getStoredLoacation();
+  }
+  
+  //let player pick up item from current room.
+  public void pickUpitem(int playerId, int itemId) {
+    Player player = playerList.get(playerId);
+    RoomSpace roomSpace = roomList.get(player.getLocation());
+    Item item = itemList.get(itemId);
+    // player got the item
+    player.addItem(item);
+    // room remove the item
+    roomSpace.removeItem(item);
+    // item location to -1
+    item.setStoredLoacation(-1);
+  }
+  
+  
 }

@@ -89,4 +89,14 @@ public interface GameModel {
    * @return A string contains the item info (No, name, damage)
    */
   String queryRoomItem(int location) ;
+  
+  
+  void pickUpitem(int playerId, int itemId);
+  
+  /**Get the item room location if it is in room.
+   * @param itemId
+   * @return location index, if not in room, return -1;
+   */
+  int getItemLocation(int itemId);
+  
 }

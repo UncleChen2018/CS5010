@@ -32,12 +32,12 @@ public class Item {
 
   public String getDetails() {
     if (owner != null) {
-      return String.format("Item [itemName = \"%s\", itemDamage = %d, owner = \"%s\"]", 
-          itemName, itemDamage, owner.getName());
+      return String.format("Item [itemId = %d, itemName = %s, itemDamage = %d, owner = \"%s\"]", 
+          itemId, itemName, itemDamage, owner.getName());
 
     } else {
-      return String.format("Item [itemName = \"%s\", itemDamage = %d, storedLocation = %s]", 
-          itemName, itemDamage, storedLocation);
+      return String.format("Item [itemId = %d, itemName = %s, itemDamage = %d, storedLocation = %s]", 
+          itemId, itemName, itemDamage, storedLocation);
     }
   }
   @Override

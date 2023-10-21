@@ -124,5 +124,9 @@ public class RoomSpace {
   public boolean hasTarget() {
     return isTargetIn;
   }
+  
+  public void removeItem(Item item) {
+    this.itemList.remove(item);
+  }
 
 }
