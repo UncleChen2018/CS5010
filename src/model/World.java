@@ -380,5 +380,17 @@ public class World implements GameModel {
   public int getCurrentPlayer(int turn) {
     return turn % getPlayerCount();
   }
+  
+  // get item info from cetain room
+  public String queryRoomItem(int location) {
+    StringBuilder stringBuilder = new StringBuilder();
+    for(Item item:itemList) {
+      stringBuilder.append(item.getDetails()).append("\n");
+    }
+    if(stringBuilder.length() == 0) {
+      stringBuilder.append("No item.\n");
+    }
+   return stringBuilder.toString();
+  }
 
 }

@@ -82,4 +82,11 @@ public interface GameModel {
    * room.
    */
   void moveTargetNextRoom();
+  
+  
+  /** Given room location, query its item information.
+   * @param location the room index.
+   * @return A string contains the item info (No, name, damage)
+   */
+  String queryRoomItem(int location) ;
 }
