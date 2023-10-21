@@ -54,10 +54,25 @@ public class Player extends MovableCharacter {
   }
 
 
-  public String getDetails() {
-    return String.format("Player [name = %s, location = %d, controlType = %s, itemCapacity = %d, itemList = %s]",
-        name, location, controlType, ITEM_CAPACITY, itemList);
+  public String querryDetails() {
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("-------------------PLAYER DETAILS-------------------\n");
+    stringBuilder.append("Player: ").append(this).append("\n")
+    .append("Control Type: ").append(controlType).append("\n")
+    .append("Stock|Capacity: ").append(itemList.size()).append("|").append(ITEM_CAPACITY).append("\n")
+    .append("Items: ").append(itemList).append("\n")
+    .append("-------------------DETAILS END-------------------").append("\n");
+        
+    return stringBuilder.toString();
   }
+
+  @Override
+  public String toString() {
+    return String.format("No.%d \"%s\"", playerID, name) ;
+  }
+  
+  
+  
 
 
 }

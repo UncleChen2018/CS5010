@@ -17,11 +17,13 @@ public class MoveToNeighbor extends TurnBaseCommand {
       throws IllegalArgumentException, IOException {
 
     while (true) {
+      int playerLocation = model.getPlayerLocation(playerId);
+      out.append(model.queryRoomDetails(playerLocation));
       out.append("Enter the room index to move to\n");
       String line = scan.nextLine().trim();
       try {
         int location = Integer.parseInt(line);
-        int playerLocation = model.getPlayerLocation(playerId);
+        
         if (model.isNeighbor(location, playerLocation)) {
           model.setPlayerLocation(playerId, location);
           out.append("Move to neighbor successfully.\n");

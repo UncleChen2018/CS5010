@@ -76,7 +76,7 @@ public class RoomSpace {
 
   @Override
   public String toString() {
-    return name;
+    return String.format("No.%d \"%s\"", spaceIndex, name);
   }
 
   // return the neighbors list
@@ -100,33 +100,46 @@ public class RoomSpace {
         visbleRoomSpaces);
     return retString;
   }
-  
+
   public ArrayList<Movable> getCharacterList() {
     return this.characterList;
   }
-  
+
   public void addCharacer(Movable character) {
     characterList.add(character);
   }
-  
+
   public void removeCharacter(Movable character) {
     characterList.remove(character);
   }
-  
+
   public void setTargetIn() {
     this.isTargetIn = true;
   }
-  
+
   public void setTargetOut() {
     this.isTargetIn = false;
   }
-  
+
   public boolean hasTarget() {
     return isTargetIn;
   }
-  
+
   public void removeItem(Item item) {
     this.itemList.remove(item);
   }
 
+  // return what is in the room
+  public String queryDetails() { // "Item [itemId = %d, itemName = %s, itemDamage = %d, owner =
+                                 // \"%s\"]"
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("-------------------ROOM DETAILS-------------------\n");
+    stringBuilder.append("Room: ").append(this).append("\n").append("Items: ")
+        .append(itemList.size() > 0 ? itemList : "No Item").append("\n").append("Player: ")
+        .append(characterList.size() > 0 ? characterList : "No Player").append("\n")
+        .append("Target: ").append(isTargetIn ? "Found" : "Not Found\n")
+        .append("-------------------DETAILS END-------------------").append("\n");
+        
+    return stringBuilder.toString();
+  }
 }

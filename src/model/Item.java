@@ -30,7 +30,7 @@ public class Item {
   }
 
 
-  public String getDetails() {
+  public String queryDetails() {
     if (owner != null) {
       return String.format("Item [itemId = %d, itemName = %s, itemDamage = %d, owner = \"%s\"]", 
           itemId, itemName, itemDamage, owner.getName());
@@ -42,7 +42,7 @@ public class Item {
   }
   @Override
   public String toString() {
-    return String.format("\"%s\"",itemName);
+    return String.format("No.%d \"%s\"", itemId, itemName);
   }
   
   public int getItemDamage() {

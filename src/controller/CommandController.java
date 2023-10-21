@@ -79,6 +79,9 @@ public class CommandController implements GameController {
       while (currentTurn < MAX_TURN) {
         SimpleCommand cmd = null;
         int activePlayer = model.getCurrentPlayer(currentTurn);
+        out.append(model.queryPlayerDetails(activePlayer));
+        int location = model.getPlayerLocation(activePlayer);
+        out.append(model.queryRoomDetails(location));
         displayGameMenu(activePlayer);
         switch (line = scan.nextLine().trim()) {
           //TODO change the constructor of command, in, out should be in the execute.
@@ -119,14 +122,18 @@ public class CommandController implements GameController {
   private void displayGameMenu(int playerId) throws IOException {
     out.append(String.format("Player %d's turn, please select one of the option below", playerId))
         .append("\n");
-    out.append("===================Game Menu===================").append("\n");
+    int playerLocation = model.getPlayerLocation(playerId);
+    out.append(model.queryPlayerDetails(playerId));
+    out.append(model.queryRoomDetails(playerLocation));
+    out.append("-------------------GAME MENU-------------------").append("\n");
     out.append("1. Move to neighbor space.(Cost one turn)\n");
     out.append("2. Pick up items from this space.(Cost one turn)\n");
     out.append("3. Look around.(Cost one turn)\n");
     out.append("4. Display player info.\n");
-    out.append("5. Display room.\n");
-    out.append("6. Display target.\n");
-    out.append("7. Display item.\n");
+    out.append("5. Display current room.\n");
+    out.append("6. Display target info.\n");
+    out.append("7. Display item info.\n");
+    out.append("-------------------MENU END-------------------").append("\n");
   }
 
   private void displayMap() {

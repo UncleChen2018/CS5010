@@ -323,7 +323,7 @@ public class World implements GameModel {
   }
 
   public void printItemInfo(int index) {
-    System.out.println(itemList.get(index).getDetails());
+    System.out.println(itemList.get(index).queryDetails());
   }
 
   @Override
@@ -345,8 +345,11 @@ public class World implements GameModel {
     if (capacity <= 0) {
       throw new IllegalArgumentException("Capacity must be at least one");
     }
-
-    playerList.add(new Player(name, initLocation, capacity, isHumanControl, playerList.size()));
+    //put player in list
+    Player toAddPlayer = new Player(name, initLocation, capacity, isHumanControl, playerList.size());
+    playerList.add(toAddPlayer);
+    //add player to room
+    roomList.get(initLocation).addCharacer(toAddPlayer);
   }
 
   @Override
@@ -384,7 +387,7 @@ public class World implements GameModel {
   public String queryRoomItem(int location) {
     StringBuilder stringBuilder = new StringBuilder();
     for (Item item : roomList.get(location).getSpaceItem()) {
-      stringBuilder.append(item.getDetails()).append("\n");
+      stringBuilder.append(item.queryDetails()).append("\n");
     }
     if (stringBuilder.length() == 0) {
       stringBuilder.append("No item.\n");
@@ -410,6 +413,16 @@ public class World implements GameModel {
     roomSpace.removeItem(item);
     // item location to -1
     item.setStoredLoacation(-1);
+  }
+  
+  // TODO displayRoomifno
+  public String queryRoomDetails(int location) {
+    return roomList.get(location).queryDetails();
+  }
+
+  @Override
+  public String queryPlayerDetails(int playerId) {
+     return playerList.get(playerId).querryDetails();
   }
 
 }
