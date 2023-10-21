@@ -16,8 +16,9 @@ public class PickUpItem extends TurnBaseCommand {
   @Override
   public void execute(GameModel model, Scanner scan, Appendable out) throws IOException {
     while (true) {
-      
-      out.append("Enter the room index to move to\n");
+      int curLocation = model.getPlayerLocation(playerId);
+      out.append(model.queryRoomItem(curLocation));
+      out.append("Enter the item  you want to pick up\n");
       String line = scan.nextLine().trim();
       try {
         int location = Integer.parseInt(line);

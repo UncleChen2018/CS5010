@@ -8,6 +8,7 @@ import org.hamcrest.core.Is;
  * is set to null for its no longer belong to certain space.
  */
 public class Item {
+  private final int itemId;
   private final int itemDamage;
   private final String itemName;
   private int storedLocation;
@@ -20,7 +21,8 @@ public class Item {
    * @param itemDamage        damage of the item.
    * @param itemLocationIndex current located at which room.
    */
-  public Item(String itemName, int itemDamage, int itemLocationIndex) {
+  public Item(int id, String itemName, int itemDamage, int itemLocationIndex) {
+    this.itemId = id;
     this.itemDamage = itemDamage;
     this.itemName = itemName;
     this.storedLocation = itemLocationIndex;

@@ -76,7 +76,7 @@ public class World implements GameModel {
       int spaceIndex = scanner.nextInt();
       int damage = scanner.nextInt();
       String itemName = scanner.nextLine().trim();
-      Item newItem = new Item(itemName, damage, spaceIndex);
+      Item newItem = new Item(i,itemName, damage, spaceIndex);
       itemList.add(newItem);
       addItemToRoom(newItem, getRoomSpace(spaceIndex));
     }
