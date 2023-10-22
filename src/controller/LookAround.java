@@ -9,7 +9,7 @@ import java.util.Scanner;
 import model.GameModel;
 
 /**
- * 
+ * Look around make a player has the ability to get its neighbors detail.
  */
 public class LookAround extends TurnBaseCommand {
 
@@ -21,30 +21,18 @@ public class LookAround extends TurnBaseCommand {
   }
 
   @Override
-  public void execute(GameModel model, Scanner scan, Appendable out) throws IOException {
-    while (true) {
-      int curLocation = model.getPlayerLocation(playerId);
-      out.append(model.queryRoomItem(curLocation));
-      out.append("Enter the item  you want to pick up\n");
-      String line = scan.nextLine().trim();
-      try {
-        int itemId = Integer.parseInt(line);
-        int playerLocation = model.getPlayerLocation(playerId);
-        if (model.getItemLocation(itemId) == playerLocation) {
-          model.pickUpitem(playerId, itemId);
-          out.append("Pick up successfully.\n");
-          turnEnd();
-          break;
-        } else {
-          out.append("No such item in this room, pick up failed,\n");
-        }
-
-      } catch (NumberFormatException e) {
-        out.append("Wrong format for an integer, try gain.\n");
-      } catch (IndexOutOfBoundsException e) {
-        out.append(e.getMessage()).append("\n");
-      }
+  public String execute(GameModel model) throws IOException {
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("Look Aroud result\n");
+    int playerLocation = model.getPlayerLocation(playerId);
+    stringBuilder.append(model.queryRoomDetails(playerLocation)).append("\n");
+    
+    //out.append(model.queryRoomDetails(playerLocation)).append("\n");
+    for (int i : model.getRoomNeighbors(playerLocation)) {
+      stringBuilder.append(model.queryRoomDetails(i)).append("\n");
     }
+    return stringBuilder.toString();
+
   }
 
   @Override

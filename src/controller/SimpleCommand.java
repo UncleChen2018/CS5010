@@ -6,5 +6,5 @@ import java.util.Scanner;
 import model.GameModel;
 
 public interface SimpleCommand {
-  void execute(GameModel model, Scanner scan, Appendable out) throws IOException;
+  String execute(GameModel model) throws IOException;
 }

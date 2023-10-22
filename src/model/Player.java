@@ -73,12 +73,11 @@ public class Player extends MovableCharacter {
   }
 
   public boolean reachItemCapacity() {
-    // TODO Auto-generated method stub
     return itemList.size()== ITEM_CAPACITY;
   }
   
   
   
-
+  
 
 }

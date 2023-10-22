@@ -377,7 +377,7 @@ public class World implements GameModel {
     if (isLocationValid(base) && isLocationValid(quest)) {
       return roomList.get(base).getNeighbors().contains(roomList.get(quest));
     } else {
-      throw new IndexOutOfBoundsException("In check neighbor, at least room index not valid");
+      throw new IndexOutOfBoundsException("Room index not valid");
     }
   }
 
@@ -455,4 +455,17 @@ public class World implements GameModel {
     return roomList.get(location).getItems().size();
   }
 
+  @Override
+  public ArrayList<Integer> getRoomNeighbors(int location) {
+    ArrayList<Integer> retList = new ArrayList<Integer>();
+    for(RoomSpace room:roomList.get(location).getNeighbors()) {
+      retList.add(room.getSpaceIndex());
+    }
+    return retList;
+  }
+
+  @Override
+  public boolean isHumanPlayer(int playerId) {
+    return playerList.get(playerId).isHumanPlayer();
+  }
 }

@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  * The game model interface. Including setup a brand new world, (including
@@ -117,9 +118,13 @@ public interface GameModel {
   CharSequence queryTargetDetails();
 
   String queryRoomNeighbors(int playerLocation);
+  
+  ArrayList<Integer> getRoomNeighbors(int location);
 
   boolean playerReachCapacity(int playerId);
 
   int getRoomItemCount(int location);
+  
+  boolean isHumanPlayer(int playerId);
   
 }

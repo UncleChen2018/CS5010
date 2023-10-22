@@ -3,7 +3,6 @@ package controller;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -77,21 +76,71 @@ public class CommandController implements GameController {
       out.append("Settting finished, game started.\n");
      
       while (currentTurn < MAX_TURN) {
-        SimpleCommand cmd = null;
+        out.append(String.format("[TURN %d]\n",currentTurn+1));
+        
         int activePlayer = model.getCurrentPlayer(currentTurn);
-//        out.append(model.queryPlayerDetails(activePlayer));
+        if(model.isHumanPlayer(activePlayer)) {
         int location = model.getPlayerLocation(activePlayer);
-//        out.append(model.queryRoomDetails(location));
+        SimpleCommand cmd = null;
         displayGameMenu(activePlayer);
-        switch (line = scan.nextLine().trim()) {
-          
-          case "1":        
-            cmd = new MoveToNeighbor(activePlayer);
+        switch (line = scan.nextLine().trim()) {          
+          case "1":   
+            while (true) {
+              int playerLocation = model.getPlayerLocation(activePlayer);
+              out.append(model.queryRoomNeighbors(playerLocation));
+              out.append("Enter the room index to move to\n");
+              line = scan.nextLine().trim();
+              try {
+                int destLocation = Integer.parseInt(line);
+                
+                if (model.isNeighbor(destLocation, playerLocation)) {
+                  cmd = new MoveToNeighbor(activePlayer,destLocation);
+                  
+                  break;
+                } else {
+                  out.append("Not a valid neighbor, move failed,\n");
+                }
+
+              } catch (NumberFormatException e) {
+                out.append("Wrong format for an integer, try gain.\n");
+              } catch (IndexOutOfBoundsException e) {
+                out.append("Room index not valid, try gain.\n").append("\n");
+              }
+            }
             break;
           case "2":
-            cmd = new PickUpItem(activePlayer);
+            if(model.playerReachCapacity(activePlayer)) {
+              out.append("Item capacity reached, choose other option.").append("\n");
+              
+            }
+            int curLocation = model.getPlayerLocation(activePlayer);
+            if(model.getRoomItemCount(curLocation)==0) {
+              out.append("Room has not item, choose other option.\n");
+              break;
+            }
+            while (true) {      
+              out.append(model.queryRoomItem(curLocation));
+              out.append("Enter the item  you want to pick up\n");
+              line = scan.nextLine().trim();
+              try {
+                int itemId = Integer.parseInt(line);
+                int playerLocation = model.getPlayerLocation(activePlayer);
+                if (model.getItemLocation(itemId) == playerLocation) {
+                  cmd = new PickUpItem(activePlayer, itemId);      
+                  break;
+                } else {
+                  out.append("No such item in this room, pick up failed,\n");
+                }
+
+              } catch (NumberFormatException e) {
+                out.append("Wrong format for an integer, try gain.\n");
+              } catch (IndexOutOfBoundsException e) {
+                out.append(e.getMessage()).append("\n");
+              }
+            }
             break;
           case "3":
+            cmd = new LookAround(activePlayer);
             break;
           case "4":
             displayPlayerInfo(activePlayer);
@@ -111,7 +160,7 @@ public class CommandController implements GameController {
         }
         if (cmd != null) {
           try {
-          cmd.execute(model,scan,out);
+          out.append(cmd.execute(model));
           model.moveTargetNextRoom();
           currentTurn += 1;
           }
@@ -119,6 +168,7 @@ public class CommandController implements GameController {
             out.append(e.getMessage()).append("\n");
           }
           cmd = null;
+        }
         }
       }
 
@@ -135,9 +185,6 @@ public class CommandController implements GameController {
   private void displayGameMenu(int playerId) throws IOException {
     out.append(String.format("Player %d's turn, please select one of the option below", playerId))
         .append("\n");
-    int playerLocation = model.getPlayerLocation(playerId);
-//    out.append(model.queryPlayerDetails(playerId));
-//    out.append(model.queryRoomDetails(playerLocation));
     out.append("-------------------GAME MENU-------------------").append("\n");
     out.append("1. Move to neighbor space.(Cost one turn)\n");
     out.append("2. Pick up items from this space.(Cost one turn)\n");
