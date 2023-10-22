@@ -42,7 +42,7 @@ public class Item {
   }
   @Override
   public String toString() {
-    return String.format("No.%d \"%s\"", itemId, itemName);
+    return String.format("No.%d \"%s\" Damage:%d", itemId, itemName, itemDamage);
   }
   
   public int getItemDamage() {
