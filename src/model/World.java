@@ -19,7 +19,7 @@ public class World implements GameModel {
   private int colSize;
 
   private TargetCharacter targetCharacter;
-  private ArrayList<RoomSpace> roomList;
+  private ArrayList<Room> roomList;
   private ArrayList<Item> itemList;
   private ArrayList<Player> playerList;
 
@@ -31,7 +31,7 @@ public class World implements GameModel {
     setupNewWorld(source);
   }
 
-  private void addItemToRoom(Weapon item, RoomSpace room) {
+  private void addItemToRoom(Item item, Room room) {
     room.addItem(item);
   }
 
@@ -41,7 +41,7 @@ public class World implements GameModel {
    * @param source file or string match certain format.
    */
   public void setupNewWorld(Readable source) {
-    roomList = new ArrayList<RoomSpace>();
+    roomList = new ArrayList<Room>();
     itemList = new ArrayList<Item>();
     playerList = new ArrayList<Player>();
 
@@ -87,12 +87,12 @@ public class World implements GameModel {
 
     // fill the neighbors and visible room list
     for (int i = 0; i < roomList.size(); i++) {
-      RoomSpace thisSpace = roomList.get(i);
+      Room thisSpace = roomList.get(i);
       for (int j = 0; j < roomList.size(); j++) {
         if (i == j) {
           continue;
         }
-        RoomSpace otherSpace = roomList.get(j);
+        Room otherSpace = roomList.get(j);
         if (isNeighbor(thisSpace, otherSpace)) {
           thisSpace.getNeighbors().add(otherSpace);
         }
@@ -113,7 +113,7 @@ public class World implements GameModel {
     }
   }
 
-  private static boolean isNeighbor(RoomSpace one, RoomSpace two) {
+  private static boolean isNeighbor(Room thisSpace, Room otherSpace) {
     boolean result = false;
     // if two room share the same wall,then they are neighbor
     // every room has 4 wall, top: (x1, y1--> y2); right: (x1->x2, y2); bottom:
@@ -122,8 +122,8 @@ public class World implements GameModel {
     // overlap
     // 2) right-left: y2a = y1b or y1a = y2b, then test if X overlap
 
-    int[] rectOne = one.getRoomRect();
-    int[] rectTwo = two.getRoomRect();
+    int[] rectOne = thisSpace.getRoomRect();
+    int[] rectTwo = otherSpace.getRoomRect();
     int x1a = rectOne[0];
     int y1a = rectOne[1];
     int x2a = rectOne[2];
@@ -149,14 +149,14 @@ public class World implements GameModel {
    * Judge if two room two can be visible from room one. Being visible means they
    * have overlap on X or Y axis.
    * 
-   * @param one vision start from room one.
-   * @param two the other room to be judged if is visible.
+   * @param thisSpace vision start from room one.
+   * @param otherSpace the other room to be judged if is visible.
    * @return if it's true that from room one, we can see room two.
    */
-  private static boolean isVisible(RoomSpace one, RoomSpace two) {
+  private static boolean isVisible(Room thisSpace, Room otherSpace) {
     // if two room has X or Y overlap, consider them visible to each other
-    int[] rectOne = one.getRoomRect();
-    int[] rectTwo = two.getRoomRect();
+    int[] rectOne = thisSpace.getRoomRect();
+    int[] rectTwo = otherSpace.getRoomRect();
     int x1a = rectOne[0];
     int y1a = rectOne[1];
     int x2a = rectOne[2] + 1;
@@ -171,7 +171,7 @@ public class World implements GameModel {
 
   // rerun {row, col} of the world.
 
-  public ArrayList<RoomSpace> getWorldSpace() {
+  public ArrayList<Room> getWorldSpace() {
     return roomList;
   }
 
@@ -214,7 +214,7 @@ public class World implements GameModel {
 
     graph.drawRect(leftPadding * scale, topPadding * scale, width * scale, height * scale);
 
-    for (RoomSpace room : roomList) {
+    for (Room room : roomList) {
       // apply paddings and scaling to draw room's rectangel
       int x1 = room.getRoomRect()[1] + leftPadding;
       int y1 = room.getRoomRect()[0] + topPadding;
@@ -305,7 +305,7 @@ public class World implements GameModel {
     return targetCharacter;
   }
 
-  public RoomSpace getRoomSpace(int index) {
+  public Room getRoomSpace(int index) {
     return roomList.get(index);
   }
 
@@ -315,7 +315,7 @@ public class World implements GameModel {
    * @param index the index of the room array
    */
   public void printRoomInfo(int index) {
-    RoomSpace room = getRoomSpace(index);
+    Room room = getRoomSpace(index);
     System.out.println(String.format("[Room No.%d: %s's information]", index, room.getSpaceName()));
     System.out.println(String.format("Neighbors: %s", room.getNeighbors()));
     System.out.println(String.format("Visible: %s", room.getVisibles()));
@@ -409,7 +409,7 @@ public class World implements GameModel {
   // let player pick up item from current room.
   public void pickUpitem(int playerId, int itemId) {
     Player player = playerList.get(playerId);
-    RoomSpace roomSpace = roomList.get(player.getLocation());
+    Room roomSpace = roomList.get(player.getLocation());
     Item item = itemList.get(itemId);
     // player got the item
     player.addItem(item);
@@ -454,7 +454,7 @@ public class World implements GameModel {
   @Override
   public ArrayList<Integer> getRoomNeighbors(int location) {
     ArrayList<Integer> retList = new ArrayList<Integer>();
-    for (RoomSpace room : roomList.get(location).getNeighbors()) {
+    for (Room room : roomList.get(location).getNeighbors()) {
       retList.add(room.getSpaceIndex());
     }
     return retList;

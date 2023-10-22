@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Rooms in the world, with index, rectangle coordinate it can be represented,
  * room name, arrays of containing item, neighbor rooms and other visible rooms.
  */
-public class RoomSpace {
+public class RoomSpace implements Room{
 
   private int spaceIndex;
   private int[] rectCordinate; // the coordinate of the room rectangle
@@ -15,8 +15,8 @@ public class RoomSpace {
 
   // Not final here, later may need to change
   private ArrayList<Item> itemList;
-  private ArrayList<RoomSpace> neighboRoomSpaces;
-  private ArrayList<RoomSpace> visbleRoomSpaces;
+  private ArrayList<Room> neighboRoomSpaces;
+  private ArrayList<Room> visbleRoomSpaces;
   private ArrayList<Movable> characterList;
   private boolean isTargetIn;
 
@@ -40,8 +40,8 @@ public class RoomSpace {
     rectCordinate[3] = colEnd + 1;
     this.name = name;
     this.itemList = new ArrayList<Item>();
-    this.neighboRoomSpaces = new ArrayList<RoomSpace>();
-    this.visbleRoomSpaces = new ArrayList<RoomSpace>();
+    this.neighboRoomSpaces = new ArrayList<Room>();
+    this.visbleRoomSpaces = new ArrayList<Room>();
     this.characterList = new ArrayList<Movable>();
     isTargetIn = false;
   }
@@ -62,7 +62,7 @@ public class RoomSpace {
     return spaceIndex;
   }
 
-  public void addItem(Weapon item) {
+  public void addItem(Item item) {
     itemList.add(item);
     item.setStoredLoacation(spaceIndex);
   }
@@ -81,12 +81,12 @@ public class RoomSpace {
   }
 
   // return the neighbors list
-  public ArrayList<RoomSpace> getNeighbors() {
+  public ArrayList<Room> getNeighbors() {
     return neighboRoomSpaces;
   }
 
   // return the visible list
-  public ArrayList<RoomSpace> getVisibles() {
+  public ArrayList<Room> getVisibles() {
     return visbleRoomSpaces;
   }
 
@@ -155,7 +155,7 @@ public class RoomSpace {
   public String queryRoomNeighbors() {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("-------------------Neighbor Info-------------------\n");
-    for (RoomSpace room : neighboRoomSpaces) {
+    for (Room room : neighboRoomSpaces) {
       stringBuilder.append(room).append("\n");
     }
     return stringBuilder.toString();
