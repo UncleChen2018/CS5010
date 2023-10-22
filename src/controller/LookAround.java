@@ -23,7 +23,7 @@ public class LookAround extends TurnBaseCommand {
     stringBuilder.append("Look Aroud result\n");
     int playerLocation = model.getPlayerLocation(playerId);
     stringBuilder.append(model.queryRoomDetails(playerLocation)).append("\n");
-
+    
     // out.append(model.queryRoomDetails(playerLocation)).append("\n");
     for (int i : model.getRoomNeighbors(playerLocation)) {
       stringBuilder.append(model.queryRoomDetails(i)).append("\n");

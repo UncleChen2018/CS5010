@@ -3,9 +3,12 @@ package controller;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
+import javax.print.attribute.IntegerSyntax;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,8 +29,11 @@ public class CommandController implements GameController {
   private Readable worldData;
   private BufferedImage image;
   private JFrame frame;
+  private NumberGenerator generator;
 
   // Build a controller, so the in, out, and MaxTurn is set.
+  // This is the default constructor, which use random to generate choice of
+  // computer controlling.
   public CommandController(Readable in, Appendable out, Readable worldSource, int turnLimit) {
     if (in == null || out == null || worldSource == null) {
       throw new IllegalArgumentException("Readable and Appendable can't be null");
@@ -42,6 +48,15 @@ public class CommandController implements GameController {
 
     MAX_TURN = turnLimit;
     currentTurn = 0;
+    generator = new NumberGenerator();
+
+  }
+
+  public CommandController(Readable in, Appendable out, Readable worldSource, int turnLimit,
+      int... numbers) {
+    this(in, out, worldSource, turnLimit);
+    generator = new NumberGenerator(numbers);
+
   }
 
   @Override
@@ -169,9 +184,10 @@ public class CommandController implements GameController {
             }
             cmd = null;
           }
-        }
-        else {
-          // TODO: computer random choice
+        } else {
+          out.append(String.format("Turn %d: ",++currentTurn));
+          out.append(String.format("get number %d ",generator.getNextNumber())).append("\n");
+          
         }
       }
 
@@ -324,6 +340,36 @@ public class CommandController implements GameController {
 
   private void displayItemInfo(int itemId) throws IOException {
     out.append(model.queryItemDetails(itemId)).append("\n");
+  }
+
+  private class NumberGenerator {
+    private ArrayList<Integer> numbers;
+    private int currentIndex;
+    private Random random;
+
+    public NumberGenerator(int... numbers) {
+      this.numbers = new ArrayList<>();
+      for (int num : numbers) {
+        this.numbers.add(num);
+      }
+      this.currentIndex = 0;
+      this.random = null; // not use random
+    }
+
+    public NumberGenerator() {
+      this.random = new Random(666);
+      this.currentIndex = -1;
+      this.numbers = null; // not use arrayList
+    }
+
+    public int getNextNumber() {
+      if (numbers != null) {
+          return numbers.get(currentIndex++ % numbers.size());
+        } 
+      else {
+        return random.nextInt(256);
+      }
+    }
   }
 
 }
