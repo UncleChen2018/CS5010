@@ -1,4 +1,5 @@
 package model;
+
 // TODO: add item interface.
 /**
  * Items in the world. Store its damage, name, and room index where it's now in.
@@ -78,6 +79,10 @@ public class Item {
         .append("\n");
 
     return stringBuilder.toString();
+  }
+
+  public int getItemId() {
+    return this.itemId;
   }
 
 }

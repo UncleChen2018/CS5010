@@ -467,4 +467,15 @@ public class World implements GameModel {
   public boolean isHumanPlayer(int playerId) {
     return playerList.get(playerId).isHumanPlayer();
   }
+
+  @Override
+  public ArrayList<Integer> getRoomItems(int location) {
+    ArrayList<Integer> retList = new ArrayList<Integer>();
+    for (Item item : roomList.get(location).getItems()) {
+      retList.add(item.getItemId());
+    }
+    return retList;
+  }
+  
+  
 }

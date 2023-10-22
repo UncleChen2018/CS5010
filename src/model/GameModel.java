@@ -126,5 +126,7 @@ public interface GameModel {
   int getRoomItemCount(int location);
   
   boolean isHumanPlayer(int playerId);
+
+  ArrayList<Integer> getRoomItems(int location);
   
 }

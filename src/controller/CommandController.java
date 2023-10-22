@@ -94,9 +94,11 @@ public class CommandController implements GameController {
         out.append(String.format("[TURN %d]\n", currentTurn + 1));
 
         int activePlayer = model.getCurrentPlayer(currentTurn);
+        int location = model.getPlayerLocation(activePlayer);
+        SimpleCommand cmd = null;
+
+        // Through interaction, get human command.
         if (model.isHumanPlayer(activePlayer)) {
-          int location = model.getPlayerLocation(activePlayer);
-          SimpleCommand cmd = null;
           displayGameMenu(activePlayer);
           switch (line = scan.nextLine().trim()) {
             case "1":
@@ -173,21 +175,54 @@ public class CommandController implements GameController {
               out.append("Invalid choice, try again").append("\n");
               break;
           }
-          if (cmd != null) {
-            try {
-              // TODO: add more display info for each command after execution.
-              out.append(cmd.execute(model));
-              model.moveTargetNextRoom();
-              currentTurn += 1;
-            } catch (IllegalArgumentException | IllegalStateException e) {
-              out.append(e.getMessage()).append("\n");
-            }
-            cmd = null;
-          }
         } else {
-          out.append(String.format("Turn %d: ",++currentTurn));
-          out.append(String.format("get number %d ",generator.getNextNumber())).append("\n");
-          
+          // TODO: use generator to help computer decide.
+          int nextInt = generator.getNextNumber();
+          int curLocation = model.getPlayerLocation(activePlayer);
+          // let computer choose which action to take
+          int actionChoice = -1;
+          // make computer smart, if not able to pickup, omit this option, not choose 1.
+          if (model.playerReachCapacity(activePlayer) || model.getRoomItemCount(curLocation) == 0) {
+            if (nextInt % 2 == 0) {
+              actionChoice = 0;
+            } else {
+              actionChoice = 2;
+            }
+          } else {
+            actionChoice = nextInt % 3;
+          }
+
+          switch (actionChoice) {
+            case 0:
+              nextInt = generator.getNextNumber();
+              ArrayList<Integer> neighbors = model.getRoomNeighbors(curLocation);
+              int destLocation = nextInt % neighbors.size();
+              cmd = new MoveToNeighbor(activePlayer, destLocation);
+              break;
+            case 1:
+              nextInt = generator.getNextNumber();
+              ArrayList<Integer> items = model.getRoomItems(curLocation);
+              int pickId = nextInt % items.size();
+              cmd = new PickUpItem(activePlayer, pickId);
+              break;
+            case 2:
+              cmd = new LookAround(activePlayer);
+              break;
+            default:
+              throw new IllegalStateException("Computer made invaild choice");
+          }
+        }
+        // Execute command.
+        if (cmd != null) {
+          try {
+            // TODO: add more display info for each command after execution.
+            out.append(cmd.execute(model));
+            model.moveTargetNextRoom();
+            currentTurn += 1;
+          } catch (IllegalArgumentException | IllegalStateException e) {
+            out.append(e.getMessage()).append("\n");
+          }
+          cmd = null;
         }
       }
 
@@ -364,9 +399,8 @@ public class CommandController implements GameController {
 
     public int getNextNumber() {
       if (numbers != null) {
-          return numbers.get(currentIndex++ % numbers.size());
-        } 
-      else {
+        return numbers.get(currentIndex++ % numbers.size());
+      } else {
         return random.nextInt(256);
       }
     }
