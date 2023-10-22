@@ -444,4 +444,15 @@ public class World implements GameModel {
     return roomList.get(playerLocation).queryRoomNeighbors();
   }
 
+  @Override
+  public boolean playerReachCapacity(int playerId) {
+    // TODO Auto-generated method stub
+    return playerList.get(playerId).reachItemCapacity();
+  }
+
+  @Override
+  public int getRoomItemCount(int location) {
+    return roomList.get(location).getItems().size();
+  }
+
 }

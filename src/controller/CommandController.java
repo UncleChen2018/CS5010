@@ -115,7 +115,7 @@ public class CommandController implements GameController {
           model.moveTargetNextRoom();
           currentTurn += 1;
           }
-          catch (IllegalArgumentException e) {
+          catch (IllegalArgumentException | IllegalStateException e) {
             out.append(e.getMessage()).append("\n");
           }
           cmd = null;

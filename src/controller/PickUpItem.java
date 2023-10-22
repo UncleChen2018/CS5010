@@ -13,10 +13,15 @@ public class PickUpItem extends TurnBaseCommand {
   }
 
   @Override
-  public void execute(GameModel model, Scanner scan, Appendable out) throws IOException {
-
-    while (true) {
-      int curLocation = model.getPlayerLocation(playerId);
+  public void execute(GameModel model, Scanner scan, Appendable out) throws IOException, IllegalStateException {
+    if(model.playerReachCapacity(playerId)) {
+      throw new IllegalStateException("Item capacity reached, choose other option.");
+    }
+    int curLocation = model.getPlayerLocation(playerId);
+    if(model.getRoomItemCount(curLocation)==0) {
+      throw new IllegalStateException("Room has not item, choose other option.");
+    }
+    while (true) {      
       out.append(model.queryRoomItem(curLocation));
       out.append("Enter the item  you want to pick up\n");
       String line = scan.nextLine().trim();

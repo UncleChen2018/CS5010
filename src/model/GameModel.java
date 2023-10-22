@@ -117,4 +117,9 @@ public interface GameModel {
   CharSequence queryTargetDetails();
 
   String queryRoomNeighbors(int playerLocation);
+
+  boolean playerReachCapacity(int playerId);
+
+  int getRoomItemCount(int location);
+  
 }

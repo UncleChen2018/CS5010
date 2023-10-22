@@ -71,6 +71,11 @@ public class Player extends MovableCharacter {
   public String toString() {
     return String.format("No.%d \"%s\"", playerID, name) ;
   }
+
+  public boolean reachItemCapacity() {
+    // TODO Auto-generated method stub
+    return itemList.size()== ITEM_CAPACITY;
+  }
   
   
   
