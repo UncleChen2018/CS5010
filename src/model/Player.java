@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Player extends MovableCharacter {
   private final int ITEM_CAPACITY;
-  private ArrayList<Item> itemList;
+  private ArrayList<Weapon> itemList;
   private ControlType controlType;
   private int playerID;   // every player has unique id from 0
   
@@ -16,7 +16,7 @@ public class Player extends MovableCharacter {
   public Player(String name, int location, int itemCapacity, boolean isHumanControl, int id) {
     super(name, location);
     ITEM_CAPACITY = itemCapacity;
-    itemList = new ArrayList<Item>(ITEM_CAPACITY);
+    itemList = new ArrayList<Weapon>(ITEM_CAPACITY);
     if(isHumanControl) {
     controlType = ControlType.HUMAN;
     }
@@ -26,13 +26,13 @@ public class Player extends MovableCharacter {
     playerID = id;
   }
 
-  public void addItem(Item item) {
+  public void addItem(Weapon item) {
     if (itemList.size() < ITEM_CAPACITY) {
       itemList.add(item);
     }
   }
   
-  public ArrayList<Item> getItemList() {
+  public ArrayList<Weapon> getItemList() {
     return itemList;
   }
   

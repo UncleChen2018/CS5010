@@ -6,7 +6,7 @@ import java.io.StringReader;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.Item;
+import model.Weapon;
 import model.RoomSpace;
 import model.TargetCharacter;
 import model.World;
@@ -53,7 +53,7 @@ public class WorldTest {
     assertEquals("Armory", room.getSpaceName());
     // test item
     assertEquals(20, world.getItems().size());
-    Item item = world.getItems().get(0);
+    Weapon item = world.getItems().get(0);
     assertEquals("Crepe Pan", item.getItemName());
     assertEquals(3, item.getItemDamage());
     assertEquals(8, item.getStoredLoacation());

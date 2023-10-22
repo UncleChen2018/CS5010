@@ -20,7 +20,7 @@ public class World implements GameModel {
 
   private TargetCharacter targetCharacter;
   private ArrayList<RoomSpace> roomList;
-  private ArrayList<Item> itemList;
+  private ArrayList<Weapon> itemList;
   private ArrayList<Player> playerList;
 
   public World() {
@@ -31,7 +31,7 @@ public class World implements GameModel {
     setupNewWorld(source);
   }
 
-  private void addItemToRoom(Item item, RoomSpace room) {
+  private void addItemToRoom(Weapon item, RoomSpace room) {
     room.addItem(item);
   }
 
@@ -42,7 +42,7 @@ public class World implements GameModel {
    */
   public void setupNewWorld(Readable source) {
     roomList = new ArrayList<RoomSpace>();
-    itemList = new ArrayList<Item>();
+    itemList = new ArrayList<Weapon>();
     playerList = new ArrayList<Player>();
 
     Scanner scanner = new Scanner(source);
@@ -79,7 +79,7 @@ public class World implements GameModel {
       int spaceIndex = scanner.nextInt();
       int damage = scanner.nextInt();
       String itemName = scanner.nextLine().trim();
-      Item newItem = new Item(i, itemName, damage, spaceIndex);
+      Weapon newItem = new Weapon(i, itemName, damage, spaceIndex);
       itemList.add(newItem);
       addItemToRoom(newItem, getRoomSpace(spaceIndex));
     }
@@ -322,7 +322,7 @@ public class World implements GameModel {
     System.out.println(String.format("Items: %s", room.getSpaceItem()));
   }
 
-  public ArrayList<Item> getItems() {
+  public ArrayList<Weapon> getItems() {
     return itemList;
   }
 
@@ -390,7 +390,7 @@ public class World implements GameModel {
   // get item info from certain room
   public String queryRoomItem(int location) {
     StringBuilder stringBuilder = new StringBuilder();
-    for (Item item : roomList.get(location).getSpaceItem()) {
+    for (Weapon item : roomList.get(location).getSpaceItem()) {
       stringBuilder.append(item.queryDetails()).append("\n");
     }
     if (stringBuilder.length() == 0) {
@@ -410,7 +410,7 @@ public class World implements GameModel {
   public void pickUpitem(int playerId, int itemId) {
     Player player = playerList.get(playerId);
     RoomSpace roomSpace = roomList.get(player.getLocation());
-    Item item = itemList.get(itemId);
+    Weapon item = itemList.get(itemId);
     // player got the item
     player.addItem(item);
     // room remove the item
@@ -468,7 +468,7 @@ public class World implements GameModel {
   @Override
   public ArrayList<Integer> getRoomItems(int location) {
     ArrayList<Integer> retList = new ArrayList<Integer>();
-    for (Item item : roomList.get(location).getItems()) {
+    for (Weapon item : roomList.get(location).getItems()) {
       retList.add(item.getItemId());
     }
     return retList;

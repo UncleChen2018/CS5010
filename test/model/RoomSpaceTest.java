@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import org.junit.Test;
 
-import model.Item;
+import model.Weapon;
 import model.RoomSpace;
 
 /**
@@ -30,9 +30,9 @@ public class RoomSpaceTest {
   @Test
   public void testAddItemAndGetSpaceItem() {
     RoomSpace room = new RoomSpace(3, 2, 2, 5, 5, "Kitchen");
-    Item item = new Item("Knife", 5, 3);
+    Weapon item = new Weapon("Knife", 5, 3);
     room.addItem(item);
-    ArrayList<Item> itemList = room.getSpaceItem();
+    ArrayList<Weapon> itemList = room.getSpaceItem();
     assertTrue(itemList.contains(item));
   }
 
@@ -72,7 +72,7 @@ public class RoomSpaceTest {
   @Test
   public void testGetSpaceInfo() {
     RoomSpace room = new RoomSpace(10, 0, 0, 3, 3, "Library");
-    Item item = new Item("Book", 2, 10);
+    Weapon item = new Weapon("Book", 2, 10);
     room.addItem(item);
     RoomSpace visibleRoom = new RoomSpace(11, 4, 4, 7, 7, "Study");
     room.addVisible(visibleRoom);

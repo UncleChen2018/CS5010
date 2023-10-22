@@ -6,7 +6,7 @@ package model;
  * Items can also be taken by a player, who becomes its owner, and the location
  * is set to null for its no longer belong to certain space.
  */
-public class Item {
+public class Weapon {
   private final int itemId;
   private final int itemDamage;
   private final String itemName;
@@ -20,7 +20,7 @@ public class Item {
    * @param itemDamage        damage of the item.
    * @param itemLocationIndex current located at which room.
    */
-  public Item(int id, String itemName, int itemDamage, int itemLocationIndex) {
+  public Weapon(int id, String itemName, int itemDamage, int itemLocationIndex) {
     this.itemId = id;
     this.itemDamage = itemDamage;
     this.itemName = itemName;

@@ -17,7 +17,7 @@ public class Test {
     System.out.println(player.isComputerPlayer());
     player.getDetails();
     
-    Item item = new Item(0,"da fe ji", 99, 10);
+    Weapon item = new Weapon(0,"da fe ji", 99, 10);
     System.out.println(item.queryDetails());
     item.setOwner(player);
     System.out.println(item.queryDetails());
