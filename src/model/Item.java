@@ -1,7 +1,5 @@
 package model;
-
-import org.hamcrest.core.Is;
-
+// TODO: add item interface.
 /**
  * Items in the world. Store its damage, name, and room index where it's now in.
  * Items can also be taken by a player, who becomes its owner, and the location
@@ -29,22 +27,23 @@ public class Item {
     this.owner = null; // No one owns it at the start.
   }
 
-
   public String queryDetails() {
     if (owner != null) {
-      return String.format("Item [itemId = %d, itemName = %s, itemDamage = %d, owner = \"%s\"]", 
+      return String.format("Item [itemId = %d, itemName = %s, itemDamage = %d, owner = \"%s\"]",
           itemId, itemName, itemDamage, owner.getName());
 
     } else {
-      return String.format("Item [itemId = %d, itemName = %s, itemDamage = %d, storedLocation = %s]", 
-          itemId, itemName, itemDamage, storedLocation);
+      return String.format(
+          "Item [itemId = %d, itemName = %s, itemDamage = %d, storedLocation = %s]", itemId,
+          itemName, itemDamage, storedLocation);
     }
   }
+
   @Override
   public String toString() {
     return String.format("No.%d \"%s\" Damage:%d", itemId, itemName, itemDamage);
   }
-  
+
   public int getItemDamage() {
     return itemDamage;
   }
@@ -68,18 +67,17 @@ public class Item {
   public void setOwner(Player owner) {
     this.owner = owner;
   }
-  
+
   public String querryDetails() {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("-------------------Item DETAILS-------------------\n");
-    stringBuilder.append("Item: ").append(this).append("\n")
-    .append("Damage: ").append(itemDamage).append("\n")
-    .append("Location: ").append(storedLocation!=-1?storedLocation:"Be Taken").append("\n")
-    .append("Owner: ").append(owner).append("\n")
-    .append("-------------------DETAILS END-------------------").append("\n");
-        
+    stringBuilder.append("Item: ").append(this).append("\n").append("Damage: ").append(itemDamage)
+        .append("\n").append("Location: ")
+        .append(storedLocation != -1 ? storedLocation : "Be Taken").append("\n").append("Owner: ")
+        .append(owner).append("\n").append("-------------------DETAILS END-------------------")
+        .append("\n");
+
     return stringBuilder.toString();
   }
-  
 
 }

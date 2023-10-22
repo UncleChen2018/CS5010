@@ -3,9 +3,6 @@
  */
 package controller;
 
-import java.io.IOException;
-import java.util.Scanner;
-
 import model.GameModel;
 
 /**
@@ -21,29 +18,17 @@ public class LookAround extends TurnBaseCommand {
   }
 
   @Override
-  public String execute(GameModel model) throws IOException {
+  public String execute(GameModel model) {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("Look Aroud result\n");
     int playerLocation = model.getPlayerLocation(playerId);
     stringBuilder.append(model.queryRoomDetails(playerLocation)).append("\n");
-    
-    //out.append(model.queryRoomDetails(playerLocation)).append("\n");
+
+    // out.append(model.queryRoomDetails(playerLocation)).append("\n");
     for (int i : model.getRoomNeighbors(playerLocation)) {
       stringBuilder.append(model.queryRoomDetails(i)).append("\n");
     }
     return stringBuilder.toString();
-
-  }
-
-  @Override
-  protected void turnBegin() {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  protected void turnEnd() {
-    // TODO Auto-generated method stub
 
   }
 

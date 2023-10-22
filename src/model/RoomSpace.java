@@ -1,5 +1,6 @@
 package model;
 
+// TODO: add room Interface.
 import java.util.ArrayList;
 
 /**
@@ -88,18 +89,15 @@ public class RoomSpace {
   public ArrayList<RoomSpace> getVisibles() {
     return visbleRoomSpaces;
   }
-  
-  
+
   // return the neighbors list
   public ArrayList<Item> getItems() {
     return itemList;
   }
-  
+
   public ArrayList<Movable> getCharacters() {
     return characterList;
   }
-  
-
 
   /**
    * Give a string that describes the name, items and visible spaces from the
@@ -151,18 +149,17 @@ public class RoomSpace {
         .append(characterList.size() > 0 ? characterList : "No Player").append("\n")
         .append("Target: ").append(isTargetIn ? "Found" : "Not Found").append("\n")
         .append("-------------------DETAILS END-------------------").append("\n");
-        
+
     return stringBuilder.toString();
   }
 
   public String queryRoomNeighbors() {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("-------------------Neighbor Info-------------------\n");
-    for(RoomSpace room:neighboRoomSpaces) {
+    for (RoomSpace room : neighboRoomSpaces) {
       stringBuilder.append(room).append("\n");
     }
     return stringBuilder.toString();
   }
-  
-  
+
 }

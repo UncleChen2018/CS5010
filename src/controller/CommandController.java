@@ -74,101 +74,104 @@ public class CommandController implements GameController {
         line = scan.nextLine().trim();
       }
       out.append("Settting finished, game started.\n");
-     
+
       while (currentTurn < MAX_TURN) {
-        out.append(String.format("[TURN %d]\n",currentTurn+1));
-        
+        out.append(String.format("[TURN %d]\n", currentTurn + 1));
+
         int activePlayer = model.getCurrentPlayer(currentTurn);
-        if(model.isHumanPlayer(activePlayer)) {
-        int location = model.getPlayerLocation(activePlayer);
-        SimpleCommand cmd = null;
-        displayGameMenu(activePlayer);
-        switch (line = scan.nextLine().trim()) {          
-          case "1":   
-            while (true) {
-              int playerLocation = model.getPlayerLocation(activePlayer);
-              out.append(model.queryRoomNeighbors(playerLocation));
-              out.append("Enter the room index to move to\n");
-              line = scan.nextLine().trim();
-              try {
-                int destLocation = Integer.parseInt(line);
-                
-                if (model.isNeighbor(destLocation, playerLocation)) {
-                  cmd = new MoveToNeighbor(activePlayer,destLocation);
-                  
-                  break;
-                } else {
-                  out.append("Not a valid neighbor, move failed,\n");
-                }
-
-              } catch (NumberFormatException e) {
-                out.append("Wrong format for an integer, try gain.\n");
-              } catch (IndexOutOfBoundsException e) {
-                out.append("Room index not valid, try gain.\n").append("\n");
-              }
-            }
-            break;
-          case "2":
-            if(model.playerReachCapacity(activePlayer)) {
-              out.append("Item capacity reached, choose other option.").append("\n");
-              
-            }
-            int curLocation = model.getPlayerLocation(activePlayer);
-            if(model.getRoomItemCount(curLocation)==0) {
-              out.append("Room has not item, choose other option.\n");
-              break;
-            }
-            while (true) {      
-              out.append(model.queryRoomItem(curLocation));
-              out.append("Enter the item  you want to pick up\n");
-              line = scan.nextLine().trim();
-              try {
-                int itemId = Integer.parseInt(line);
+        if (model.isHumanPlayer(activePlayer)) {
+          int location = model.getPlayerLocation(activePlayer);
+          SimpleCommand cmd = null;
+          displayGameMenu(activePlayer);
+          switch (line = scan.nextLine().trim()) {
+            case "1":
+              while (true) {
                 int playerLocation = model.getPlayerLocation(activePlayer);
-                if (model.getItemLocation(itemId) == playerLocation) {
-                  cmd = new PickUpItem(activePlayer, itemId);      
-                  break;
-                } else {
-                  out.append("No such item in this room, pick up failed,\n");
-                }
+                out.append(model.queryRoomNeighbors(playerLocation));
+                out.append("Enter the room index to move to\n");
+                line = scan.nextLine().trim();
+                try {
+                  int destLocation = Integer.parseInt(line);
 
-              } catch (NumberFormatException e) {
-                out.append("Wrong format for an integer, try gain.\n");
-              } catch (IndexOutOfBoundsException e) {
-                out.append(e.getMessage()).append("\n");
+                  if (model.isNeighbor(destLocation, playerLocation)) {
+                    cmd = new MoveToNeighbor(activePlayer, destLocation);
+
+                    break;
+                  } else {
+                    out.append("Not a valid neighbor, move failed,\n");
+                  }
+
+                } catch (NumberFormatException e) {
+                  out.append("Wrong format for an integer, try gain.\n");
+                } catch (IndexOutOfBoundsException e) {
+                  out.append("Room index not valid, try gain.\n").append("\n");
+                }
               }
+              break;
+            case "2":
+              if (model.playerReachCapacity(activePlayer)) {
+                out.append("Item capacity reached, choose other option.").append("\n");
+
+              }
+              int curLocation = model.getPlayerLocation(activePlayer);
+              if (model.getRoomItemCount(curLocation) == 0) {
+                out.append("Room has not item, choose other option.\n");
+                break;
+              }
+              while (true) {
+                out.append(model.queryRoomItem(curLocation));
+                out.append("Enter the item  you want to pick up\n");
+                line = scan.nextLine().trim();
+                try {
+                  int itemId = Integer.parseInt(line);
+                  int playerLocation = model.getPlayerLocation(activePlayer);
+                  if (model.getItemLocation(itemId) == playerLocation) {
+                    cmd = new PickUpItem(activePlayer, itemId);
+                    break;
+                  } else {
+                    out.append("No such item in this room, pick up failed,\n");
+                  }
+
+                } catch (NumberFormatException e) {
+                  out.append("Wrong format for an integer, try gain.\n");
+                } catch (IndexOutOfBoundsException e) {
+                  out.append(e.getMessage()).append("\n");
+                }
+              }
+              break;
+            case "3":
+              cmd = new LookAround(activePlayer);
+              break;
+            case "4":
+              displayPlayerInfo(activePlayer);
+              break;
+            case "5":
+              displayRoomInfo(location);
+              break;
+            case "6":
+              displayTargetInfo();
+              break;
+            case "7":
+              displayItemInfo(0);
+              break;
+            default:
+              out.append("Invalid choice, try again").append("\n");
+              break;
+          }
+          if (cmd != null) {
+            try {
+              // TODO: add more display info for each command after execution.
+              out.append(cmd.execute(model));
+              model.moveTargetNextRoom();
+              currentTurn += 1;
+            } catch (IllegalArgumentException | IllegalStateException e) {
+              out.append(e.getMessage()).append("\n");
             }
-            break;
-          case "3":
-            cmd = new LookAround(activePlayer);
-            break;
-          case "4":
-            displayPlayerInfo(activePlayer);
-            break;
-          case "5":
-            displayRoomInfo(location);
-            break;
-          case "6":
-            displayTargetInfo();
-            break;
-          case "7":
-            displayItemInfo(0);
-            break;            
-          default:
-            out.append("Invalid choice, try again").append("\n");
-            break;
-        }
-        if (cmd != null) {
-          try {
-          out.append(cmd.execute(model));
-          model.moveTargetNextRoom();
-          currentTurn += 1;
+            cmd = null;
           }
-          catch (IllegalArgumentException | IllegalStateException e) {
-            out.append(e.getMessage()).append("\n");
-          }
-          cmd = null;
         }
+        else {
+          // TODO: computer random choice
         }
       }
 
@@ -177,7 +180,6 @@ public class CommandController implements GameController {
     } catch (IOException ioe) {
       throw new IllegalStateException("Append failed", ioe);
     }
-
 
   }
 
@@ -307,27 +309,21 @@ public class CommandController implements GameController {
   private void displayGameInfo() throws IOException {
     out.append(model.getDetails()).append("\n");
   }
-  
+
   private void displayPlayerInfo(int playerId) throws IOException {
     out.append(model.queryPlayerDetails(playerId)).append("\n");
   }
-  
+
   private void displayRoomInfo(int roomId) throws IOException {
     out.append(model.queryRoomDetails(roomId)).append("\n");
   }
-  
+
   private void displayTargetInfo() throws IOException {
     out.append(model.queryTargetDetails()).append("\n");
   }
-  
+
   private void displayItemInfo(int itemId) throws IOException {
     out.append(model.queryItemDetails(itemId)).append("\n");
-  }
-  
-  
-
-  private void FFFmakeTurns() {
-    // TODO
   }
 
 }

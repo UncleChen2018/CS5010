@@ -1,8 +1,5 @@
 package controller;
 
-import java.io.IOException;
-import java.util.Scanner;
-
 import model.GameModel;
 
 public class PickUpItem extends TurnBaseCommand {
@@ -14,21 +11,9 @@ public class PickUpItem extends TurnBaseCommand {
   }
 
   @Override
-  public String execute(GameModel model) throws IOException, IllegalStateException {
+  public String execute(GameModel model) {
     model.pickUpitem(playerId, itemId);
-    return "Pick up successfully.\n";   
-
-  }
-
-  @Override
-  protected void turnBegin() {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  protected void turnEnd() {
-    // TODO Auto-generated method stub
+    return "Pick up successfully.\n";
 
   }
 

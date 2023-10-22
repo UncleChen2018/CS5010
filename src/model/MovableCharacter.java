@@ -9,8 +9,7 @@ package model;
 public abstract class MovableCharacter implements Movable {
   protected final String name;
   protected int location;
-  
-  
+
   public MovableCharacter(String name, int location) {
     this.name = name;
     this.location = location;
@@ -21,10 +20,8 @@ public abstract class MovableCharacter implements Movable {
     this.location = spaceIndex;
   }
 
-
   @Override
   public String getName() {
-    // TODO Auto-generated method stub
     return this.name;
   }
 
@@ -36,11 +33,9 @@ public abstract class MovableCharacter implements Movable {
   public String toString() {
     return String.format(name);
   }
-  
+
   public String getDetails() {
     return String.format("MovableCharacter [name = %s, location = %d]", name, location);
   }
-  
-
 
 }

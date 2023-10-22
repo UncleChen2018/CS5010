@@ -69,7 +69,7 @@ public class World implements GameModel {
       String roomName = scanner.nextLine().trim();
       roomList.add(new RoomSpace(i, row1, col1, row2, col2, roomName));
     }
-    
+
     // New: add target to room.
     roomList.get(targetCharacter.getLocation()).setTargetIn();
 
@@ -232,7 +232,8 @@ public class World implements GameModel {
       // 5 is a proper offset to guarantee the text not over lap with tht
       int textX = rectX + 5;
       int textY = rectY + (rectHeight - textHeight) / 2 + fontMetrics.getAscent();
-      graph.drawString(String.format("%d %s",room.getSpaceIndex(), room.getSpaceName()), textX, textY);
+      graph.drawString(String.format("%d %s", room.getSpaceIndex(), room.getSpaceName()), textX,
+          textY);
     }
 
     // At last, draw the world name on top
@@ -348,16 +349,16 @@ public class World implements GameModel {
     if (capacity <= 0) {
       throw new IllegalArgumentException("Capacity must be at least one");
     }
-    //put player in list
-    Player toAddPlayer = new Player(name, initLocation, capacity, isHumanControl, playerList.size());
+    // put player in list
+    Player toAddPlayer = new Player(name, initLocation, capacity, isHumanControl,
+        playerList.size());
     playerList.add(toAddPlayer);
-    //add player to room
+    // add player to room
     roomList.get(initLocation).addCharacer(toAddPlayer);
   }
 
   @Override
   public int getRoomCount() {
-    // TODO Auto-generated method stub
     return roomList.size();
   }
 
@@ -417,15 +418,14 @@ public class World implements GameModel {
     // item location to -1
     item.setStoredLoacation(-1);
   }
-  
-  // TODO displayRoomifno
+
   public String queryRoomDetails(int location) {
     return roomList.get(location).queryDetails();
   }
 
   @Override
   public String queryPlayerDetails(int playerId) {
-     return playerList.get(playerId).querryDetails();
+    return playerList.get(playerId).querryDetails();
   }
 
   @Override
@@ -440,13 +440,12 @@ public class World implements GameModel {
 
   @Override
   public String queryRoomNeighbors(int playerLocation) {
-    
+
     return roomList.get(playerLocation).queryRoomNeighbors();
   }
 
   @Override
   public boolean playerReachCapacity(int playerId) {
-    // TODO Auto-generated method stub
     return playerList.get(playerId).reachItemCapacity();
   }
 
@@ -458,7 +457,7 @@ public class World implements GameModel {
   @Override
   public ArrayList<Integer> getRoomNeighbors(int location) {
     ArrayList<Integer> retList = new ArrayList<Integer>();
-    for(RoomSpace room:roomList.get(location).getNeighbors()) {
+    for (RoomSpace room : roomList.get(location).getNeighbors()) {
       retList.add(room.getSpaceIndex());
     }
     return retList;
