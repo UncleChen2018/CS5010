@@ -20,7 +20,7 @@ public class World implements GameModel {
 
   private TargetCharacter targetCharacter;
   private ArrayList<RoomSpace> roomList;
-  private ArrayList<Weapon> itemList;
+  private ArrayList<Item> itemList;
   private ArrayList<Player> playerList;
 
   public World() {
@@ -42,7 +42,7 @@ public class World implements GameModel {
    */
   public void setupNewWorld(Readable source) {
     roomList = new ArrayList<RoomSpace>();
-    itemList = new ArrayList<Weapon>();
+    itemList = new ArrayList<Item>();
     playerList = new ArrayList<Player>();
 
     Scanner scanner = new Scanner(source);
@@ -322,7 +322,7 @@ public class World implements GameModel {
     System.out.println(String.format("Items: %s", room.getSpaceItem()));
   }
 
-  public ArrayList<Weapon> getItems() {
+  public ArrayList<Item> getItems() {
     return itemList;
   }
 
@@ -390,7 +390,7 @@ public class World implements GameModel {
   // get item info from certain room
   public String queryRoomItem(int location) {
     StringBuilder stringBuilder = new StringBuilder();
-    for (Weapon item : roomList.get(location).getSpaceItem()) {
+    for (Item item : roomList.get(location).getSpaceItem()) {
       stringBuilder.append(item.queryDetails()).append("\n");
     }
     if (stringBuilder.length() == 0) {
@@ -410,7 +410,7 @@ public class World implements GameModel {
   public void pickUpitem(int playerId, int itemId) {
     Player player = playerList.get(playerId);
     RoomSpace roomSpace = roomList.get(player.getLocation());
-    Weapon item = itemList.get(itemId);
+    Item item = itemList.get(itemId);
     // player got the item
     player.addItem(item);
     // room remove the item
@@ -468,7 +468,7 @@ public class World implements GameModel {
   @Override
   public ArrayList<Integer> getRoomItems(int location) {
     ArrayList<Integer> retList = new ArrayList<Integer>();
-    for (Weapon item : roomList.get(location).getItems()) {
+    for (Item item : roomList.get(location).getItems()) {
       retList.add(item.getItemId());
     }
     return retList;

@@ -14,7 +14,7 @@ public class RoomSpace {
   private String name;
 
   // Not final here, later may need to change
-  private ArrayList<Weapon> itemList;
+  private ArrayList<Item> itemList;
   private ArrayList<RoomSpace> neighboRoomSpaces;
   private ArrayList<RoomSpace> visbleRoomSpaces;
   private ArrayList<Movable> characterList;
@@ -39,7 +39,7 @@ public class RoomSpace {
     rectCordinate[2] = rowEnd + 1; //
     rectCordinate[3] = colEnd + 1;
     this.name = name;
-    this.itemList = new ArrayList<Weapon>();
+    this.itemList = new ArrayList<Item>();
     this.neighboRoomSpaces = new ArrayList<RoomSpace>();
     this.visbleRoomSpaces = new ArrayList<RoomSpace>();
     this.characterList = new ArrayList<Movable>();
@@ -67,7 +67,7 @@ public class RoomSpace {
     item.setStoredLoacation(spaceIndex);
   }
 
-  public ArrayList<Weapon> getSpaceItem() {
+  public ArrayList<Item> getSpaceItem() {
     return itemList;
   }
 
@@ -91,7 +91,7 @@ public class RoomSpace {
   }
 
   // return the neighbors list
-  public ArrayList<Weapon> getItems() {
+  public ArrayList<Item> getItems() {
     return itemList;
   }
 
@@ -135,7 +135,7 @@ public class RoomSpace {
     return isTargetIn;
   }
 
-  public void removeItem(Weapon item) {
+  public void removeItem(Item item) {
     this.itemList.remove(item);
   }
 

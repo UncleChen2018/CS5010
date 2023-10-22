@@ -6,7 +6,7 @@ package model;
  * Items can also be taken by a player, who becomes its owner, and the location
  * is set to null for its no longer belong to certain space.
  */
-public class Weapon {
+public class Weapon implements Item{
   private final int itemId;
   private final int itemDamage;
   private final String itemName;
