@@ -428,10 +428,7 @@ public class World implements GameModel {
     return playerList.get(playerId).querryDetails();
   }
 
-  @Override
-  public String queryItemDetails(int itemId) {
-    return itemList.get(itemId).querryDetails();
-  }
+
 
   @Override
   public CharSequence queryTargetDetails() {
@@ -477,5 +474,19 @@ public class World implements GameModel {
     return retList;
   }
   
+  public String getPlayerString(int playerId) {
+    return playerList.get(playerId).toString();
+  }
   
+  public String getRoomString(int location) {
+    return roomList.get(location).toString();
+  }
+  public String getTargetString() {
+    return targetCharacter.toString();
+  }
+  public String getItemString(int itemID) {
+    return itemList.get(itemID).toString();
+  }
 }
+  
+

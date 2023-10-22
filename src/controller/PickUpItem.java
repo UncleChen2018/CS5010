@@ -12,9 +12,12 @@ public class PickUpItem extends TurnBaseCommand {
 
   @Override
   public String execute(GameModel model) {
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append(String.format("Player %s try to pick up %s\n",
+        model.getPlayerString(playerId), model.getItemString(itemId)));
     model.pickUpitem(playerId, itemId);
-    return "Pick up successfully.\n";
-
+    stringBuilder.append("Pick up successfully.\n");
+    return stringBuilder.toString();
   }
 
 }

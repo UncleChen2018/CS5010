@@ -1,5 +1,7 @@
 package controller;
 
+import static org.junit.Assert.assertThrows;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -88,12 +90,15 @@ public class CommandController implements GameController {
         out.append(String.format("Totally %d player, add more?(y|n)", model.getPlayerCount()));
         line = scan.nextLine().trim();
       }
-      out.append("Settting finished, game started.\n");
+      out.append("Settting finished, game started.\n\n\n");
 
+      //begin to take turn.
       while (currentTurn < MAX_TURN) {
         out.append(String.format("[TURN %d]\n", currentTurn + 1));
-
         int activePlayer = model.getCurrentPlayer(currentTurn);
+        out.append(String.format("Player %s's turn", model.getPlayerString(activePlayer)))
+        .append("\n");
+        
         int location = model.getPlayerLocation(activePlayer);
         SimpleCommand cmd = null;
 
@@ -169,8 +174,9 @@ public class CommandController implements GameController {
               displayTargetInfo();
               break;
             case "7":
-              displayItemInfo(0);
-              break;
+              out.append("Player end game in the process, now quiting.\n");
+              frame.dispose();
+              System.exit(0);
             default:
               out.append("Invalid choice, try again").append("\n");
               break;
@@ -217,15 +223,19 @@ public class CommandController implements GameController {
           try {
             // TODO: add more display info for each command after execution.
             out.append(cmd.execute(model));
+            out.append(model.queryPlayerDetails(activePlayer));
             model.moveTargetNextRoom();
             currentTurn += 1;
           } catch (IllegalArgumentException | IllegalStateException e) {
             out.append(e.getMessage()).append("\n");
           }
+          out.append("~~~~~~~~~~~~~~~~~~~Turn End~~~~~~~~~~~~~~~~~~~\n");
           cmd = null;
         }
       }
-
+      if(currentTurn == MAX_TURN) {
+        out.append("Max turn reached, game exist\n");
+      }
       frame.dispose();
 
     } catch (IOException ioe) {
@@ -236,17 +246,8 @@ public class CommandController implements GameController {
 
   // help method, display information for certain player.
   private void displayGameMenu(int playerId) throws IOException {
-    out.append(String.format("Player %d's turn, please select one of the option below", playerId))
-        .append("\n");
-    out.append("-------------------GAME MENU-------------------").append("\n");
-    out.append("1. Move to neighbor space.(Cost one turn)\n");
-    out.append("2. Pick up items from this space.(Cost one turn)\n");
-    out.append("3. Look around.(Cost one turn)\n");
-    out.append("4. Display player info.\n");
-    out.append("5. Display current room.\n");
-    out.append("6. Display target info.\n");
-    out.append("7. Display item info.\n");
-    out.append("-------------------MENU END-------------------").append("\n");
+    out.append("Please select one of the option below\n");
+    out.append("MENU|1.Move|2.Pickup|3.LookAround|4.PlayerInfo|5.RoomInfo|6.Target|7.Exit").append("\n");
   }
 
   private void displayMap() {
@@ -373,9 +374,6 @@ public class CommandController implements GameController {
     out.append(model.queryTargetDetails()).append("\n");
   }
 
-  private void displayItemInfo(int itemId) throws IOException {
-    out.append(model.queryItemDetails(itemId)).append("\n");
-  }
 
   private class NumberGenerator {
     private ArrayList<Integer> numbers;

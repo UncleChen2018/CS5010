@@ -62,7 +62,7 @@ public class Player extends MovableCharacter {
     .append("Location: ").append(location).append("\n")
     .append("Stock|Capacity: ").append(itemList.size()).append("|").append(ITEM_CAPACITY).append("\n")
     .append("Items: ").append(itemList).append("\n")
-    .append("-------------------DETAILS END-------------------").append("\n");
+    ;
         
     return stringBuilder.toString();
   }

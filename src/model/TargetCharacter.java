@@ -46,8 +46,7 @@ public class TargetCharacter extends MovableCharacter{
     stringBuilder.append("-------------------Target DETAILS-------------------\n");
     stringBuilder.append("Target: ").append(this).append("\n")
     .append("Health: ").append(health).append("\n")
-    .append("Location: ").append(location).append("\n")
-    .append("-------------------DETAILS END-------------------").append("\n");
+    .append("Location: ").append(location).append("\n");
     return stringBuilder.toString();
   }
 }

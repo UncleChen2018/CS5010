@@ -20,13 +20,18 @@ public class LookAround extends TurnBaseCommand {
   @Override
   public String execute(GameModel model) {
     StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append("Look Aroud result\n");
-    int playerLocation = model.getPlayerLocation(playerId);
-    stringBuilder.append(model.queryRoomDetails(playerLocation)).append("\n");
-    
-    // out.append(model.queryRoomDetails(playerLocation)).append("\n");
-    for (int i : model.getRoomNeighbors(playerLocation)) {
-      stringBuilder.append(model.queryRoomDetails(i)).append("\n");
+    stringBuilder.append(String.format("Player %s try to look around from %s%n",
+        model.getPlayerString(playerId), model.getRoomString(model.getPlayerLocation(playerId))));
+    if (model.isHumanPlayer(playerId)) {
+      stringBuilder.append("Look Aroud result\n");
+      int playerLocation = model.getPlayerLocation(playerId);
+      stringBuilder.append(model.queryRoomDetails(playerLocation)).append("\n");
+      for (int i : model.getRoomNeighbors(playerLocation)) {
+        stringBuilder.append(model.queryRoomDetails(i)).append("\n");
+      }
+    }
+    else {
+      stringBuilder.append("Computer look around result ommitted.\n");
     }
     return stringBuilder.toString();
 

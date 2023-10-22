@@ -3,6 +3,8 @@ package model;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import javax.lang.model.element.NestingKind;
+
 /**
  * The game model interface. Including setup a brand new world, (including
  * rooms, target, character, player) and all methods that are used to get the
@@ -113,7 +115,6 @@ public interface GameModel {
 
   String queryPlayerDetails(int playerId);
 
-  String queryItemDetails(int itemId);
 
   CharSequence queryTargetDetails();
 
@@ -128,5 +129,11 @@ public interface GameModel {
   boolean isHumanPlayer(int playerId);
 
   ArrayList<Integer> getRoomItems(int location);
+  
+  String getPlayerString(int playerId);
+  String getRoomString(int location);
+  String getTargetString();
+  String getItemString(int itemID);
+
   
 }
