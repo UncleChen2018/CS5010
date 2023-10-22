@@ -59,6 +59,7 @@ public class Player extends MovableCharacter {
     stringBuilder.append("-------------------PLAYER DETAILS-------------------\n");
     stringBuilder.append("Player: ").append(this).append("\n")
     .append("Control Type: ").append(controlType).append("\n")
+    .append("Location: ").append(location).append("\n")
     .append("Stock|Capacity: ").append(itemList.size()).append("|").append(ITEM_CAPACITY).append("\n")
     .append("Items: ").append(itemList).append("\n")
     .append("-------------------DETAILS END-------------------").append("\n");

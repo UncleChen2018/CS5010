@@ -75,23 +75,36 @@ public class CommandController implements GameController {
         line = scan.nextLine().trim();
       }
       out.append("Settting finished, game started.\n");
-      // TODO construct the turns, should think about the interaction.
+     
       while (currentTurn < MAX_TURN) {
         SimpleCommand cmd = null;
         int activePlayer = model.getCurrentPlayer(currentTurn);
-        out.append(model.queryPlayerDetails(activePlayer));
+//        out.append(model.queryPlayerDetails(activePlayer));
         int location = model.getPlayerLocation(activePlayer);
-        out.append(model.queryRoomDetails(location));
+//        out.append(model.queryRoomDetails(location));
         displayGameMenu(activePlayer);
         switch (line = scan.nextLine().trim()) {
-          //TODO change the constructor of command, in, out should be in the execute.
+          
           case "1":        
             cmd = new MoveToNeighbor(activePlayer);
             break;
           case "2":
             cmd = new PickUpItem(activePlayer);
             break;
-            
+          case "3":
+            break;
+          case "4":
+            displayPlayerInfo(activePlayer);
+            break;
+          case "5":
+            displayRoomInfo(location);
+            break;
+          case "6":
+            displayTargetInfo();
+            break;
+          case "7":
+            displayItemInfo(0);
+            break;            
           default:
             out.append("Invalid choice, try again").append("\n");
             break;
@@ -123,8 +136,8 @@ public class CommandController implements GameController {
     out.append(String.format("Player %d's turn, please select one of the option below", playerId))
         .append("\n");
     int playerLocation = model.getPlayerLocation(playerId);
-    out.append(model.queryPlayerDetails(playerId));
-    out.append(model.queryRoomDetails(playerLocation));
+//    out.append(model.queryPlayerDetails(playerId));
+//    out.append(model.queryRoomDetails(playerLocation));
     out.append("-------------------GAME MENU-------------------").append("\n");
     out.append("1. Move to neighbor space.(Cost one turn)\n");
     out.append("2. Pick up items from this space.(Cost one turn)\n");
@@ -247,6 +260,24 @@ public class CommandController implements GameController {
   private void displayGameInfo() throws IOException {
     out.append(model.getDetails()).append("\n");
   }
+  
+  private void displayPlayerInfo(int playerId) throws IOException {
+    out.append(model.queryPlayerDetails(playerId)).append("\n");
+  }
+  
+  private void displayRoomInfo(int roomId) throws IOException {
+    out.append(model.queryRoomDetails(roomId)).append("\n");
+  }
+  
+  private void displayTargetInfo() throws IOException {
+    out.append(model.queryTargetDetails()).append("\n");
+  }
+  
+  private void displayItemInfo(int itemId) throws IOException {
+    out.append(model.queryItemDetails(itemId)).append("\n");
+  }
+  
+  
 
   private void FFFmakeTurns() {
     // TODO

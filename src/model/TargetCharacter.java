@@ -35,4 +35,19 @@ public class TargetCharacter extends MovableCharacter{
   public String getDetails() {   
     return String.format("Target [name = \"%s\", location = %d, health = %d]", name, location, health);
   }
+
+  @Override
+  public String toString() {
+    return String.format("\"%s\"", name) ;
+  }
+  
+  public String querryDetails() {
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("-------------------Target DETAILS-------------------\n");
+    stringBuilder.append("Target: ").append(this).append("\n")
+    .append("Health: ").append(health).append("\n")
+    .append("Location: ").append(location).append("\n")
+    .append("-------------------DETAILS END-------------------").append("\n");
+    return stringBuilder.toString();
+  }
 }

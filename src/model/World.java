@@ -69,8 +69,11 @@ public class World implements GameModel {
       String roomName = scanner.nextLine().trim();
       roomList.add(new RoomSpace(i, row1, col1, row2, col2, roomName));
     }
+    
+    // New: add target to room.
+    roomList.get(targetCharacter.getLocation()).setTargetIn();
 
-    // parse the item number;
+    // parse the item number and put into room
     int itemNumber = scanner.nextInt();
     for (int i = 0; i < itemNumber; i++) {
       int spaceIndex = scanner.nextInt();
@@ -423,6 +426,16 @@ public class World implements GameModel {
   @Override
   public String queryPlayerDetails(int playerId) {
      return playerList.get(playerId).querryDetails();
+  }
+
+  @Override
+  public String queryItemDetails(int itemId) {
+    return itemList.get(itemId).querryDetails();
+  }
+
+  @Override
+  public CharSequence queryTargetDetails() {
+    return targetCharacter.querryDetails();
   }
 
 }

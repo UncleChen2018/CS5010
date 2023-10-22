@@ -88,6 +88,18 @@ public class RoomSpace {
   public ArrayList<RoomSpace> getVisibles() {
     return visbleRoomSpaces;
   }
+  
+  
+  // return the neighbors list
+  public ArrayList<Item> getItems() {
+    return itemList;
+  }
+  
+  public ArrayList<Movable> getCharacters() {
+    return characterList;
+  }
+  
+
 
   /**
    * Give a string that describes the name, items and visible spaces from the
@@ -137,9 +149,11 @@ public class RoomSpace {
     stringBuilder.append("Room: ").append(this).append("\n").append("Items: ")
         .append(itemList.size() > 0 ? itemList : "No Item").append("\n").append("Player: ")
         .append(characterList.size() > 0 ? characterList : "No Player").append("\n")
-        .append("Target: ").append(isTargetIn ? "Found" : "Not Found\n")
+        .append("Target: ").append(isTargetIn ? "Found" : "Not Found").append("\n")
         .append("-------------------DETAILS END-------------------").append("\n");
         
     return stringBuilder.toString();
   }
+  
+  
 }

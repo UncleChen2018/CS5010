@@ -69,5 +69,17 @@ public class Item {
     this.owner = owner;
   }
   
+  public String querryDetails() {
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("-------------------Item DETAILS-------------------\n");
+    stringBuilder.append("Item: ").append(this).append("\n")
+    .append("Damage: ").append(itemDamage).append("\n")
+    .append("Location: ").append(storedLocation!=-1?storedLocation:"Be Taken").append("\n")
+    .append("Owner: ").append(owner).append("\n")
+    .append("-------------------DETAILS END-------------------").append("\n");
+        
+    return stringBuilder.toString();
+  }
+  
 
 }
