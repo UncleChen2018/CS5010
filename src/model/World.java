@@ -232,7 +232,7 @@ public class World implements GameModel {
       // 5 is a proper offset to guarantee the text not over lap with tht
       int textX = rectX + 5;
       int textY = rectY + (rectHeight - textHeight) / 2 + fontMetrics.getAscent();
-      graph.drawString(room.getSpaceName(), textX, textY);
+      graph.drawString(String.format("%d %s",room.getSpaceIndex(), room.getSpaceName()), textX, textY);
     }
 
     // At last, draw the world name on top
@@ -436,6 +436,12 @@ public class World implements GameModel {
   @Override
   public CharSequence queryTargetDetails() {
     return targetCharacter.querryDetails();
+  }
+
+  @Override
+  public String queryRoomNeighbors(int playerLocation) {
+    
+    return roomList.get(playerLocation).queryRoomNeighbors();
   }
 
 }

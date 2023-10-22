@@ -5,6 +5,10 @@ package model;
 public class Test {
 
   public static void main(String[] args) {
+    String dingbatZero = "\uD83C\uDD0B"; // Unicode for DINGBAT CIRCLED SANS-SERIF DIGIT ZERO
+
+    System.out.println(dingbatZero);
+    System.out.println(dingbatZero);
     Player player = new Player("Jimmy", 10, 2,true, 0);
     System.out.println(player);
 

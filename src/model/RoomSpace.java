@@ -154,6 +154,15 @@ public class RoomSpace {
         
     return stringBuilder.toString();
   }
+
+  public String queryRoomNeighbors() {
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("-------------------Neighbor Info-------------------\n");
+    for(RoomSpace room:neighboRoomSpaces) {
+      stringBuilder.append(room).append("\n");
+    }
+    return stringBuilder.toString();
+  }
   
   
 }

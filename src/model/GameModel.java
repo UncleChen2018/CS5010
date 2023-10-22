@@ -115,4 +115,6 @@ public interface GameModel {
   String queryItemDetails(int itemId);
 
   CharSequence queryTargetDetails();
+
+  String queryRoomNeighbors(int playerLocation);
 }

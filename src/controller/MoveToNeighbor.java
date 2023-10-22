@@ -18,7 +18,7 @@ public class MoveToNeighbor extends TurnBaseCommand {
 
     while (true) {
       int playerLocation = model.getPlayerLocation(playerId);
-      out.append(model.queryRoomDetails(playerLocation));
+      out.append(model.queryRoomNeighbors(playerLocation));
       out.append("Enter the room index to move to\n");
       String line = scan.nextLine().trim();
       try {
