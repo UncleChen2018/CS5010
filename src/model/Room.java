@@ -72,26 +72,20 @@ public interface Room {
    */
   String getSpaceInfo();
 
-  /**
-   * Get a list of characters in the room.
-   *
-   * @return The list of characters.
-   */
-  ArrayList<Movable> getCharacters();
 
   /**
    * Get a list of characters in the room.
    *
    * @return The list of characters.
    */
-  ArrayList<Movable> getCharacterList();
+  ArrayList<Player> getCharacterList();
 
   /**
    * Add a character to the room.
    *
    * @param character The character to be added.
    */
-  void addCharacer(Movable character);
+  void addCharacer(Player character);
 
   /**
    * Remove a character from the room.

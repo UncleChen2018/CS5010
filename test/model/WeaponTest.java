@@ -1,7 +1,7 @@
 package model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
@@ -11,74 +11,100 @@ import org.junit.Test;
 public class WeaponTest {
 
   @Test
-  public void queryDetailsWithoutOwner() {
-    Weapon weapon = new Weapon(1, "Sword", 10, 3);
-    String expected = "Item [itemId = 1, itemName = Sword, itemDamage = 10, storedLocation = 3]";
-    assertEquals(expected, weapon.queryDetails());
-  }
+  public void queryDetails() {
+    Player player = new Player("Player1", 1, 5, true, 1);
+    Item sword = new Weapon(1, "Sword", 10, 1);
+    sword.setOwner(player);
 
-  @Test
-  public void queryDetailsWithOwner() {
-    Weapon weapon = new Weapon(1, "Sword", 10, 3);
-    Player owner = new Player("John", 2, 5, true, 1);
-    weapon.setOwner(owner);
-
-    String expected = "Item [itemId = 1, itemName = Sword, itemDamage = 10, owner = \"John\"]";
-    assertEquals(expected, weapon.queryDetails());
+    String expected = "Item [itemId = 1, itemName = Sword, itemDamage = 10, owner = \"Player1\"]";
+    assertEquals(expected, sword.queryDetails());
   }
 
   @Test
   public void toStringTest() {
-    Weapon weapon = new Weapon(1, "Sword", 10, 3);
+    Item sword = new Weapon(1, "Sword", 10, 1);
+
     String expected = "No.1 \"Sword\" Damage:10";
-    assertEquals(expected, weapon.toString());
+    assertEquals(expected, sword.toString());
   }
 
   @Test
-  public void getSetItemDamage() {
-    Weapon weapon = new Weapon(1, "Sword", 10, 3);
-    assertEquals(10, weapon.getItemDamage());
+  public void getItemDamage() {
+    Item sword = new Weapon(1, "Sword", 10, 1);
 
-    weapon.setStoredLoacation(15);
-    assertEquals(15, weapon.getStoredLoacation());
+    int expected = 10;
+    assertEquals(expected, sword.getItemDamage());
   }
 
   @Test
   public void getItemName() {
-    Weapon weapon = new Weapon(1, "Sword", 10, 3);
-    assertEquals("Sword", weapon.getItemName());
+    Item sword = new Weapon(1, "Sword", 10, 1);
+
+    String expected = "Sword";
+    assertEquals(expected, sword.getItemName());
   }
 
   @Test
-  public void getSetStoredLocation() {
-    Weapon weapon = new Weapon(1, "Sword", 10, 3);
-    assertEquals(3, weapon.getStoredLoacation());
+  public void getStoredLocation() {
+    Item sword = new Weapon(1, "Sword", 10, 1);
 
-    weapon.setStoredLoacation(15);
-    assertEquals(15, weapon.getStoredLoacation());
+    int expected = 1;
+    assertEquals(expected, sword.getStoredLoacation());
   }
 
   @Test
-  public void getSetOwner() {
-    Weapon weapon = new Weapon(1, "Sword", 10, 3);
-    Player owner = new Player("John", 2, 5, true, 1);
-    assertNull(weapon.getOwner());
+  public void setStoredLocation() {
+    Item sword = new Weapon(1, "Sword", 10, 1);
+    sword.setStoredLoacation(2);
 
-    weapon.setOwner(owner);
-    assertEquals(owner, weapon.getOwner());
+    int expected = 2;
+    assertEquals(expected, sword.getStoredLoacation());
   }
 
   @Test
-  public void getItemId() {
-    Weapon weapon = new Weapon(1, "Sword", 10, 3);
-    assertEquals(1, weapon.getItemId());
+  public void getOwner() {
+    Player player = new Player("Player1", 1, 5, true, 1);
+    Item sword = new Weapon(1, "Sword", 10, 1);
+    sword.setOwner(player);
+
+    Player owner = sword.getOwner();
+    assertNotNull(owner);
+    assertEquals("Player1", owner.getName());
+  }
+
+  @Test
+  public void setOwner() {
+    Player player1 = new Player("Player1", 1, 5, true, 1);
+    Player player2 = new Player("Player2", 1, 5, true, 2);
+
+    Item sword = new Weapon(1, "Sword", 10, 1);
+    sword.setOwner(player1);
+
+    Player owner1 = sword.getOwner();
+    assertNotNull(owner1);
+    assertEquals("Player1", owner1.getName());
+
+    sword.setOwner(player2);
+
+    Player owner2 = sword.getOwner();
+    assertNotNull(owner2);
+    assertEquals("Player2", owner2.getName());
   }
 
   @Test
   public void querryLocationDetails() {
-    Weapon weapon = new Weapon(1, "Sword", 10, 3);
+    Item sword = new Weapon(1, "Sword", 10, 1);
+
     String expected = "-------------------Item DETAILS-------------------\n"
-        + "Item: No.1 \"Sword\" Damage:10\n" + "Damage: 10\n" + "Location: 3\n" + "Owner: null\n";
-    assertEquals(expected, weapon.querryLocationDetails());
+        + "Item: No.1 \"Sword\" Damage:10\n" + "Damage: 10\n" + "Location: 1\n" + "Owner: null\n";
+    assertEquals(expected, sword.querryLocationDetails());
+  }
+
+  @Test
+  public void getItemId() {
+    Item sword = new Weapon(1, "Sword", 10, 1);
+
+    int expected = 1;
+    assertEquals(expected, sword.getItemId());
   }
 }

@@ -16,7 +16,7 @@ public class RoomSpace implements Room {
   private ArrayList<Item> itemList;
   private ArrayList<Room> neighboRoomSpaces;
   private ArrayList<Room> visbleRoomSpaces;
-  private ArrayList<Movable> characterList;
+  private ArrayList<Player> characterList;
   private boolean isTargetIn;
 
   /**
@@ -41,7 +41,7 @@ public class RoomSpace implements Room {
     this.itemList = new ArrayList<Item>();
     this.neighboRoomSpaces = new ArrayList<Room>();
     this.visbleRoomSpaces = new ArrayList<Room>();
-    this.characterList = new ArrayList<Movable>();
+    this.characterList = new ArrayList<Player>();
     isTargetIn = false;
   }
 
@@ -94,9 +94,6 @@ public class RoomSpace implements Room {
     return itemList;
   }
 
-  public ArrayList<Movable> getCharacters() {
-    return characterList;
-  }
 
   /**
    * Give a string that describes the name, items and visible spaces from the
@@ -110,11 +107,11 @@ public class RoomSpace implements Room {
     return retString;
   }
 
-  public ArrayList<Movable> getCharacterList() {
+  public ArrayList<Player> getCharacterList() {
     return this.characterList;
   }
 
-  public void addCharacer(Movable character) {
+  public void addCharacer(Player character) {
     characterList.add(character);
   }
 

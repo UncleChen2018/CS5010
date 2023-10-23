@@ -526,4 +526,18 @@ public class World implements GameModel {
   public String getItemString(int itemId) {
     return itemList.get(itemId).toString();
   }
+
+  /**
+   * Retrieves a list of player IDs in a given room.
+   *
+   * @param location The location of the room.
+   * @return An ArrayList of Integers representing player IDs.
+   */
+  public ArrayList<Integer> getRoomCharater(int location) {
+    ArrayList<Integer> retList = new ArrayList<Integer>();
+    for (Player player : roomList.get(location).getCharacterList()) {
+      retList.add(player.getPlayerId());
+    }
+    return retList;
+  }
 }

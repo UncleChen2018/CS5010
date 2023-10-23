@@ -10,12 +10,32 @@ import java.util.ArrayList;
  * 
  */
 public interface GameModel {
+  /**
+   * Set up the new world before it can be used.
+   * 
+   * @param source the data from which the world is built.
+   */
   void setupNewWorld(Readable source);
 
+  /**
+   * Based on rooms, generate the map.
+   * 
+   * @return image data to draw the map.
+   */
   BufferedImage drawWorld();
 
+  /**
+   * Get a world summary in String.
+   * 
+   * @return the summary.
+   */
   String getDetails();
 
+  /**
+   * Give the world's name.
+   * 
+   * @return name of the world.
+   */
   String getName();
 
   /**
@@ -136,5 +156,7 @@ public interface GameModel {
   String getTargetString();
 
   String getItemString(int itemId);
+
+  ArrayList<Integer> getRoomCharater(int location);
 
 }

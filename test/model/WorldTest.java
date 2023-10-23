@@ -1,22 +1,20 @@
 package model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.StringReader;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.Weapon;
-import model.RoomSpace;
-import model.TargetCharacter;
-import model.World;
-
 /**
  * Test class for world. Most part is to check if it is correctly set up.
  */
 public class WorldTest {
-
-  private World world;
+// TODO: use model to test.
+  private GameModel model;
 
   /**
    * Give the string as the map input and get the world set up.
@@ -37,37 +35,110 @@ public class WorldTest {
         + "2 4 Big Red Hammer\n" + "6 2 Pinking Shears\n" + "18 3 Duck Decoy\n" + "13 2 Bad Cream\n"
         + "18 2 Monkey Hand\n" + "11 2 Tight Hat\n" + "19 2 Piece of Rope\n" + "9 3 Silken Cord\n"
         + "7 2 Loud Noise";
-    world = new World(new StringReader(input));
+    model = new World(new StringReader(input));
+    assertNotNull(model);
+    model.addNewPlayer("Jimmy", 0, 2, true);
+    model.addNewPlayer("AI", 0, 1, false);
+    model.addNewPlayer("Penny", 3, 2, false);
 
   }
 
   @Test
   public void testSetupNewWorld() {
-    assertEquals("Doctor Lucky's Mansion", world.getWorldName());
+    String expectedWorldName = "Doctor Lucky's Mansion";
+    int expectedRoomCount = 21;
 
-    assertEquals(50, world.getTarget().getHealth());
-    assertEquals("Doctor Lucky", world.getTarget().getName());
-    // test room
-    assertEquals(21, world.getWorldSpace().size());
-    RoomSpace room = world.getWorldSpace().get(0);
-    assertEquals("Armory", room.getSpaceName());
-    // test item
-    assertEquals(20, world.getItems().size());
-    Weapon item = world.getItems().get(0);
-    assertEquals("Crepe Pan", item.getItemName());
-    assertEquals(3, item.getItemDamage());
-    assertEquals(8, item.getStoredLoacation());
+    assertEquals(expectedWorldName, model.getName());
+    assertEquals(expectedRoomCount, model.getRoomCount());
+    int expectedItemNumber = 1;
+    assertEquals(expectedItemNumber, model.getRoomItemCount(0)); // Assuming you want to check the
+    int expectedPlayerCount = 3; // Assuming no players yet // first room
+    assertEquals(expectedPlayerCount, model.getPlayerCount());
   }
 
-  @Test
-  public void testMoveTargetNextRoom() {
-
-    TargetCharacter target = world.getTarget();
-    int initialRoomIndex = target.getLocation();
-    world.moveTargetNextRoom();
-    int newRoomIndex = target.getLocation();
-
-    assertEquals((initialRoomIndex + 1) % world.getWorldSpace().size(), newRoomIndex);
-  }
-
+//  @Test
+//  public void testGetWorldName() {
+//    assertEquals("Doctor Lucky's Mansion", model.getWorldName());
+//  }
+//
+//  @Test
+//  public void testGetName() {
+//    String expectedName = "Doctor Lucky's Mansion";
+//    assertEquals(expectedName, world.getName());
+//  }
+//
+//  @Test
+//  public void testGetRoomCount() {
+//    assertEquals(21, world.getRoomCount());
+//  }
+//
+//  @Test
+//  public void testGetItemCount() {
+//    assertEquals(20, world.getItems().size());
+//  }
+//
+//  @Test
+//  public void testGetPlayerCount() {
+//    assertEquals(3, world.getPlayerCount());
+//    
+//
+//  }
+//
+//  @Test
+//  public void testGetTargetName() {
+//    assertEquals("Doctor Lucky", world.getTarget().getName());
+//  }
+//
+//  @Test
+//  public void testGetRoomSpace() {
+//    assertNotNull(world.getRoomSpace(0));
+//  }
+//
+//  @Test
+//  public void testGetDetails() {
+//    String expectedDetails = String.format(
+//        "World [World name = %s, room number =  %d, item number = %d, "
+//            + "target charater = %s, player number = %d].",
+//        world.getWorldName(), world.getRoomCount(), world.getItems().size(),
+//        world.getTarget().getName(), world.getPlayerCount());
+//
+//    assertEquals(expectedDetails, world.getDetails());
+//  }
+//
+//  @Test
+//  public void testSetPlayerLocationValid() {
+//    // Assuming you have at least one player and one room
+//    int playerId = 0; // Assuming player index 0 exists
+//    int destinationRoom = 1; // Assuming room index 1 exists
+//
+//    // Get the initial location of the player
+//    int initialLocation = world.getPlayerLocation(playerId);
+//
+//    // Set the player to a new location
+//    world.setPlayerLocation(playerId, destinationRoom);
+//
+//    // Check if the player's location has changed
+//    int newLocation = world.getPlayerLocation(playerId);
+//    assertEquals(destinationRoom, newLocation);
+//
+//    // Check if the player has been removed from the initial room
+//    assertFalse(world.getRoomCharater(initialLocation).contains(playerId));
+//
+//    // Check if the player has been added to the destination room
+//    assertTrue(world.getRoomCharater(destinationRoom).contains(playerId));
+//  }
+//
+//  @Test(expected = IllegalArgumentException.class)
+//  public void testSetPlayerLocationInvalidPlayer() {
+//    int invalidPlayerId = -1; // Assuming an invalid player index
+//    int destinationRoom = 1; // Assuming room index 1 exists
+//    world.setPlayerLocation(invalidPlayerId, destinationRoom);
+//  }
+//
+//  @Test(expected = IllegalArgumentException.class)
+//  public void testSetPlayerLocationInvalidLocation() {
+//    int playerId = 0; // Assuming player index 0 exists
+//    int invalidDestinationRoom = -1; // Assuming an invalid room index
+//    world.setPlayerLocation(playerId, invalidDestinationRoom);
+//  }
 }

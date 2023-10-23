@@ -96,4 +96,7 @@ public class Player extends MovableCharacter {
     return itemList.size() == capacity;
   }
 
+  public int getPlayerId() {
+    return this.playerId;
+  }
 }
