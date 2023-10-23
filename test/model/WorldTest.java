@@ -509,23 +509,22 @@ public class WorldTest {
     String expectedItemStringWithOwner = "No.0 \"Crepe Pan\" Damage:3";
     assertEquals(expectedItemStringWithOwner, itemStringWithOwner);
   }
-  
+
   @Test
   public void testGetRoomCharacter() {
-      // Test for a room with characters
-      int roomWithCharacters = 0; // Choose a room with characters
-      ArrayList<Integer> charactersInRoom = model.getRoomCharacter(roomWithCharacters);
-      ArrayList<Integer> expectedCharactersInRoom = new ArrayList<>(Arrays.asList(0, 1));
+    // Test for a room with characters
+    int roomWithCharacters = 0; // Choose a room with characters
+    ArrayList<Integer> charactersInRoom = model.getRoomCharacter(roomWithCharacters);
+    ArrayList<Integer> expectedCharactersInRoom = new ArrayList<>(Arrays.asList(0, 1));
 
-      assertEquals(expectedCharactersInRoom, charactersInRoom);
+    assertEquals(expectedCharactersInRoom, charactersInRoom);
 
-      // Test for a room without characters
-      int roomWithoutCharacters = 2; // Choose a room without characters
-      ArrayList<Integer> charactersNotInRoom = model.getRoomCharacter(roomWithoutCharacters);
-      ArrayList<Integer> expectedCharactersNotInRoom = new ArrayList<>();
+    // Test for a room without characters
+    int roomWithoutCharacters = 2; // Choose a room without characters
+    ArrayList<Integer> charactersNotInRoom = model.getRoomCharacter(roomWithoutCharacters);
+    ArrayList<Integer> expectedCharactersNotInRoom = new ArrayList<>();
 
-      assertEquals(expectedCharactersNotInRoom, charactersNotInRoom);
+    assertEquals(expectedCharactersNotInRoom, charactersNotInRoom);
   }
-
 
 }
