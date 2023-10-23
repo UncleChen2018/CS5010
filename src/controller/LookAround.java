@@ -1,6 +1,3 @@
-/**
- * 
- */
 package controller;
 
 import model.GameModel;
@@ -10,9 +7,6 @@ import model.GameModel;
  */
 public class LookAround extends TurnBaseCommand {
 
-  /**
-   * 
-   */
   public LookAround(int playerId) {
     super(playerId);
   }
@@ -29,8 +23,7 @@ public class LookAround extends TurnBaseCommand {
       for (int i : model.getRoomNeighbors(playerLocation)) {
         stringBuilder.append(model.queryRoomDetails(i)).append("\n");
       }
-    }
-    else {
+    } else {
       stringBuilder.append("Computer look around result ommitted.\n");
     }
     return stringBuilder.toString();

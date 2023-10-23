@@ -93,7 +93,7 @@ public class World implements GameModel {
           continue;
         }
         Room otherSpace = roomList.get(j);
-        if (isNeighbor(thisSpace, otherSpace)) {
+        if (isNeighborRect(thisSpace, otherSpace)) {
           thisSpace.getNeighbors().add(otherSpace);
         }
         if (isVisible(thisSpace, otherSpace)) {
@@ -113,7 +113,7 @@ public class World implements GameModel {
     }
   }
 
-  private static boolean isNeighbor(Room thisSpace, Room otherSpace) {
+  private static boolean isNeighborRect(Room thisSpace, Room otherSpace) {
     boolean result = false;
     // if two room share the same wall,then they are neighbor
     // every room has 4 wall, top: (x1, y1--> y2); right: (x1->x2, y2); bottom:
@@ -149,7 +149,7 @@ public class World implements GameModel {
    * Judge if two room two can be visible from room one. Being visible means they
    * have overlap on X or Y axis.
    * 
-   * @param thisSpace vision start from room one.
+   * @param thisSpace  vision start from room one.
    * @param otherSpace the other room to be judged if is visible.
    * @return if it's true that from room one, we can see room two.
    */
@@ -182,11 +182,6 @@ public class World implements GameModel {
   /**
    * Draw the map to image, according to the scaling and padding argument.
    * 
-   * @param scale       get the image bigger, the pixels for a single unit of the
-   *                    world.
-   * 
-   * @param leftPadding blank space to the left of the world border.
-   * @param topPadding  blank space to the top of the world border
    * @return buffered image later can be used to output.
    */
 
@@ -265,7 +260,8 @@ public class World implements GameModel {
   @Override
   public String getDetails() {
     String worldInfo = String.format(
-        "World [World name = %s, room number =  %d, item number = %d, target charater = %s, player number = %d].",
+        "World [World name = %s, room number =  %d, item number = %d, "
+            + "target charater = %s, player number = %d].",
         worldName, roomList.size(), itemList.size(), targetCharacter.getName(), playerList.size());
     return worldInfo;
   }
@@ -274,7 +270,16 @@ public class World implements GameModel {
     return id >= 0 && id < playerList.size();
   }
 
-  // set the player to the right position, with the room info updated too.
+  /**
+   * Sets the location of a player to the specified destination location. with the
+   * room info updated too.
+   *
+   * @param playerIndex  The index of the player whose location is to be set.
+   * @param destLocation The index of the destination location to set for the
+   *                     player.
+   * @throws IllegalArgumentException if playerIndex is out of bounds or
+   *                                  destLocation is not a valid location.
+   */
   public void setPlayerLocation(int playerIndex, int destLocation) {
     if (!isPlayerIdValid(playerIndex) || !isLocationValid(destLocation)) {
       throw new IllegalArgumentException(
@@ -290,7 +295,7 @@ public class World implements GameModel {
     roomList.get(destLocation).addCharacer(player);
   }
 
-  // also check that the room is
+  @Override
   public void moveTargetNextRoom() {
     int curLocation = targetCharacter.getLocation();
     int nextLocation = (curLocation + 1) % roomList.size();
@@ -337,7 +342,7 @@ public class World implements GameModel {
 
   /**
    * Add a new player to the queue of the model, if the name already exist, throws
-   * IllegalArgumentException
+   * IllegalArgumentException.
    */
 
   @Override
@@ -373,6 +378,15 @@ public class World implements GameModel {
 
   }
 
+  /**
+   * Checks if a given room is a neighbor of another room.
+   *
+   * @param quest The index of the room being checked as a neighbor.
+   * @param base  The index of the base room.
+   * @return true if the rooms are neighbors, false otherwise.
+   * @throws IndexOutOfBoundsException if quest or base are not valid room
+   *                                   indices.
+   */
   @Override
   public boolean isNeighbor(int quest, int base) {
     if (isLocationValid(base) && isLocationValid(quest)) {
@@ -387,7 +401,16 @@ public class World implements GameModel {
     return turn % getPlayerCount();
   }
 
-  // get item info from certain room
+  /**
+   * Queries the items available in the specified room.
+   *
+   * @param location The index of the room to query.
+   * @return A formatted string containing information about the items in the
+   *         room. If there are no items in the room, it returns "No item."
+   *         followed by a newline character.
+   * @throws IndexOutOfBoundsException if the location is not a valid room index.
+   */
+
   public String queryRoomItem(int location) {
     StringBuilder stringBuilder = new StringBuilder();
     for (Item item : roomList.get(location).getSpaceItem()) {
@@ -399,6 +422,14 @@ public class World implements GameModel {
     return stringBuilder.toString();
   }
 
+  /**
+   * Gets the location of the specified item.
+   *
+   * @param itemId The unique identifier of the item.
+   * @return The index of the room where the item is stored.
+   * @throws IndexOutOfBoundsException if the itemId is not a valid item id.
+   */
+
   public int getItemLocation(int itemId) {
     if (itemId < 0 || itemId > itemList.size()) {
       throw new IndexOutOfBoundsException(String.format("Invalid item id %d.", itemId));
@@ -406,7 +437,15 @@ public class World implements GameModel {
     return itemList.get(itemId).getStoredLoacation();
   }
 
-  // let player pick up item from current room.
+  /**
+   * Allows a player to pick up an item from the current room.
+   *
+   * @param playerId The ID of the player picking up the item.
+   * @param itemId   The ID of the item to be picked up.
+   * @throws IndexOutOfBoundsException if the playerId or itemId is not a valid
+   *                                   ID.
+   */
+
   public void pickUpitem(int playerId, int itemId) {
     Player player = playerList.get(playerId);
     Room roomSpace = roomList.get(player.getLocation());
@@ -427,8 +466,6 @@ public class World implements GameModel {
   public String queryPlayerDetails(int playerId) {
     return playerList.get(playerId).querryDetails();
   }
-
-
 
   @Override
   public CharSequence queryTargetDetails() {
@@ -473,20 +510,20 @@ public class World implements GameModel {
     }
     return retList;
   }
-  
+
   public String getPlayerString(int playerId) {
     return playerList.get(playerId).toString();
   }
-  
+
   public String getRoomString(int location) {
     return roomList.get(location).toString();
   }
+
   public String getTargetString() {
     return targetCharacter.toString();
   }
-  public String getItemString(int itemID) {
-    return itemList.get(itemID).toString();
+
+  public String getItemString(int itemId) {
+    return itemList.get(itemId).toString();
   }
 }
-  
-

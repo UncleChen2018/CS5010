@@ -1,6 +1,9 @@
 package controller;
 
 import model.GameModel;
+/**
+ * Represents a command to move the player to a neighboring room.
+ */
 
 public class MoveToNeighbor extends TurnBaseCommand {
 

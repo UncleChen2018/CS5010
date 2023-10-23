@@ -4,12 +4,18 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-
 import model.GameModel;
 import model.World;
 
+/**
+ * New program runner to receive argument and give control to controller. 
+ */
 public class NewDriver {
 
+  /**
+   * The main function.
+   * @param args readable way source and max turn.
+   */
   public static void main(String[] args) {
     //
     if (args.length != 3) {
@@ -41,12 +47,12 @@ public class NewDriver {
   }
 
   private static Readable parseSource(String[] args) throws IOException{
-      if (args[0].equals("-f")) {
-        return new FileReader(args[1]);
-      } else if (args[0].equals("-s")) {
-        String multiLineString = args[1].replace("^n", "\n");
-        return new StringReader(multiLineString);
-      }
-      return null; 
+    if (args[0].equals("-f")) {
+      return new FileReader(args[1]);
+    } else if (args[0].equals("-s")) {
+      String multiLineString = args[1].replace("^n", "\n");
+      return new StringReader(multiLineString);
     }
+    return null; 
   }
+}

@@ -1,13 +1,12 @@
 package model;
 
-// TODO: add room Interface.
 import java.util.ArrayList;
 
 /**
  * Rooms in the world, with index, rectangle coordinate it can be represented,
  * room name, arrays of containing item, neighbor rooms and other visible rooms.
  */
-public class RoomSpace implements Room{
+public class RoomSpace implements Room {
 
   private int spaceIndex;
   private int[] rectCordinate; // the coordinate of the room rectangle
@@ -139,9 +138,13 @@ public class RoomSpace implements Room{
     this.itemList.remove(item);
   }
 
-  // return what is in the room
-  public String queryDetails() { // "Item [itemId = %d, itemName = %s, itemDamage = %d, owner =
-                                 // \"%s\"]"
+  /**
+   * Returns a detailed description of the items, players, and target in the room.
+   *
+   * @return A formatted string representing the room details.
+   */
+
+  public String queryDetails() {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("-------------------ROOM DETAILS-------------------\n");
     stringBuilder.append("Room: ").append(this).append("\n").append("Items: ")
@@ -151,6 +154,12 @@ public class RoomSpace implements Room{
 
     return stringBuilder.toString();
   }
+
+  /**
+   * Returns information about neighboring rooms.
+   *
+   * @return A formatted string representing the neighbor information.
+   */
 
   public String queryRoomNeighbors() {
     StringBuilder stringBuilder = new StringBuilder();

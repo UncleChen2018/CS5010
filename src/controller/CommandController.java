@@ -1,32 +1,28 @@
 package controller;
 
-import static org.junit.Assert.assertThrows;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-
 import javax.imageio.ImageIO;
-import javax.print.attribute.IntegerSyntax;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
 import model.GameModel;
 
 /**
- * The implementation of controller using command pattern.
- * 
+ * The implementation of the controller using the command pattern. This
+ * controller manages the game flow and interactions with the user or computer
+ * players.
  */
 public class CommandController implements GameController {
 
   private GameModel model;
   private final Appendable out;
   private final Scanner scan;
-  private int MAX_TURN;
+  private int maxTurn;
   private int currentTurn;
   private Readable worldData;
   private BufferedImage image;
@@ -36,6 +32,19 @@ public class CommandController implements GameController {
   // Build a controller, so the in, out, and MaxTurn is set.
   // This is the default constructor, which use random to generate choice of
   // computer controlling.
+  /**
+   * Constructs a CommandController with the specified input, output, world
+   * source, and turn limit.
+   *
+   * @param in          The input source for the controller.
+   * @param out         The output destination for the controller.
+   * @param worldSource The source of world data.
+   * @param turnLimit   The maximum number of turns allowed.
+   * @throws IllegalArgumentException if any of the parameters (in, out,
+   *                                  worldSource) is null or if turnLimit is not
+   *                                  positive.
+   */
+
   public CommandController(Readable in, Appendable out, Readable worldSource, int turnLimit) {
     if (in == null || out == null || worldSource == null) {
       throw new IllegalArgumentException("Readable and Appendable can't be null");
@@ -48,11 +57,25 @@ public class CommandController implements GameController {
 
     this.worldData = worldSource;
 
-    MAX_TURN = turnLimit;
+    maxTurn = turnLimit;
     currentTurn = 0;
     generator = new NumberGenerator();
 
   }
+
+  /**
+   * Constructs a CommandController with the specified input, output, world
+   * source, turn limit, and custom number generator.
+   *
+   * @param in          The input source for the controller.
+   * @param out         The output destination for the controller.
+   * @param worldSource The source of world data.
+   * @param turnLimit   The maximum number of turns allowed.
+   * @param numbers     Custom numbers to be used by the generator.
+   * @throws IllegalArgumentException if any of the parameters (in, out,
+   *                                  worldSource) is null or if turnLimit is not
+   *                                  positive.
+   */
 
   public CommandController(Readable in, Appendable out, Readable worldSource, int turnLimit,
       int... numbers) {
@@ -77,12 +100,12 @@ public class CommandController implements GameController {
       displayMap();
       out.append("Save the map to png file?(y|n), default n").append("\n");
       line = scan.nextLine().trim();
-      if (line.equalsIgnoreCase("y") || line.equalsIgnoreCase("yes")) {
+      if ("y".equalsIgnoreCase(line) || "yes".equalsIgnoreCase("line")) {
         saveMap();
       }
       // add at least one player before game begin
       line = "y";
-      while (line.equalsIgnoreCase("y") || model.getPlayerCount() < 1) {
+      while ("y".equalsIgnoreCase(line) || model.getPlayerCount() < 1) {
         if (model.getPlayerCount() < 1) {
           out.append("Set at least one player before the game begins:").append("\n");
         }
@@ -92,13 +115,13 @@ public class CommandController implements GameController {
       }
       out.append("Settting finished, game started.\n\n\n");
 
-      //begin to take turn.
-      while (currentTurn < MAX_TURN) {
+      // begin to take turn.
+      while (currentTurn < maxTurn) {
         out.append(String.format("[TURN %d]\n", currentTurn + 1));
         int activePlayer = model.getCurrentPlayer(currentTurn);
         out.append(String.format("Player %s's turn", model.getPlayerString(activePlayer)))
-        .append("\n");
-        
+            .append("\n");
+
         int location = model.getPlayerLocation(activePlayer);
         SimpleCommand cmd = null;
 
@@ -177,12 +200,12 @@ public class CommandController implements GameController {
               out.append("Player end game in the process, now quiting.\n");
               frame.dispose();
               System.exit(0);
+              break;
             default:
               out.append("Invalid choice, try again").append("\n");
               break;
           }
         } else {
-          // TODO: use generator to help computer decide.
           int nextInt = generator.getNextNumber();
           int curLocation = model.getPlayerLocation(activePlayer);
           // let computer choose which action to take
@@ -221,7 +244,7 @@ public class CommandController implements GameController {
         // Execute command.
         if (cmd != null) {
           try {
-            // TODO: add more display info for each command after execution.
+
             out.append(cmd.execute(model));
             out.append(model.queryPlayerDetails(activePlayer));
             model.moveTargetNextRoom();
@@ -233,7 +256,7 @@ public class CommandController implements GameController {
           cmd = null;
         }
       }
-      if(currentTurn == MAX_TURN) {
+      if (currentTurn == maxTurn) {
         out.append("Max turn reached, game exist\n");
       }
       frame.dispose();
@@ -247,7 +270,8 @@ public class CommandController implements GameController {
   // help method, display information for certain player.
   private void displayGameMenu(int playerId) throws IOException {
     out.append("Please select one of the option below\n");
-    out.append("MENU|1.Move|2.Pickup|3.LookAround|4.PlayerInfo|5.RoomInfo|6.Target|7.Exit").append("\n");
+    out.append("MENU|1.Move|2.Pickup|3.LookAround|4.PlayerInfo|5.RoomInfo|6.Target|7.Exit")
+        .append("\n");
   }
 
   private void displayMap() {
@@ -259,9 +283,8 @@ public class CommandController implements GameController {
   }
 
   private void saveMap() throws IOException {
-    out.append(
-        "Enter the name of the file (not include .png), other wise will save to WorldMap.png as default)")
-        .append("\n");
+    out.append("Enter the name of the file (not include .png), ")
+        .append("other wise will save to WorldMap.png as default)").append("\n");
     String fileString = "WorldMap.png";
     String line = scan.nextLine().trim();
     if (line.isEmpty()) {
@@ -292,7 +315,8 @@ public class CommandController implements GameController {
     while (true) {
       int maxRoomIndex = model.getRoomCount() - 1;
       out.append(String.format(
-          "Set location for player %d, enter number between %d and %d, or press enter to set default value %d",
+          "Set location for player %d, enter number between %d and %d, "
+              + "or press enter to set default value %d",
           playerId, 0, maxRoomIndex, defaultLocation)).append("\n");
       line = scan.nextLine().trim();
       // line = line.trim();
@@ -315,9 +339,8 @@ public class CommandController implements GameController {
     int defaultCapacity = 2;
     int capacity = defaultCapacity;
     while (true) {
-      out.append(String.format(
-          "Set item capacity for player %d, enter number greater than %d, or press enter to set default value %d",
-          playerId, 0, defaultCapacity)).append("\n");
+      out.append(String.format("Set item capacity for player %d, enter number greater than %d,"
+          + " or press enter to set default value %d", playerId, 0, defaultCapacity)).append("\n");
       line = scan.nextLine().trim();
       if (line.isEmpty()) {
         break;
@@ -339,18 +362,19 @@ public class CommandController implements GameController {
     out.append(String.format("Set control for player %d to Computer? (y|n, default no)", playerId))
         .append("\n");
     line = scan.nextLine().trim();
-    if (line.equalsIgnoreCase("y") || line.equalsIgnoreCase("yes")) {
+    if ("y".equalsIgnoreCase(line) || "yes".equalsIgnoreCase(line)) {
       isHumanControl = false;
     }
 
     // Last check
     out.append(String.format(
-        "What you will add: Player %d, with name %s, initial location at room %d, item capacity = %d, controlled by %s",
+        "What you will add: Player %d, with name %s, "
+            + "initial location at room %d, item capacity = %d, controlled by %s",
         playerId, playerName, location, capacity, isHumanControl ? "HUMAN" : "COMPUTER"))
         .append("\n");
     out.append("Add this player to game(y) or abort(n), default y").append("\n");
     line = scan.nextLine().trim();
-    if (line.isEmpty() || line.equalsIgnoreCase("y") || line.equalsIgnoreCase("yes")) {
+    if (line.isEmpty() || "y".equalsIgnoreCase(line) || "yes".equalsIgnoreCase(line)) {
       model.addNewPlayer(playerName, location, capacity, isHumanControl);
       out.append(String.format("Player %d successfully added.\n", playerId));
     } else {
@@ -373,7 +397,6 @@ public class CommandController implements GameController {
   private void displayTargetInfo() throws IOException {
     out.append(model.queryTargetDetails()).append("\n");
   }
-
 
   private class NumberGenerator {
     private ArrayList<Integer> numbers;
