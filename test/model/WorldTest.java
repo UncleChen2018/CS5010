@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -95,8 +94,8 @@ public class WorldTest {
 
     // Assert: Check if the player was removed from the origin room and added to the
     // dest room
-    assertFalse(model.getRoomCharater(initialLocation).contains(playerIndex));
-    assertTrue(model.getRoomCharater(newLocation).contains(playerIndex));
+    assertFalse(model.getRoomCharacter(initialLocation).contains(playerIndex));
+    assertTrue(model.getRoomCharacter(newLocation).contains(playerIndex));
   }
 
   @Test
@@ -405,12 +404,128 @@ public class WorldTest {
     // Test for a player who has not reached capacity
     boolean reachedCapacity = model.playerReachCapacity(1);
     assertFalse(reachedCapacity);
-    
+
     model.pickUpitem(1, 4);
 
-    // Test for a player who has  reached capacity
+    // Test for a player who has reached capacity
     reachedCapacity = model.playerReachCapacity(1);
     assertTrue(reachedCapacity);
   }
+
+  @Test
+  public void testGetRoomItemCount() {
+    // Test for a room with 1 items
+    int itemCount = model.getRoomItemCount(0);
+    assertEquals(1, itemCount);
+
+    // Test for a room with more than 1 items
+    itemCount = model.getRoomItemCount(2);
+    assertEquals(2, itemCount);
+
+    // Test for a room with no items
+    itemCount = model.getRoomItemCount(3);
+    assertEquals(0, itemCount);
+  }
+
+  @Test
+  public void testIsHumanPlayer() {
+    // Test for a human player
+    boolean isHuman = model.isHumanPlayer(0);
+    assertTrue(isHuman);
+
+    // Test for an AI player
+    isHuman = model.isHumanPlayer(1);
+    assertFalse(isHuman);
+
+    // Test for a different player
+    isHuman = model.isHumanPlayer(2);
+    assertFalse(isHuman);
+  }
+
+  @Test
+  public void testGetRoomItems() {
+    // Assuming you have already set up some items in the room
+    int locationWithItems = 0; // Choose a room with items
+    int locationWithoutItems = 3; // Choose a room without items
+    int locationWithoutManyItems = 2; // Choose a room with many items
+
+    ArrayList<Integer> itemsWith = model.getRoomItems(locationWithItems);
+    ArrayList<Integer> itemsWithout = model.getRoomItems(locationWithoutItems);
+    ArrayList<Integer> itemsWithMany = model.getRoomItems(locationWithoutManyItems);
+
+    ArrayList<Integer> expectedItemsWith = new ArrayList<>(Arrays.asList(4));
+    ArrayList<Integer> expectedItemsWithout = new ArrayList<>(Arrays.asList());
+
+    assertEquals(expectedItemsWith, itemsWith);
+    assertEquals(expectedItemsWithout, itemsWithout);
+    ArrayList<Integer> expectedItemsWithMany = new ArrayList<>(Arrays.asList(6, 11));
+    assertEquals(expectedItemsWithMany, itemsWithMany);
+  }
+
+  @Test
+  public void testGetPlayerString() {
+    // Test for a human player
+    int humanPlayerId = 0;
+    String humanPlayerString = model.getPlayerString(humanPlayerId);
+    String expectedHumanPlayerString = "No.0 \"Jimmy\"";
+    assertEquals(expectedHumanPlayerString, humanPlayerString);
+
+    // Test for an AI player
+    int aiPlayerId = 1;
+    String aiPlayerString = model.getPlayerString(aiPlayerId);
+    String expectedAiPlayerString = "No.1 \"AI\"";
+    assertEquals(expectedAiPlayerString, aiPlayerString);
+  }
+
+  @Test
+  public void testGetRoomString() {
+    // Test for a room with items, players, and target
+    int roomWithAllDetails = 0;
+    String roomStringWithAllDetails = model.getRoomString(roomWithAllDetails);
+    String expectedRoomStringWithAllDetails = "No.0 \"Armory\"";
+    assertEquals(expectedRoomStringWithAllDetails, roomStringWithAllDetails);
+
+    // Test for a room with no players and no target
+    int roomWithNoDetails = 1;
+    String roomStringWithNoDetails = model.getRoomString(roomWithNoDetails);
+    String expectedRoomStringWithNoDetails = "No.1 \"Billiard Room\"";
+    assertEquals(expectedRoomStringWithNoDetails, roomStringWithNoDetails);
+  }
+
+  @Test
+  public void testGetTargetString() {
+
+    String targetStringFound = model.getTargetString();
+    String expectedTargetStringFound = "\"Doctor Lucky\"";
+    assertEquals(expectedTargetStringFound, targetStringFound);
+
+  }
+
+  @Test
+  public void testGetItemString() {
+    // Test for an item with an owner
+    int itemWithOwner = 0; // Choose an item with an owner
+    String itemStringWithOwner = model.getItemString(itemWithOwner);
+    String expectedItemStringWithOwner = "No.0 \"Crepe Pan\" Damage:3";
+    assertEquals(expectedItemStringWithOwner, itemStringWithOwner);
+  }
+  
+  @Test
+  public void testGetRoomCharacter() {
+      // Test for a room with characters
+      int roomWithCharacters = 0; // Choose a room with characters
+      ArrayList<Integer> charactersInRoom = model.getRoomCharacter(roomWithCharacters);
+      ArrayList<Integer> expectedCharactersInRoom = new ArrayList<>(Arrays.asList(0, 1));
+
+      assertEquals(expectedCharactersInRoom, charactersInRoom);
+
+      // Test for a room without characters
+      int roomWithoutCharacters = 2; // Choose a room without characters
+      ArrayList<Integer> charactersNotInRoom = model.getRoomCharacter(roomWithoutCharacters);
+      ArrayList<Integer> expectedCharactersNotInRoom = new ArrayList<>();
+
+      assertEquals(expectedCharactersNotInRoom, charactersNotInRoom);
+  }
+
 
 }

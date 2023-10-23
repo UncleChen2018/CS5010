@@ -548,7 +548,7 @@ public class World implements GameModel {
    * @param location The location of the room.
    * @return An ArrayList of Integers representing player IDs.
    */
-  public ArrayList<Integer> getRoomCharater(int location) {
+  public ArrayList<Integer> getRoomCharacter(int location) {
     ArrayList<Integer> retList = new ArrayList<Integer>();
     for (Player player : roomList.get(location).getCharacterList()) {
       retList.add(player.getPlayerId());

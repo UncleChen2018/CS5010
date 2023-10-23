@@ -210,18 +210,65 @@ public interface GameModel {
 
   int getRoomItemCount(int location);
 
+  /**
+   * Checks if the player with the specified ID is a human player.
+   *
+   * @param playerId the ID of the player
+   * @return true if the player is a human player, otherwise false
+   */
+
   boolean isHumanPlayer(int playerId);
+
+  /**
+   * Gets a list of item IDs present in the room at the specified location.
+   *
+   * @param location the location of the room
+   * @return a list of item IDs in the room
+   */
 
   ArrayList<Integer> getRoomItems(int location);
 
+  /**
+   * Gets a formatted string representation of the player with the specified ID.
+   *
+   * @param playerId the ID of the player
+   * @return a formatted string containing player information
+   */
+
   String getPlayerString(int playerId);
+
+  /**
+   * Gets a formatted string representation of the room at the specified location.
+   *
+   * @param location the location of the room
+   * @return a formatted string containing room information
+   */
 
   String getRoomString(int location);
 
+  /**
+   * Gets a formatted string representation of the target.
+   *
+   * @return a formatted string containing target information
+   */
   String getTargetString();
+
+  /**
+   * Gets a formatted string representation of the item with the specified ID.
+   *
+   * @param itemId the ID of the item
+   * @return a formatted string containing item information
+   */
 
   String getItemString(int itemId);
 
-  ArrayList<Integer> getRoomCharater(int location);
+  /**
+   * Gets a list of character IDs present in the room at the specified location.
+   *
+   * @param location the location of the room
+   * @return a list of character IDs in the room
+   */
+
+  ArrayList<Integer> getRoomCharacter(int location);
 
 }
