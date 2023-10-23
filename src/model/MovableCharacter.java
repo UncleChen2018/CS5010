@@ -1,10 +1,7 @@
-/**
- * 
- */
 package model;
 
 /**
- * 
+ * Abstract class representing a movable character in the game.
  */
 public abstract class MovableCharacter implements Movable {
   protected final String name;

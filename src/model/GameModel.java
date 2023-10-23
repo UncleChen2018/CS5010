@@ -3,8 +3,6 @@ package model;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import javax.lang.model.element.NestingKind;
-
 /**
  * The game model interface. Including setup a brand new world, (including
  * rooms, target, character, player) and all methods that are used to get the
@@ -36,10 +34,10 @@ public interface GameModel {
   void setPlayerLocation(int playerId, int location);
 
   /**
-   * Return the player's current location.
+   * Returns the current location of the player with the specified ID.
    * 
-   * @param playerId.
-   * @return space index.
+   * @param playerId The ID of the player.
+   * @return The index of the space where the player is located.
    */
   int getPlayerLocation(int playerId);
 
@@ -53,11 +51,12 @@ public interface GameModel {
   boolean isNeighbor(int quest, int base);
 
   /**
-   * Decide which player should act on the turn.
+   * Decides which player should take action on the turn.
    * 
-   * @param turn
-   * @return the player id that should act.
+   * @param turn The current turn.
+   * @return The ID of the player that should take action.
    */
+
   public int getCurrentPlayer(int turn);
 
   /**
@@ -97,11 +96,12 @@ public interface GameModel {
   void pickUpitem(int playerId, int itemId);
 
   /**
-   * Get the item room location if it is in room.
+   * Gets the location index of the item if it is in a room.
    * 
-   * @param itemId
-   * @return location index, if not in room, return -1;
+   * @param itemId The ID of the item.
+   * @return The location index. If the item is not in a room, returns -1.
    */
+
   int getItemLocation(int itemId);
 
   /**
@@ -115,25 +115,26 @@ public interface GameModel {
 
   String queryPlayerDetails(int playerId);
 
-
   CharSequence queryTargetDetails();
 
   String queryRoomNeighbors(int playerLocation);
-  
+
   ArrayList<Integer> getRoomNeighbors(int location);
 
   boolean playerReachCapacity(int playerId);
 
   int getRoomItemCount(int location);
-  
+
   boolean isHumanPlayer(int playerId);
 
   ArrayList<Integer> getRoomItems(int location);
-  
-  String getPlayerString(int playerId);
-  String getRoomString(int location);
-  String getTargetString();
-  String getItemString(int itemID);
 
-  
+  String getPlayerString(int playerId);
+
+  String getRoomString(int location);
+
+  String getTargetString();
+
+  String getItemString(int itemId);
+
 }

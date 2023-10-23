@@ -4,11 +4,20 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-
 import model.GameModel;
 import model.World;
 
+/**
+ * Another driver with variable arguments.
+ */
 public class NewDriverVarargs {
+
+  /**
+   * The driver's entry.
+   * 
+   * @param args -f filename to read from files. -s string to read from string.
+   *             And a predefined integer array.
+   */
 
   public static void main(String[] args) {
     //
@@ -53,8 +62,9 @@ public class NewDriverVarargs {
           226, 79, 175, 62, 145, 86, 81, 5, 30, 167, 189, 194, 29, 119, 62, 80, 129, 46, 34, 99,
           102, 60, 66, 6, 55, 52, 128, 69, 185, 50, 113, 53, 216, 126, 59, 3, 2, 181, 50, 226, 152,
           122, 139, 93, 8, 109, 45, 80, 121, 147, 146, 60, 109, 7, 85, 233, 41, 20, 237, 105, 83,
-          63, 216, 197, 54, 85, 220, 234, 1, 81, 85, 117, 96, 26, 119, 37, 118};
-      GameController controller = new CommandController(input, output, worldDataSource, maxTurn,random);
+          63, 216, 197, 54, 85, 220, 234, 1, 81, 85, 117, 96, 26, 119, 37, 118 };
+      GameController controller = new CommandController(input, output, worldDataSource, maxTurn,
+          random);
       controller.start(model);
     } catch (IOException e) {
       System.out.println(e);

@@ -1,6 +1,9 @@
 package controller;
 
 import model.GameModel;
+/**
+ * A command to pick up an item.
+ */
 
 public class PickUpItem extends TurnBaseCommand {
   private int itemId;
