@@ -6,6 +6,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +16,7 @@ import org.junit.Test;
  * Test class for world. Most part is to check if it is correctly set up.
  */
 public class WorldTest {
-// TODO: use model to test.
+
   private GameModel model;
 
   /**
@@ -243,12 +246,171 @@ public class WorldTest {
         + "Item [itemId = 11, itemName = Big Red Hammer, itemDamage = 4, storedLocation = 2]\n";
     actualOutput = model.queryRoomItem(locationWithItems);
 
+    // Choose a location with no items
     assertEquals(expectedOutput, actualOutput);
     locationWithItems = 3; // Choose a location with items
     expectedOutput = "No item.\n";
     actualOutput = model.queryRoomItem(locationWithItems);
 
     assertEquals(expectedOutput, actualOutput);
+  }
+
+  @Test
+  public void testPickUpItem() {
+    // Arrange
+    int playerId = 0; // Choose a player
+    int roomId = 0; // Choose a room with items
+    int itemId = 4; // Choose an item from the room
+
+    // Act
+    model.pickUpitem(playerId, itemId);
+
+    // Assert
+    assertTrue(model.getPlayerItems(playerId).contains(itemId));
+    assertFalse(model.getRoomItems(roomId).contains(itemId));
+    assertEquals(-1, model.getItemLocation(itemId));
+  }
+
+  @Test
+  public void testGetPlayerItems() {
+    // Arrange
+    int playerId = 0; // Choose a player
+    int itemId1 = 1;
+    int itemId2 = 3;
+    model.pickUpitem(playerId, itemId1);
+    model.pickUpitem(playerId, itemId2);
+
+    // Act
+    ArrayList<Integer> playerItems = model.getPlayerItems(playerId);
+
+    // Assert
+    assertTrue(playerItems.contains(itemId1));
+    assertTrue(playerItems.contains(itemId2));
+    assertEquals(2, playerItems.size());
+  }
+
+  @Test
+  public void testGetItemLocation() {
+    // Arrange
+    int itemId = 4; // Choose an existing item
+
+    // Act
+    int itemLocation = model.getItemLocation(itemId);
+
+    // Assert
+    assertEquals(0, itemLocation);
+    model.pickUpitem(0, itemId);
+    assertEquals(-1, model.getItemLocation(itemId));
+
+  }
+
+  @Test(expected = IndexOutOfBoundsException.class)
+  public void testGetItemLocationInvalidId() {
+    // Arrange
+    int invalidItemId = -1; // Choose an invalid item ID
+
+    // Act
+    model.getItemLocation(invalidItemId);
+  }
+
+  @Test
+  public void testQueryRoomDetails() {
+    // Test two player and target in
+    String details = model.queryRoomDetails(0);
+    String expectedString = "-------------------ROOM DETAILS-------------------\n"
+        + "Room: No.0 \"Armory\"\n" + "Items: [No.4 \"Revolver\" Damage:3]\n"
+        + "Player: [No.0 \"Jimmy\", No.1 \"AI\"]\n" + "Target: Found\n" + "";
+
+    assertEquals(expectedString, details);
+
+    // Test no player and target not in
+    details = model.queryRoomDetails(1);
+    expectedString = "-------------------ROOM DETAILS-------------------\n"
+        + "Room: No.1 \"Billiard Room\"\n" + "Items: [No.8 \"Billiard Cue\" Damage:2]\n"
+        + "Player: No Player\n" + "Target: Not Found\n" + "";
+
+    assertEquals(expectedString, details);
+
+    // Test 1 player and target not in and no item
+    details = model.queryRoomDetails(3);
+    expectedString = "-------------------ROOM DETAILS-------------------\n"
+        + "Room: No.3 \"Dining Hall\"\n" + "Items: No Item\n" + "Player: [No.2 \"Penny\"]\n"
+        + "Target: Not Found\n" + "";
+
+    assertEquals(expectedString, details);
+
+  }
+
+  @Test
+  public void testQueryPlayerDetails() {
+    // Test player 0 ("Jimmy") with items
+    String details0 = model.queryPlayerDetails(0);
+    String expectedString0 = "-------------------PLAYER DETAILS-------------------\n"
+        + "Player: No.0 \"Jimmy\"\n" + "Control Type: HUMAN\n" + "Location: 0\n"
+        + "Stock|Capacity: 0|2\n" + "Items: []\n";
+    assertEquals(expectedString0, details0);
+
+    // Test player 1 ("AI") with 1 items
+    model.pickUpitem(1, 4);
+    String details1 = model.queryPlayerDetails(1);
+    String expectedString1 = "-------------------PLAYER DETAILS-------------------\n"
+        + "Player: No.1 \"AI\"\n" + "Control Type: COMPUTER\n" + "Location: 0\n"
+        + "Stock|Capacity: 1|1\n" + "Items: [No.4 \"Revolver\" Damage:3]\n" + "";
+    ;
+    assertEquals(expectedString1, details1);
+
+  }
+
+  @Test
+  public void testQueryTargetDetails() {
+    String detailsFound = model.queryTargetDetails();
+    String expectedStringFound = "-------------------Target DETAILS-------------------\n"
+        + "Target: \"Doctor Lucky\"\n" + "Health: 50\n" + "Location: 0\n" + "";
+    assertEquals(expectedStringFound, detailsFound);
+  }
+
+  @Test
+  public void testQueryRoomNeighbors() {
+    // Test for a room with more than 1 neighbors
+    String detailsWithNeighbors = model.queryRoomNeighbors(0);
+    String expectedStringWithNeighbors = "-------------------Neighbor Info-------------------\n"
+        + "No.1 \"Billiard Room\"\n" + "No.3 \"Dining Hall\"\n" + "No.4 \"Drawing Room\"\n" + "";
+    assertEquals(expectedStringWithNeighbors, detailsWithNeighbors);
+
+    // Test for a room without 1 neighbors
+    String detailsWithoutNeighbors = model.queryRoomNeighbors(2);
+    String expectedStringWithoutNeighbors = "-------------------Neighbor Info-------------------\n"
+        + "No.20 \"Winter Garden\"\n" + "";
+
+    assertEquals(expectedStringWithoutNeighbors, detailsWithoutNeighbors);
+  }
+
+  @Test
+  public void testGetRoomNeighbors() {
+    // Test for a room with more than 1neighbors
+    ArrayList<Integer> neighborsWith = model.getRoomNeighbors(0);
+    ArrayList<Integer> expectedNeighborsWith = new ArrayList<>(Arrays.asList(1, 3, 4));
+
+    assertEquals(expectedNeighborsWith, neighborsWith);
+
+    // Test for a room with 1 neighbors
+    ArrayList<Integer> neighborsWithout = model.getRoomNeighbors(2);
+    ArrayList<Integer> expectedNeighborsWithout = new ArrayList<>(Arrays.asList(20));
+
+    assertEquals(expectedNeighborsWithout, neighborsWithout);
+  }
+
+  @Test
+  public void testPlayerReachCapacity() {
+    // Test for a player who has not reached capacity
+    boolean reachedCapacity = model.playerReachCapacity(1);
+    assertFalse(reachedCapacity);
+    
+    model.pickUpitem(1, 4);
+
+    // Test for a player who has  reached capacity
+    reachedCapacity = model.playerReachCapacity(1);
+    assertTrue(reachedCapacity);
   }
 
 }

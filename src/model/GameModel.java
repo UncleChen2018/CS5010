@@ -120,7 +120,22 @@ public interface GameModel {
    */
   String queryRoomItem(int location);
 
+  /**
+   * Picks up an item with the specified ID and associates it with the player with
+   * the given ID.
+   *
+   * @param playerId the ID of the player picking up the item
+   * @param itemId   the ID of the item to be picked up
+   */
   void pickUpitem(int playerId, int itemId);
+
+  /**
+   * Gets a list of item IDs associated with the specified player.
+   *
+   * @param playerId the ID of the player
+   * @return a list of item IDs
+   */
+  ArrayList<Integer> getPlayerItems(int playerId);
 
   /**
    * Gets the location index of the item if it is in a room.
@@ -140,15 +155,58 @@ public interface GameModel {
    */
   String queryRoomDetails(int location);
 
+  /**
+   * Queries and retrieves detailed information about the player with the
+   * specified ID.
+   *
+   * @param playerId the ID of the player
+   * @return a formatted string containing player details
+   */
+
   String queryPlayerDetails(int playerId);
 
-  CharSequence queryTargetDetails();
+  /**
+   * Queries and retrieves detailed information about the target.
+   *
+   * @return a formatted string containing target details
+   */
+
+  String queryTargetDetails();
+
+  /**
+   * Queries and retrieves information about the neighboring rooms of the
+   * specified player location.
+   *
+   * @param playerLocation the location of the player
+   * @return a formatted string containing information about neighboring rooms
+   */
 
   String queryRoomNeighbors(int playerLocation);
 
+  /**
+   * Gets a list of neighboring room IDs for the specified location.
+   *
+   * @param location the location for which to retrieve neighboring rooms
+   * @return a list of neighboring room IDs
+   */
+
   ArrayList<Integer> getRoomNeighbors(int location);
 
+  /**
+   * Checks if the player with the specified ID has reached their item capacity.
+   *
+   * @param playerId the ID of the player
+   * @return true if the player has reached their item capacity, otherwise false
+   */
+
   boolean playerReachCapacity(int playerId);
+
+  /**
+   * Gets the number of items in the room at the specified location.
+   *
+   * @param location the location of the room
+   * @return the number of items in the room
+   */
 
   int getRoomItemCount(int location);
 

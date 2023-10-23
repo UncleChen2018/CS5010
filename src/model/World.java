@@ -473,7 +473,7 @@ public class World implements GameModel {
   }
 
   @Override
-  public CharSequence queryTargetDetails() {
+  public String queryTargetDetails() {
     return targetCharacter.querryDetails();
   }
 
@@ -516,6 +516,16 @@ public class World implements GameModel {
     return retList;
   }
 
+  
+  @Override
+  public ArrayList<Integer> getPlayerItems(int playerId) {
+    ArrayList<Integer> retList = new ArrayList<Integer>();
+    for (Item item : playerList.get(playerId).getItemList()) {
+      retList.add(item.getItemId());
+    }
+    return retList;
+  }
+  
   public String getPlayerString(int playerId) {
     return playerList.get(playerId).toString();
   }
