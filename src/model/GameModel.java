@@ -104,13 +104,14 @@ public interface GameModel {
    * room.
    */
   void moveTargetNextRoom();
-  
-  /** Get target location.
+
+  /**
+   * Get target location.
+   * 
    * @return the room index target is in.
    */
   int getTargetLocation();
-  
-  
+
   /**
    * Given room location, query its item information.
    * 

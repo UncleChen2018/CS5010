@@ -240,8 +240,7 @@ public class WorldTest {
     // Choose a location with 1 items
     locationWithItems = 2; // Choose a location with items
     expectedOutput = "Item [itemId = 6, itemName = Chain Saw, itemDamage = 4, storedLocation = 2]\n"
-        + "Item [itemId = 11, itemName = Big Red Hammer, itemDamage = 4, storedLocation = 2]\n"
-        ;
+        + "Item [itemId = 11, itemName = Big Red Hammer, itemDamage = 4, storedLocation = 2]\n";
     actualOutput = model.queryRoomItem(locationWithItems);
 
     assertEquals(expectedOutput, actualOutput);

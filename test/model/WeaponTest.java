@@ -75,7 +75,6 @@ public class WeaponTest {
   @Test
   public void setOwner() {
     Player player1 = new Player("Player1", 1, 5, true, 1);
-    Player player2 = new Player("Player2", 1, 5, true, 2);
 
     Item sword = new Weapon(1, "Sword", 10, 1);
     sword.setOwner(player1);
@@ -83,6 +82,7 @@ public class WeaponTest {
     Player owner1 = sword.getOwner();
     assertNotNull(owner1);
     assertEquals("Player1", owner1.getName());
+    Player player2 = new Player("Player2", 1, 5, true, 2);
 
     sword.setOwner(player2);
 
