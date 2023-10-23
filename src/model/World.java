@@ -313,6 +313,11 @@ public class World implements GameModel {
   public Room getRoomSpace(int index) {
     return roomList.get(index);
   }
+  
+  @Override
+  public int getTargetLocation() {
+    return targetCharacter.getLocation();
+  }
 
   /**
    * Print out the room info in a formatted way.

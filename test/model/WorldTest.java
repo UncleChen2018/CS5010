@@ -56,89 +56,200 @@ public class WorldTest {
     assertEquals(expectedPlayerCount, model.getPlayerCount());
   }
 
-//  @Test
-//  public void testGetWorldName() {
-//    assertEquals("Doctor Lucky's Mansion", model.getWorldName());
-//  }
-//
-//  @Test
-//  public void testGetName() {
-//    String expectedName = "Doctor Lucky's Mansion";
-//    assertEquals(expectedName, world.getName());
-//  }
-//
-//  @Test
-//  public void testGetRoomCount() {
-//    assertEquals(21, world.getRoomCount());
-//  }
-//
-//  @Test
-//  public void testGetItemCount() {
-//    assertEquals(20, world.getItems().size());
-//  }
-//
-//  @Test
-//  public void testGetPlayerCount() {
-//    assertEquals(3, world.getPlayerCount());
-//    
-//
-//  }
-//
-//  @Test
-//  public void testGetTargetName() {
-//    assertEquals("Doctor Lucky", world.getTarget().getName());
-//  }
-//
-//  @Test
-//  public void testGetRoomSpace() {
-//    assertNotNull(world.getRoomSpace(0));
-//  }
-//
-//  @Test
-//  public void testGetDetails() {
-//    String expectedDetails = String.format(
-//        "World [World name = %s, room number =  %d, item number = %d, "
-//            + "target charater = %s, player number = %d].",
-//        world.getWorldName(), world.getRoomCount(), world.getItems().size(),
-//        world.getTarget().getName(), world.getPlayerCount());
-//
-//    assertEquals(expectedDetails, world.getDetails());
-//  }
-//
-//  @Test
-//  public void testSetPlayerLocationValid() {
-//    // Assuming you have at least one player and one room
-//    int playerId = 0; // Assuming player index 0 exists
-//    int destinationRoom = 1; // Assuming room index 1 exists
-//
-//    // Get the initial location of the player
-//    int initialLocation = world.getPlayerLocation(playerId);
-//
-//    // Set the player to a new location
-//    world.setPlayerLocation(playerId, destinationRoom);
-//
-//    // Check if the player's location has changed
-//    int newLocation = world.getPlayerLocation(playerId);
-//    assertEquals(destinationRoom, newLocation);
-//
-//    // Check if the player has been removed from the initial room
-//    assertFalse(world.getRoomCharater(initialLocation).contains(playerId));
-//
-//    // Check if the player has been added to the destination room
-//    assertTrue(world.getRoomCharater(destinationRoom).contains(playerId));
-//  }
-//
-//  @Test(expected = IllegalArgumentException.class)
-//  public void testSetPlayerLocationInvalidPlayer() {
-//    int invalidPlayerId = -1; // Assuming an invalid player index
-//    int destinationRoom = 1; // Assuming room index 1 exists
-//    world.setPlayerLocation(invalidPlayerId, destinationRoom);
-//  }
-//
-//  @Test(expected = IllegalArgumentException.class)
-//  public void testSetPlayerLocationInvalidLocation() {
-//    int playerId = 0; // Assuming player index 0 exists
-//    int invalidDestinationRoom = -1; // Assuming an invalid room index
-//    world.setPlayerLocation(playerId, invalidDestinationRoom);
-//  }
+  @Test
+  public void testGetName() {
+    String expectedName = "Doctor Lucky's Mansion";
+    assertEquals(expectedName, model.getName());
+  }
+
+  @Test
+  public void testGetDetails() {
+    String expectedDetails = "World [World name = Doctor Lucky's Mansion,"
+        + " room number =  21, item number = 20, "
+        + "target charater = Doctor Lucky, player number = 3].";
+    String actualDetails = model.getDetails();
+    assertEquals(expectedDetails, actualDetails);
+  }
+
+  @Test
+  public void testGetPlayerCount() {
+    assertEquals(3, model.getPlayerCount());
+
+  }
+
+  @Test
+  public void testSetPlayerLocation() {
+    // Arrange: Get the initial location of the player
+    int playerIndex = 0; // Assuming player with index 0
+    int initialLocation = model.getPlayerLocation(playerIndex);
+
+    // Act: Set the player to a new location
+    int newLocation = 2; // Choose a valid new location
+    model.setPlayerLocation(playerIndex, newLocation);
+
+    // Assert: Check if the player's location was updated correctly
+    assertEquals(newLocation, model.getPlayerLocation(playerIndex));
+
+    // Assert: Check if the player was removed from the origin room and added to the
+    // dest room
+    assertFalse(model.getRoomCharater(initialLocation).contains(playerIndex));
+    assertTrue(model.getRoomCharater(newLocation).contains(playerIndex));
+  }
+
+  @Test
+  public void testGetPlayerLocation() {
+    // Arrange: Create a player and set their location
+    int playerId = 3; // Assuming player with index 0
+    int expectedLocation = 3; // Choose an arbitrary location
+
+    model.addNewPlayer("TestPlayer", expectedLocation, 5, true);
+
+    // Act: Retrieve the player's location using getPlayerLocation
+    int actualLocation = model.getPlayerLocation(playerId);
+
+    // Assert: Check if the returned location matches the expected location
+    assertEquals(expectedLocation, actualLocation);
+  }
+
+  @Test
+  public void testIsNeighbor() {
+    // Arrange: Define quest and base locations
+    int questLocation = 2; // Choose a valid location
+    int baseLocation = 3; // Choose another valid location
+
+    // Act: Check if quest is a neighbor of base
+    boolean isNeighbor = model.isNeighbor(questLocation, baseLocation);
+
+    // Assert: Check if the result is as expected
+    assertFalse(isNeighbor);
+
+    questLocation = 8;
+    isNeighbor = model.isNeighbor(questLocation, baseLocation);
+    // Assert: Check if the result is as expected
+    assertTrue(isNeighbor);
+  }
+
+  @Test(expected = IndexOutOfBoundsException.class)
+  public void testIsNeighborInvalidIndices() {
+    // Arrange
+    int quest = -1; // Invalid index
+    int base = 0; // Assuming base is valid
+
+    // Act
+    model.isNeighbor(quest, base);
+
+    // Assert (not needed, the test is expected to throw an exception)
+  }
+
+  @Test
+  public void testGetCurrentPlayer() {
+    // Act and Assert: Check the current player for different turns
+    assertEquals(0, model.getCurrentPlayer(0)); // Turn 0, Player 0
+    assertEquals(1, model.getCurrentPlayer(1)); // Turn 1, Player 1
+    assertEquals(2, model.getCurrentPlayer(2)); // Turn 2, Player 2
+    assertEquals(0, model.getCurrentPlayer(3)); // Turn 3, Player 0 (cycling back to the first)
+
+    assertEquals(1, model.getCurrentPlayer(4)); // Turn 4, Player 1
+    assertEquals(2, model.getCurrentPlayer(5)); // Turn 5, Player 2
+    assertEquals(0, model.getCurrentPlayer(6)); // Turn 6, Player 0 (cycling back to the first)
+  }
+
+  @Test
+  public void testAddNewPlayer() {
+    // Arrange: Assuming the roomList has at least one room
+    String playerName = "John Doe";
+    int initLocation = 0;
+    int capacity = 3;
+    boolean isHumanControl = true;
+
+    // Act
+    model.addNewPlayer(playerName, initLocation, capacity, isHumanControl);
+
+    // Assert
+    int expectedPlayerCount = 4; // 3 players added in setup + 1 new player
+    assertEquals(expectedPlayerCount, model.getPlayerCount());
+
+    int expectedPlayerLocation = initLocation;
+    assertEquals(expectedPlayerLocation, model.getPlayerLocation(3)); // Assuming 0-based indexing
+    // for player IDs
+
+    String playeString = "No.3 \"John Doe\"";
+    // Assuming player IDs start from 0
+    assertEquals(playeString, model.getPlayerString(3));
+
+    // Add more assertions as needed...
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddNewPlayerInvalidLocation() {
+    // Arrange
+    String playerName = "John Doe";
+    int initLocation = 100; // Assuming there are not more than 10 rooms
+    int capacity = 3;
+    boolean isHumanControl = true;
+
+    // Act
+    model.addNewPlayer(playerName, initLocation, capacity, isHumanControl);
+
+    // Assert (not needed, the test is expected to throw an exception)
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddNewPlayerInvalidCapacity() {
+    // Arrange
+    String playerName = "John Doe";
+    int initLocation = 0;
+    int capacity = 0; // Invalid capacity
+    boolean isHumanControl = true;
+
+    // Act
+    model.addNewPlayer(playerName, initLocation, capacity, isHumanControl);
+
+    // Assert (not needed, the test is expected to throw an exception)
+  }
+
+  @Test
+  public void testGetRoomCount() {
+    assertEquals(21, model.getRoomCount());
+  }
+
+  @Test
+  public void testMoveTargetNextRoom() {
+
+    // Act
+    for (int i = 0; i <= model.getRoomCount(); i++) {
+      int initialLocation = model.getTargetLocation();
+      int expectedNextLocation = (initialLocation + 1) % model.getRoomCount();
+      model.moveTargetNextRoom();
+      int actualNextLocation = model.getTargetLocation();
+      // Assert
+      assertEquals(expectedNextLocation, actualNextLocation);
+
+    }
+  }
+
+  @Test
+  public void testQueryRoomItem() {
+    int locationWithItems = 0; // Choose a location with 1 items
+    String expectedOutput = "Item [itemId = 4, itemName = Revolver, "
+        + "itemDamage = 3, storedLocation = 0]\n";
+    String actualOutput = model.queryRoomItem(locationWithItems);
+
+    assertEquals(expectedOutput, actualOutput);
+
+    // Choose a location with 1 items
+    locationWithItems = 2; // Choose a location with items
+    expectedOutput = "Item [itemId = 6, itemName = Chain Saw, itemDamage = 4, storedLocation = 2]\n"
+        + "Item [itemId = 11, itemName = Big Red Hammer, itemDamage = 4, storedLocation = 2]\n"
+        ;
+    actualOutput = model.queryRoomItem(locationWithItems);
+
+    assertEquals(expectedOutput, actualOutput);
+    locationWithItems = 3; // Choose a location with items
+    expectedOutput = "No item.\n";
+    actualOutput = model.queryRoomItem(locationWithItems);
+
+    assertEquals(expectedOutput, actualOutput);
+  }
+
 }
