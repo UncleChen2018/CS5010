@@ -143,7 +143,7 @@ public class CommandController implements GameController {
 
                     break;
                   } else {
-                    out.append("Not a valid neighbor, move failed,\n");
+                    out.append("Not a valid neighbor, try gain.\n");
                   }
 
                 } catch (NumberFormatException e) {
@@ -156,7 +156,7 @@ public class CommandController implements GameController {
             case "2":
               if (model.playerReachCapacity(activePlayer)) {
                 out.append("Item capacity reached, choose other option.").append("\n");
-
+                break;
               }
               int curLocation = model.getPlayerLocation(activePlayer);
               if (model.getRoomItemCount(curLocation) == 0) {
@@ -174,7 +174,7 @@ public class CommandController implements GameController {
                     cmd = new PickUpItem(activePlayer, itemId);
                     break;
                   } else {
-                    out.append("No such item in this room, pick up failed,\n");
+                    out.append(String.format("No such item %d in this room, try again.\n", itemId));
                   }
 
                 } catch (NumberFormatException e) {

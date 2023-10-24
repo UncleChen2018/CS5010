@@ -76,7 +76,7 @@ public class CommandControllerTest {
         + "Player end game in the process, now quiting.\n";
 
   }
-  
+
   @Test
   public void testConstructorValidArguments() {
     // Arrange
@@ -141,7 +141,7 @@ public class CommandControllerTest {
   }
 
   @Test
-  
+
   public void testSetUpWorldAndAddPlayer() {
     // name location capacity control [confirm add] [add more]
     String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "y\nPenny\n3\n3\n\n\n"
@@ -271,10 +271,177 @@ public class CommandControllerTest {
     // assertEquals(baseOutput, log.toString());
   }
 
+  @Test
+  public void testValidMoveNeighbor() {
+    // name location capacity control [confirm add] [add more]
 
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "y\nPenny\n3\n3\n\n\n"
+        + "\n" // Enter game
+        + "1\n3\n" // Player 0 move from room 0 to neighbor room 3.
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameController controller = new CommandController(in, out, worldData, 100);
+    controller.start(mockModel);
+    // Test out put the player moving action and result.
+    String expectedOutput = "Player No.0 \"Jimmy\" try to move to No.3 \"Dining Hall\"\n"
+        + "Move to neighbor successfully.";
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test call the right move method
+    // assertEquals(baseOutput, out.toString());
+    String expectedLog = "setPlayerLocation called, playerIndex = 0, destLocation = 3";
+    assertTrue(log.toString().contains(expectedLog));
+    // assertEquals(expectedLog, log.toString());
+  }
+
+  @Test
+  public void testInValidMoveNeighbor() {
+    // name location capacity control [confirm add] [add more]
+
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "y\nPenny\n3\n3\n\n\n"
+        + "\n" // Enter game
+        + "1\n" // Choose to move to neighbor
+        + "rt\n" + "-1\n" + "5\n" // enter wrong choice.
+        + "3\n" // Player 0 move from room 0 to neighbor room 3.
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameController controller = new CommandController(in, out, worldData, 100);
+    controller.start(mockModel);
+    // Test not enter integer
+    String expectedOutput = "Wrong format for an integer";
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test not enter invalid room number
+    expectedOutput = "Room index not valid";
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test not enter neighbor room number
+    expectedOutput = "Not a valid neighbor";
+    assertTrue(out.toString().contains(expectedOutput));
+    // assertEquals(expectedLog, log.toString());
+  }
+
+  @Test
+  public void testPickUp() {
+    // name location capacity control [confirm add] [add more]
+
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "y\nPenny\n3\n3\n\n\n"
+        + "\n" // Enter game
+        + "2\n" // Choose to pick up item
+        + "4\n" // Player 0 pick up item number 4.
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameController controller = new CommandController(in, out, worldData, 100);
+    controller.start(mockModel);
+    // Test out put the player moving action and result.
+    String expectedOutput = "Player No.0 \"Jimmy\" try to pick up No.4 \"Revolver\" Damage:3\n"
+        + "Pick up successfully.";
+    // assertEquals(baseOutput, out.toString());
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test call the right pickup method
+    // assertEquals(baseOutput, out.toString());
+    String expectedLog = "pickUpitem called, playerId = 0, itemId = 4";
+    assertTrue(log.toString().contains(expectedLog));
+    // assertEquals(expectedLog, log.toString());
+    // assertEquals(baseOutput, out.toString());
+
+  }
+
+  @Test
+  public void testInValidPickUpItem() {
+    // name location capacity control [confirm add] [add more]
+
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "y\nPenny\n3\n3\n\n\n"
+        + "\n" // Enter game
+        + "2\n" // Choose to pick up
+        + "rt\n" + "-1\n" + "5\n" // enter wrong choice.
+        + "4\n" // Player 0 pick up Item 4.
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameController controller = new CommandController(in, out, worldData, 100);
+    controller.start(mockModel);
+    // Test not enter integer
+    String expectedOutput = "Wrong format for an integer";
+    // assertEquals(baseOutput, out.toString());
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test not enter invalid room number
+    expectedOutput = "Invalid item id -1";
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test not enter neighbor room number
+    expectedOutput = "No such item 5 in this room";
+    assertTrue(out.toString().contains(expectedOutput));
+    // assertEquals(expectedLog, log.toString());
+  }
+
+  @Test
+  public void testNotAllowedToPickUpRoomEmpty() {
+    // name location capacity control [confirm add] [add more]
+
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" 
+        + "\n" // Enter game, Jimmy has Item capacity of 2
+        + "2\n" // Choose to pick up
+        + "4\n" // Player 0 pick up Item 4
+        + "2\n" // try to pick up at the same room
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameController controller = new CommandController(in, out, worldData, 100);
+    controller.start(mockModel);
+    // Test pick up from empty room
+    String expectedOutput = "Room has not item, choose other option";
+    //assertEquals(baseOutput, out.toString());
+    assertTrue(out.toString().contains(expectedOutput));
+    // assertEquals(expectedLog, log.toString());
+  }
   
+  @Test
+  public void testNotAllowedToPickUpWhenReachCapacity() {
+    // name location capacity control [confirm add] [add more]
+
+    String inputString = "\n" + "Jimmy\n8\n1\n\n\n" + "y\nAi\n0\n1\ny\n\n" 
+        + "\n" // Enter game, Jimmy has Item capacity of 1,
+        + "2\n" // Choose to pick up
+        + "0\n" // Player 0 pick up Item 4, and capacity full.
+        + "2\n" // try to pick up at the same room, can pick up item 3.
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameController controller = new CommandController(in, out, worldData, 100);
+    controller.start(mockModel);
+    // Test pick up from empty room
+    String expectedOutput = "Room has not item, choose other option";
+    assertEquals(baseOutput, out.toString());
+//    assertTrue(out.toString().contains(expectedOutput));
+    // assertEquals(expectedLog, log.toString());
+  }
   
-  
-  
+
+  // TODO test turn end.
+  // TODO test computer move.
 
 }

@@ -603,7 +603,7 @@ public class MockModel implements GameModel {
 
   @Override
   public String getItemString(int itemId) {
-    log.append(String.format("getItemString called, itemId = %d", itemId));
+    log.append(String.format("getItemString called, itemId = %d", itemId)).append("\n");
 
     return itemList.get(itemId).toString();
   }
