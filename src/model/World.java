@@ -354,7 +354,7 @@ public class World implements GameModel {
   @Override
   public void addNewPlayer(String name, int initLocation, int capacity, boolean isHumanControl)
       throws IllegalArgumentException {
-    if (initLocation < 0 || initLocation > roomList.size()) {
+    if (initLocation < 0 || initLocation >= roomList.size()) {
       throw new IllegalArgumentException(String.format("Wrong location index %d", initLocation));
     }
     if (capacity <= 0) {

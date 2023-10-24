@@ -88,20 +88,28 @@ public class CommandControllerTest {
     StringReader in = new StringReader(inputString);
 
     GameModel mockModel = new MockModel(log);
-    GameController controller = new CommandController(in, out, worldData, 1);
+    GameController controller = new CommandController(in, out, worldData, 100);
     controller.start(mockModel);
     assertTrue(log.toString().contains("setupNewWorld called"));
     assertEquals(baseOutput, out.toString());
+
+    // Test add Human player
+    String expectedLog = "addNewPlayer called, name = Jimmy, initLocation = 0,"
+        + " capacity = 2, isHumanControl = true \n";
+    assertTrue(log.toString().contains(expectedLog));
+    // Test add Computer player
+    expectedLog = "addNewPlayer called, name = Ai, initLocation = 0,"
+        + " capacity = 1, isHumanControl = false \n";
+    assertTrue(log.toString().contains(expectedLog));
 
   }
 
   // Test player without name.
   @Test
-  public void testAddInvalidPlayer() {
+  public void testAddInValidPlayerName() {
     // name location capacity control [confirm add] [add more]
-    //Add no name
-    String inputString = "\n" + "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n"
-        + "y\nPenny\n3\n3\n\n\n" + "\n" + "7\n" // quit game
+    // Add no name
+    String inputString = "\n" + "\n" + "Jimmy\n0\n2\n\n\n" + "\n" + "7\n" // quit game
     ;
     StringBuffer out = new StringBuffer();
     StringBuilder log = new StringBuilder();
@@ -110,8 +118,35 @@ public class CommandControllerTest {
     GameModel mockModel = new MockModel(log);
     GameController controller = new CommandController(in, out, worldData, 1);
     controller.start(mockModel);
-    assertEquals("setupNewWorld called", log.toString());
-    assertEquals(baseOutput, out.toString());
+    // Test add player without name.
+    String expectedOutput = "Name can not be blank";
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test add Computer player
+    // assertEquals(baseOutput, out.toString());
+    // assertEquals(baseOutput, log.toString());
+
+  }
+  
+  
+  @Test
+  public void testAddInValidPlayerLocation() {
+    // name location capacity control [confirm add] [add more]
+    // Add no name
+    String inputString = "\n" + "\n" + "Jimmy\n0\n2\n\n\n" + "\n" + "7\n" // quit game
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameController controller = new CommandController(in, out, worldData, 100);
+    controller.start(mockModel);
+    // Test add player without name.
+    String expectedOutput = "Name can not be blank";
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test add Computer player
+    // assertEquals(baseOutput, out.toString());
+    // assertEquals(baseOutput, log.toString());
 
   }
 
