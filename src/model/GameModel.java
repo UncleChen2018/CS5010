@@ -2,6 +2,7 @@ package model;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 /**
  * The game model interface. Including setup a brand new world, (including
@@ -15,7 +16,7 @@ public interface GameModel {
    * 
    * @param source the data from which the world is built.
    */
-  void setupNewWorld(Readable source);
+  void setupNewWorld(Readable source) throws InputMismatchException;
 
   /**
    * Based on rooms, generate the map.

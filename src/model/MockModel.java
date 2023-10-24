@@ -10,11 +10,12 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * The world contains all room, target character and items. It can create those
- * parts and initialize their status, as well as manipulate them later. It also
- * give representation of the world map in the buffered image for view models.
+ * The mock model based on the tested World. Will additionally add every method
+ * name called and its input and out put to a log.
  */
-public class World implements GameModel {
+public class MockModel implements GameModel {
+  private StringBuilder log;
+
   private String worldName;
   private int rowSize;
   private int colSize;
@@ -24,11 +25,19 @@ public class World implements GameModel {
   private ArrayList<Item> itemList;
   private ArrayList<Player> playerList;
 
-  public World() {
+  public MockModel(StringBuilder log) {
+    this.log = log;
   }
 
-  // initialize the world using source.
-  public World(Readable source) {
+  /**
+   * Set up new world using data from a readable source.
+   * 
+   * @param source file or string match certain format.
+   * @param log    the log to store the inner processing result.
+   */
+  public MockModel(Readable source, StringBuilder log) {
+    // this.world = new World(source);
+    this.log = log;
     setupNewWorld(source);
   }
 
@@ -41,7 +50,9 @@ public class World implements GameModel {
    * 
    * @param source file or string match certain format.
    */
+  @Override
   public void setupNewWorld(Readable source) throws InputMismatchException {
+    log.append("setupNewWorld called");
     roomList = new ArrayList<Room>();
     itemList = new ArrayList<Item>();
     playerList = new ArrayList<Player>();

@@ -199,8 +199,8 @@ public class CommandController implements GameController {
             case "7":
               out.append("Player end game in the process, now quiting.\n");
               frame.dispose();
-              System.exit(0);
-              break;
+              return;
+
             default:
               out.append("Invalid choice, try again").append("\n");
               break;
