@@ -78,10 +78,30 @@ public class CommandControllerTest {
   }
 
   @Test
-  public void testNormal() {
+  public void testAddPlayer() {
     // name location capacity control [confirm add] [add more]
     String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "y\nPenny\n3\n3\n\n\n"
         + "\n" + "7\n" // quit game
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameController controller = new CommandController(in, out, worldData, 1);
+    controller.start(mockModel);
+    assertTrue(log.toString().contains("setupNewWorld called"));
+    assertEquals(baseOutput, out.toString());
+
+  }
+
+  // Test player without name.
+  @Test
+  public void testAddInvalidPlayer() {
+    // name location capacity control [confirm add] [add more]
+    //Add no name
+    String inputString = "\n" + "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n"
+        + "y\nPenny\n3\n3\n\n\n" + "\n" + "7\n" // quit game
     ;
     StringBuffer out = new StringBuffer();
     StringBuilder log = new StringBuilder();

@@ -526,28 +526,27 @@ public class World implements GameModel {
     return retList;
   }
 
+  @Override
   public String getPlayerString(int playerId) {
     return playerList.get(playerId).toString();
   }
 
+  @Override
   public String getRoomString(int location) {
     return roomList.get(location).toString();
   }
 
+  @Override
   public String getTargetString() {
     return targetCharacter.toString();
   }
 
+  @Override
   public String getItemString(int itemId) {
     return itemList.get(itemId).toString();
   }
 
-  /**
-   * Retrieves a list of player IDs in a given room.
-   *
-   * @param location The location of the room.
-   * @return An ArrayList of Integers representing player IDs.
-   */
+  @Override
   public ArrayList<Integer> getRoomCharacter(int location) {
     ArrayList<Integer> retList = new ArrayList<Integer>();
     for (Player player : roomList.get(location).getCharacterList()) {

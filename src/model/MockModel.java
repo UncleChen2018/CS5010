@@ -52,7 +52,7 @@ public class MockModel implements GameModel {
    */
   @Override
   public void setupNewWorld(Readable source) throws InputMismatchException {
-    log.append("setupNewWorld called");
+    log.append("setupNewWorld called\n");
     roomList = new ArrayList<Room>();
     itemList = new ArrayList<Item>();
     playerList = new ArrayList<Player>();
@@ -198,6 +198,7 @@ public class MockModel implements GameModel {
    */
 
   public BufferedImage drawWorld() {
+    log.append("drawWorld called\n");
     return drawWorld(20, 5, 5);
   }
 
@@ -266,11 +267,13 @@ public class MockModel implements GameModel {
 
   @Override
   public String getName() {
+    log.append("getName called\n");
     return worldName;
   }
 
   @Override
   public String getDetails() {
+    log.append("getDetails called\n");
     String worldInfo = String.format(
         "World [World name = %s, room number =  %d, item number = %d, "
             + "target charater = %s, player number = %d].",
@@ -293,6 +296,8 @@ public class MockModel implements GameModel {
    *                                  destLocation is not a valid location.
    */
   public void setPlayerLocation(int playerIndex, int destLocation) {
+    log.append(String.format("setPlayerLocation called, playerIndex = %d, destLocation = %d",
+        playerIndex, destLocation));
     if (!isPlayerIdValid(playerIndex) || !isLocationValid(destLocation)) {
       throw new IllegalArgumentException(
           String.format("Illegal argument: player %d, location %d", playerIndex, destLocation));
@@ -309,6 +314,7 @@ public class MockModel implements GameModel {
 
   @Override
   public void moveTargetNextRoom() {
+    log.append("moveTargetNextRoom called\n");
     int curLocation = targetCharacter.getLocation();
     int nextLocation = (curLocation + 1) % roomList.size();
     targetCharacter.setLocation(nextLocation);
@@ -328,6 +334,7 @@ public class MockModel implements GameModel {
 
   @Override
   public int getTargetLocation() {
+    log.append("getTargetLocation called\n");
     return targetCharacter.getLocation();
   }
 
@@ -354,6 +361,7 @@ public class MockModel implements GameModel {
 
   @Override
   public int getPlayerCount() {
+    log.append("getPlayerCount called");
     return playerList.size();
   }
 
@@ -365,6 +373,9 @@ public class MockModel implements GameModel {
   @Override
   public void addNewPlayer(String name, int initLocation, int capacity, boolean isHumanControl)
       throws IllegalArgumentException {
+    log.append(String.format("addNewPlayer called, name = %s, initLocation = %d, "
+        + "capacity = %d, isHumanControl = %b ", name, initLocation, capacity, isHumanControl));
+
     if (initLocation < 0 || initLocation > roomList.size()) {
       throw new IllegalArgumentException(String.format("Wrong location index %d", initLocation));
     }
@@ -381,11 +392,14 @@ public class MockModel implements GameModel {
 
   @Override
   public int getRoomCount() {
+    log.append("getRoomCount called\n");
+
     return roomList.size();
   }
 
   @Override
   public int getPlayerLocation(int playerId) {
+    log.append(String.format("getPlayerLocation called, playerId = %d", playerId));
     Player player = playerList.get(playerId);
     return player.getLocation();
   }
@@ -406,6 +420,7 @@ public class MockModel implements GameModel {
    */
   @Override
   public boolean isNeighbor(int quest, int base) {
+    log.append(String.format("isNeighbor called, quest = %d, base = %d", quest, base));
     if (isLocationValid(base) && isLocationValid(quest)) {
       return roomList.get(base).getNeighbors().contains(roomList.get(quest));
     } else {
@@ -415,6 +430,7 @@ public class MockModel implements GameModel {
 
   @Override
   public int getCurrentPlayer(int turn) {
+    log.append(String.format("getCurrentPlayer called, turn = %d", turn));
     return turn % getPlayerCount();
   }
 
@@ -429,6 +445,7 @@ public class MockModel implements GameModel {
    */
 
   public String queryRoomItem(int location) {
+    log.append(String.format("queryRoomItem called, location = %d", location));
     StringBuilder stringBuilder = new StringBuilder();
     for (Item item : roomList.get(location).getSpaceItem()) {
       stringBuilder.append(item.queryDetails()).append("\n");
@@ -448,6 +465,7 @@ public class MockModel implements GameModel {
    */
 
   public int getItemLocation(int itemId) {
+    log.append(String.format("getItemLocation called, itemId = %d", itemId));
     if (itemId < 0 || itemId > itemList.size()) {
       throw new IndexOutOfBoundsException(String.format("Invalid item id %d.", itemId));
     }
@@ -464,6 +482,7 @@ public class MockModel implements GameModel {
    */
 
   public void pickUpitem(int playerId, int itemId) {
+    log.append(String.format("pickUpitem called, playerId = %d, itemId = %d", playerId, itemId));
     Player player = playerList.get(playerId);
     Room roomSpace = roomList.get(player.getLocation());
     Item item = itemList.get(itemId);
@@ -475,38 +494,51 @@ public class MockModel implements GameModel {
     item.setStoredLoacation(-1);
   }
 
+  @Override
   public String queryRoomDetails(int location) {
+    log.append(String.format("queryRoomDetails called, location = %d", location));
     return roomList.get(location).queryDetails();
   }
 
   @Override
   public String queryPlayerDetails(int playerId) {
+    log.append(String.format("queryPlayerDetails called, playerId = %d", playerId));
+
     return playerList.get(playerId).querryDetails();
   }
 
   @Override
   public String queryTargetDetails() {
+    log.append("queryTargetDetails called");
+
     return targetCharacter.querryDetails();
   }
 
   @Override
   public String queryRoomNeighbors(int playerLocation) {
+    log.append(String.format("queryPlayerDetails called, playerLocation = %d", playerLocation));
 
     return roomList.get(playerLocation).queryRoomNeighbors();
   }
 
   @Override
   public boolean playerReachCapacity(int playerId) {
+    log.append(String.format("playerReachCapacity called, playerId = %d", playerId));
+
     return playerList.get(playerId).reachItemCapacity();
   }
 
   @Override
   public int getRoomItemCount(int location) {
+    log.append(String.format("getRoomItemCount called, location = %d", location));
+
     return roomList.get(location).getItems().size();
   }
 
   @Override
   public ArrayList<Integer> getRoomNeighbors(int location) {
+    log.append(String.format("getRoomNeighbors called, location = %d", location));
+
     ArrayList<Integer> retList = new ArrayList<Integer>();
     for (Room room : roomList.get(location).getNeighbors()) {
       retList.add(room.getSpaceIndex());
@@ -516,11 +548,15 @@ public class MockModel implements GameModel {
 
   @Override
   public boolean isHumanPlayer(int playerId) {
+    log.append(String.format("isHumanPlayer called, playerId = %d", playerId));
+
     return playerList.get(playerId).isHumanPlayer();
   }
 
   @Override
   public ArrayList<Integer> getRoomItems(int location) {
+    log.append(String.format("getRoomItems called, location = %d", location));
+
     ArrayList<Integer> retList = new ArrayList<Integer>();
     for (Item item : roomList.get(location).getItems()) {
       retList.add(item.getItemId());
@@ -530,6 +566,7 @@ public class MockModel implements GameModel {
 
   @Override
   public ArrayList<Integer> getPlayerItems(int playerId) {
+    log.append(String.format("getPlayerItems called, playerId = %d", playerId));
     ArrayList<Integer> retList = new ArrayList<Integer>();
     for (Item item : playerList.get(playerId).getItemList()) {
       retList.add(item.getItemId());
@@ -537,29 +574,38 @@ public class MockModel implements GameModel {
     return retList;
   }
 
+  @Override
   public String getPlayerString(int playerId) {
+    log.append(String.format("getPlayerString called, playerId = %d", playerId));
+
     return playerList.get(playerId).toString();
   }
 
+  @Override
   public String getRoomString(int location) {
+    log.append(String.format("getRoomString called, location = %d", location));
+
     return roomList.get(location).toString();
   }
 
+  @Override
   public String getTargetString() {
+    log.append("getTargetString called").append("\n");
     return targetCharacter.toString();
   }
 
+  @Override
   public String getItemString(int itemId) {
+    log.append(String.format("getItemString called, itemId = %d", itemId));
+
     return itemList.get(itemId).toString();
   }
 
-  /**
-   * Retrieves a list of player IDs in a given room.
-   *
-   * @param location The location of the room.
-   * @return An ArrayList of Integers representing player IDs.
-   */
+
+  @Override
   public ArrayList<Integer> getRoomCharacter(int location) {
+    log.append(String.format("getRoomCharacter called, location = %d", location));
+
     ArrayList<Integer> retList = new ArrayList<Integer>();
     for (Player player : roomList.get(location).getCharacterList()) {
       retList.add(player.getPlayerId());
