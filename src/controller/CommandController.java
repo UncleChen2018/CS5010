@@ -226,7 +226,7 @@ public class CommandController implements GameController {
               nextInt = generator.getNextNumber();
               ArrayList<Integer> neighbors = model.getRoomNeighbors(curLocation);
               int destLocation = nextInt % neighbors.size();
-              cmd = new MoveToNeighbor(activePlayer, destLocation);
+              cmd = new MoveToNeighbor(activePlayer, neighbors.get(destLocation));
               break;
             case 1:
               nextInt = generator.getNextNumber();
@@ -257,7 +257,7 @@ public class CommandController implements GameController {
         }
       }
       if (currentTurn == maxTurn) {
-        out.append("Max turn reached, game exist\n");
+        out.append("Max turn reached, game exit\n");
       }
       frame.dispose();
 
@@ -415,7 +415,7 @@ public class CommandController implements GameController {
     }
 
     public NumberGenerator() {
-      this.random = new Random(666);
+      this.random = new Random();
       this.currentIndex = -1;
       this.numbers = null; // not use arrayList
     }

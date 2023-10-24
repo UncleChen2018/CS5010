@@ -1,11 +1,10 @@
 package controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.StringReader;
-import java.util.Scanner;
 import model.GameModel;
 import model.MockModel;
 import org.junit.Before;
@@ -17,7 +16,7 @@ import org.junit.Test;
 public class CommandControllerTest {
   private Readable worldData;
 
-  private String baseInput; // base String to set up world.
+
   private String baseOutput; // base out put
 
   /**
@@ -269,6 +268,7 @@ public class CommandControllerTest {
     // Test add Computer player
     // assertEquals(baseOutput, out.toString());
     // assertEquals(baseOutput, log.toString());
+
   }
 
   @Test
@@ -296,6 +296,10 @@ public class CommandControllerTest {
     String expectedLog = "setPlayerLocation called, playerIndex = 0, destLocation = 3";
     assertTrue(log.toString().contains(expectedLog));
     // assertEquals(expectedLog, log.toString());
+    // test turn passed.
+    expectedLog = "getCurrentPlayer called, turn = 2";
+    assertTrue(log.toString().contains(expectedLog));
+
   }
 
   @Test
@@ -356,6 +360,9 @@ public class CommandControllerTest {
     assertTrue(log.toString().contains(expectedLog));
     // assertEquals(expectedLog, log.toString());
     // assertEquals(baseOutput, out.toString());
+    // test turn passed.
+    expectedLog = "getCurrentPlayer called, turn = 2";
+    assertTrue(log.toString().contains(expectedLog));
 
   }
 
@@ -394,9 +401,9 @@ public class CommandControllerTest {
   public void testNotAllowedToPickUpRoomEmpty() {
     // name location capacity control [confirm add] [add more]
 
-    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" 
-        + "\n" // Enter game, Jimmy has Item capacity of 2
-        + "2\n" // Choose to pick up
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "\n" // Enter game,
+                                                                                 
+        + "2\n" // Jimmy has Item capacity of 2 Choose to pick up
         + "4\n" // Player 0 pick up Item 4
         + "2\n" // try to pick up at the same room
         + "7\n"; // Quit game.
@@ -410,17 +417,17 @@ public class CommandControllerTest {
     controller.start(mockModel);
     // Test pick up from empty room
     String expectedOutput = "Room has not item, choose other option";
-    //assertEquals(baseOutput, out.toString());
+    // assertEquals(baseOutput, out.toString());
     assertTrue(out.toString().contains(expectedOutput));
     // assertEquals(expectedLog, log.toString());
   }
-  
+
   @Test
   public void testNotAllowedToPickUpWhenReachCapacity() {
     // name location capacity control [confirm add] [add more]
 
-    String inputString = "\n" + "Jimmy\n8\n1\n\n\n" + "y\nAi\n0\n1\ny\n\n" 
-        + "\n" // Enter game, Jimmy has Item capacity of 1,
+    String inputString = "\n" + "Jimmy\n8\n1\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "\n"
+
         + "2\n" // Choose to pick up
         + "0\n" // Player 0 pick up Item 4, and capacity full.
         + "2\n" // try to pick up at the same room, can pick up item 3.
@@ -434,14 +441,164 @@ public class CommandControllerTest {
     GameController controller = new CommandController(in, out, worldData, 100);
     controller.start(mockModel);
     // Test pick up from empty room
-    String expectedOutput = "Room has not item, choose other option";
-    assertEquals(baseOutput, out.toString());
-//    assertTrue(out.toString().contains(expectedOutput));
+    String expectedOutput = "Item capacity reached, choose other option";
+    // assertEquals(baseOutput, out.toString());
+    assertTrue(out.toString().contains(expectedOutput));
+
     // assertEquals(expectedLog, log.toString());
   }
-  
 
-  // TODO test turn end.
-  // TODO test computer move.
+  @Test
+  public void testLookAround() {
+    // name location capacity control [confirm add] [add more]
+
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "y\nPenny\n3\n3\n\n\n"
+        + "\n" // Enter game
+        + "3\n" // Choose to look around
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameController controller = new CommandController(in, out, worldData, 100);
+    controller.start(mockModel);
+    // Test out put the player moving action and result.
+    String expectedOutput = "Player No.0 \"Jimmy\" try to look around from No.0 \"Armory\"";
+    // assertEquals(baseOutput, out.toString());
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test call the right pickup method
+    // assertEquals(baseOutput, out.toString());
+    // Test the look around calling its neighbor.
+    String expectedLog = "queryRoomDetails called, location = 1\n"
+        + "queryRoomDetails called, location = 3\n" + "queryRoomDetails called, location = 4";
+    assertTrue(log.toString().contains(expectedLog));
+    // test turn passed.
+    expectedLog = "getCurrentPlayer called, turn = 2";
+    assertTrue(log.toString().contains(expectedLog));
+    // assertEquals(expectedLog, log.toString());
+    // assertEquals(baseOutput, out.toString());
+
+  }
+
+  @Test
+  public void testMaxTurnGameEnding() {
+    // name location capacity control [confirm add] [add more]
+
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "y\nPenny\n3\n3\n\n\n"
+        + "\n" // Enter game
+        + "2\n" // Choose to pick up item
+        + "4\n" // Player 0 pick up item number 4.
+    ; // No quit game.
+    ;
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameController controller = new CommandController(in, out, worldData, 2);
+    controller.start(mockModel);
+    // Test max turn reached.
+    String expectedOutput = "Max turn reached, game exit";
+    // assertEquals(baseOutput, out.toString());
+    assertTrue(out.toString().contains(expectedOutput));
+    // assertEquals(expectedLog, log.toString());
+
+  }
+
+  
+  @Test
+  public void testComputerMove() {
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "y\nPenny\n3\n3\n\n\n"
+        + "\n" // Enter game
+        + "1\n3\n" // Player 0 move from room 0 to neighbor room 3.
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    // let computer pickup itme
+    GameController controller = new CommandController(in, out, worldData, 100, 0, 1);
+    controller.start(mockModel);
+    // Test out put the Ai player move right.
+    String expectedOutput = "Player No.1 \"Ai\"'s turn\n"
+        + "Player No.1 \"Ai\" try to move to No.3 \"Dining Hall\"\n"
+        + "Move to neighbor successfully.";
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test call the right move method
+    //assertEquals(baseOutput, out.toString());
+    //    String expectedLog = "setPlayerLocation called, playerIndex = 0, destLocation = 3";
+    //    assertTrue(log.toString().contains(expectedLog));
+    //    // assertEquals(expectedLog, log.toString());
+    //    // test turn passed.
+    //    expectedLog = "getCurrentPlayer called, turn = 2";
+    //    assertTrue(log.toString().contains(expectedLog));
+
+  }
+  
+  @Test
+  public void testComputerPickUp() {
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "y\nPenny\n3\n3\n\n\n"
+        + "\n" // Enter game
+        + "1\n3\n" // Player 0 move from room 0 to neighbor room 3.
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    // let computer pickup itme
+    GameController controller = new CommandController(in, out, worldData, 100, 1, 4);
+    controller.start(mockModel);
+    // Test out put the Ai player pick up item.
+    String expectedOutput = "Player No.1 \"Ai\"'s turn\n"
+        + "Player No.1 \"Ai\" try to pick up No.0 \"Crepe Pan\" Damage:3\n"
+        + "Pick up successfully.";
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test call the right move method
+    //assertEquals(baseOutput, out.toString());
+    //    String expectedLog = "setPlayerLocation called, playerIndex = 0, destLocation = 3";
+    //    assertTrue(log.toString().contains(expectedLog));
+    //    // assertEquals(expectedLog, log.toString());
+    //    // test turn passed.
+    //    expectedLog = "getCurrentPlayer called, turn = 2";
+    //    assertTrue(log.toString().contains(expectedLog));
+
+  }
+  
+  @Test
+  public void testComputerLookAround() {
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "y\nPenny\n3\n3\n\n\n"
+        + "\n" // Enter game
+        + "1\n3\n" // Player 0 move from room 0 to neighbor room 3.
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    // let computer pickup itme
+    GameController controller = new CommandController(in, out, worldData, 100, 2, 4);
+    controller.start(mockModel);
+    // Test out put the Ai player pick up item.
+    String expectedOutput = "Player No.1 \"Ai\" try to look around from No.0 \"Armory\"\n"
+        + "Computer look around result ommitted.";
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test call the right move method
+    //assertEquals(baseOutput, out.toString());
+    //    String expectedLog = "setPlayerLocation called, playerIndex = 0, destLocation = 3";
+    //    assertTrue(log.toString().contains(expectedLog));
+    //    // assertEquals(expectedLog, log.toString());
+    //    // test turn passed.
+    //    expectedLog = "getCurrentPlayer called, turn = 2";
+    //    assertTrue(log.toString().contains(expectedLog));
+
+  }
 
 }

@@ -14,7 +14,7 @@ public class LookAround extends TurnBaseCommand {
   @Override
   public String execute(GameModel model) {
     StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append(String.format("Player %s try to look around from %s%n",
+    stringBuilder.append(String.format("Player %s try to look around from %s\n",
         model.getPlayerString(playerId), model.getRoomString(model.getPlayerLocation(playerId))));
     if (model.isHumanPlayer(playerId)) {
       stringBuilder.append("Look Aroud result\n");
