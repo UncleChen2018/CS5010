@@ -76,9 +76,73 @@ public class CommandControllerTest {
         + "Player end game in the process, now quiting.\n";
 
   }
+  
+  @Test
+  public void testConstructorValidArguments() {
+    // Arrange
+    Readable in = new StringReader("input");
+    Appendable out = new StringBuilder();
+    Readable worldSource = new StringReader("world");
+    int turnLimit = 10;
+
+    // Act
+    CommandController controller = new CommandController(in, out, worldSource, turnLimit);
+
+    // Assert
+    assertNotNull(controller);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testConstructorNullReadable() {
+    // Arrange
+    Readable in = null;
+    Appendable out = new StringBuilder();
+    Readable worldSource = new StringReader("world");
+    int turnLimit = 10;
+
+    // Act
+    new CommandController(in, out, worldSource, turnLimit);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testConstructorNullAppendable() {
+    // Arrange
+    Readable in = new StringReader("input");
+    Appendable out = null;
+    Readable worldSource = new StringReader("world");
+    int turnLimit = 10;
+
+    // Act
+    new CommandController(in, out, worldSource, turnLimit);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testConstructorNullWorldSource() {
+    // Arrange
+    Readable in = new StringReader("input");
+    Appendable out = new StringBuilder();
+    Readable worldSource = null;
+    int turnLimit = 10;
+
+    // Act
+    new CommandController(in, out, worldSource, turnLimit);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testConstructorNegativeTurnLimit() {
+    // Arrange
+    Readable in = new StringReader("input");
+    Appendable out = new StringBuilder();
+    Readable worldSource = new StringReader("world");
+    int turnLimit = -10;
+
+    // Act
+    new CommandController(in, out, worldSource, turnLimit);
+  }
 
   @Test
-  public void testAddPlayer() {
+  
+  public void testSetUpWorldAndAddPlayer() {
     // name location capacity control [confirm add] [add more]
     String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "y\nPenny\n3\n3\n\n\n"
         + "\n" + "7\n" // quit game
@@ -126,13 +190,13 @@ public class CommandControllerTest {
     // assertEquals(baseOutput, log.toString());
 
   }
-  
-  
+
   @Test
   public void testAddInValidPlayerLocation() {
     // name location capacity control [confirm add] [add more]
-    // Add no name
-    String inputString = "\n" + "\n" + "Jimmy\n0\n2\n\n\n" + "\n" + "7\n" // quit game
+    String inputString = "\n" + "Jimmy\n" // right name
+        + "wx\n" + "-2\n" + "22\n" // three wrong enter
+        + "0\n2\n\n\n" + "\n" + "7\n" // quit game
     ;
     StringBuffer out = new StringBuffer();
     StringBuilder log = new StringBuilder();
@@ -141,13 +205,76 @@ public class CommandControllerTest {
     GameModel mockModel = new MockModel(log);
     GameController controller = new CommandController(in, out, worldData, 100);
     controller.start(mockModel);
-    // Test add player without name.
-    String expectedOutput = "Name can not be blank";
+    // Test player location is not an integer.
+    String expectedOutput = "Invalid location input wx, must be valid integer";
     assertTrue(out.toString().contains(expectedOutput));
+    // Test player location is less than zero.
+    expectedOutput = "Number -2 is not between 0 and 20";
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test player location too large.
+    expectedOutput = "Number 22 is not between 0 and 20";
+    assertTrue(out.toString().contains(expectedOutput));
+
     // Test add Computer player
     // assertEquals(baseOutput, out.toString());
     // assertEquals(baseOutput, log.toString());
 
   }
+
+  @Test
+  public void testAddInValidPlayerCapacity() {
+    // name location capacity control [confirm add] [add more]
+    String inputString = "\n" + "Jimmy\n0\n" // right name
+        + "ko^^&\n" + "0\n" + "-1\n" // wrong capacity
+        + "2\n\n\n" + "\n" + "7\n" // quit game
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameController controller = new CommandController(in, out, worldData, 100);
+    controller.start(mockModel);
+    // Test player capacity is not an integer.
+    String expectedOutput = "Invalid capacity input ko^^&, must be valid integer";
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test player capacity is zero.
+    expectedOutput = "Capacity 0 is no greater than 0, try again";
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test player capacity is negative.
+    expectedOutput = "Capacity -1 is no greater than 0, try again";
+    assertTrue(out.toString().contains(expectedOutput));
+
+    // Test add Computer player
+    // assertEquals(baseOutput, out.toString());
+    // assertEquals(baseOutput, log.toString());
+  }
+
+  @Test
+  public void testNotAddPlayerToBeginGame() {
+    // name location capacity control [confirm add] [add more]
+
+    String inputString = "\n" + "Jimmy\n0\n2\n\nn\n" + "\n" // not add player
+        + "Jimmy\n0\n2\n\n\n" + "\n" + "7\n";
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameController controller = new CommandController(in, out, worldData, 100);
+    controller.start(mockModel);
+    // Test player capacity is not an integer.
+    String expectedOutput = "Set at least one player before the game begins";
+    assertTrue(out.toString().contains(expectedOutput));
+    // Test add Computer player
+    // assertEquals(baseOutput, out.toString());
+    // assertEquals(baseOutput, log.toString());
+  }
+
+
+  
+  
+  
+  
 
 }

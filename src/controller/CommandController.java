@@ -333,7 +333,8 @@ public class CommandController implements GameController {
           break;
         }
       } catch (NumberFormatException e) {
-        out.append("Invalid input, try again.\n");
+        out.append(String
+            .format("Invalid location input %s, must be valid integer." + " try again.\n", line));
       }
     }
     int defaultCapacity = 2;
@@ -348,13 +349,14 @@ public class CommandController implements GameController {
       try {
         capacity = Integer.parseInt(line);
         if (capacity <= 0) {
-          out.append(String.format("Number %d is no greater than %d, try again.\n", capacity, 0));
+          out.append(String.format("Capacity %d is no greater than %d, try again.\n", capacity, 0));
           continue;
         } else {
           break;
         }
       } catch (NumberFormatException e) {
-        out.append("Invalid input, try again.\n");
+        out.append(String
+            .format("Invalid capacity input %s, must be valid integer." + " try again.\n", line));
       }
     }
     // set control type
