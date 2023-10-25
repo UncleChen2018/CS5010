@@ -20,6 +20,10 @@
 
 git hub: https://github.com/UncleChen2018/CS5010MileStone
 
+lucid chart(updated) : https://lucid.app/lucidchart/invitations/accept/inv_a201bc0e-865d-432c-8ce9-811cb762b45e
+
+citation: no
+
 ### Assumption
 
 1. Player choose the item they want to pick up and if no item in the room or the capacity is reached, they can not choose to spend this turn in picking up (applied to computer, too).
