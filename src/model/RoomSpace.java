@@ -158,7 +158,8 @@ public class RoomSpace implements Room {
     stringBuilder.append("Room: ").append(this).append("\n").append("Items: ")
         .append(itemList.size() > 0 ? itemList : "No Item").append("\n").append("Player: ")
         .append(characterList.size() > 0 ? characterList : "No Player").append("\n")
-        .append("Target: ").append(isTargetIn ? "Found" : "Not Found").append("\n");
+        .append("Target: ").append(isTargetIn ? "Found" : "Not Found").append("\n")
+        .append("Pet: ").append(isPetIn ? "Found" : "Not Found").append("\n");
 
     return stringBuilder.toString();
   }

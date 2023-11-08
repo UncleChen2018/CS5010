@@ -36,10 +36,6 @@ public class TargetCharacter extends MovableCharacter {
         health);
   }
 
-  @Override
-  public String toString() {
-    return String.format("\"%s\"", name);
-  }
 
   /**
    * Generates a formatted string containing the details of the target.

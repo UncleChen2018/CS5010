@@ -79,7 +79,7 @@ public class World implements GameModel {
 
     // New: add target to room.
     roomList.get(targetCharacter.getLocation()).setTargetIn();
-    
+
     // New: add pet to the same room as target.
     roomList.get(targetCharacter.getLocation()).setPetIn();
 
@@ -485,7 +485,9 @@ public class World implements GameModel {
 
   @Override
   public String queryTargetDetails() {
-    return targetCharacter.querryDetails();
+    StringBuilder stringBuilder = new StringBuilder();
+    return stringBuilder.append(targetCharacter.querryDetails()).append(pet.querryDetails())
+        .toString();
   }
 
   @Override

@@ -9,4 +9,16 @@ public class Pet extends MovableCharacter {
     super(name, location);
   }
 
+  /**
+   * Generates a formatted string containing the details of the pet.
+   *
+   * @return The details of the pet.
+   */
+  public String querryDetails() {
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("Target's pet: ").append(this).append("\n").append("Location: ")
+        .append(location).append("\n");
+    return stringBuilder.toString();
+  }
+
 }
