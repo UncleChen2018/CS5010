@@ -36,7 +36,7 @@ public class AttackTarget extends TurnBaseCommand {
     stringBuilder.append(String.format("Player %s try to attack %s using %s ...\n",
         model.getPlayerString(playerId), model.getTargetString(), actionString));
 
-    // TODO test if attack can be successful.
+    // TODO think ways to test, and give more message feed back.
     if (model.isAttackInvisible(playerId)) {
       model.attackTarget(damage);
       stringBuilder.append(String.format("Attack successfully, target get damage of %d\n", damage));
