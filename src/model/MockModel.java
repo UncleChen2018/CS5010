@@ -417,7 +417,7 @@ public class MockModel implements GameModel {
     return player.getLocation();
   }
 
-  private boolean isLocationValid(int roomIndex) {
+  public boolean isLocationValid(int roomIndex) {
     return roomIndex >= 0 && roomIndex < roomList.size();
 
   }
@@ -626,5 +626,17 @@ public class MockModel implements GameModel {
       retList.add(player.getPlayerId());
     }
     return retList;
+  }
+
+  @Override
+  public void setPetLocation(int location) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public String getPetString() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

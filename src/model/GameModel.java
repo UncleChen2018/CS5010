@@ -55,6 +55,13 @@ public interface GameModel {
   void setPlayerLocation(int playerId, int location);
 
   /**
+   * Set pet to certain space.
+   * 
+   * @param location room's index.
+   */
+  void setPetLocation(int location);
+
+  /**
    * Returns the current location of the player with the specified ID.
    * 
    * @param playerId The ID of the player.
@@ -271,5 +278,20 @@ public interface GameModel {
    */
 
   ArrayList<Integer> getRoomCharacter(int location);
+
+  /**
+   * Gets a formatted string representation of the pet.
+   *
+   * @return a formatted string containing pet information
+   */
+  String getPetString();
+
+  /**
+   * Check if the location index is valid.
+   * 
+   * @param location the room index.
+   * @return if the index is valid in this world.
+   */
+  boolean isLocationValid(int location);
 
 }

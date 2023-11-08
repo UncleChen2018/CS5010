@@ -188,13 +188,38 @@ public class CommandController implements GameController {
               cmd = new LookAround(activePlayer);
               break;
             case "4":
-              displayPlayerInfo(activePlayer);
+
               break;
             case "5":
-              displayRoomInfo(location);
+              while (true) {
+                int playerLocation = model.getPlayerLocation(activePlayer);
+                out.append(model.queryRoomNeighbors(playerLocation));
+                displayTargetInfo();
+                out.append(
+                    String.format("Enter the room index to move the pet to (between %d and %d):\n",
+                        0, model.getRoomCount() - 1));
+                line = scan.nextLine().trim();
+                try {
+                  int destLocation = Integer.parseInt(line);
+                  if (model.isLocationValid(destLocation)) {
+                    cmd = new MovePet(activePlayer, destLocation);
+                    break;
+                  } else {
+                    out.append("Not a valid room location, try gain.\n");
+                  }
+
+                } catch (NumberFormatException e) {
+                  out.append("Wrong format for an integer, try gain.\n");
+                } catch (IndexOutOfBoundsException e) {
+                  out.append("Room index not valid, try gain.\n").append("\n");
+                }
+              }
+
               break;
             case "6":
               displayTargetInfo();
+              displayRoomInfo(location);
+              displayPlayerInfo(activePlayer);
               break;
             case "7":
               out.append("Player end game in the process, now quiting.\n");
@@ -270,7 +295,7 @@ public class CommandController implements GameController {
   // help method, display information for certain player.
   private void displayGameMenu(int playerId) throws IOException {
     out.append("Please select one of the option below\n");
-    out.append("MENU|1.Move|2.Pickup|3.LookAround|4.PlayerInfo|5.RoomInfo|6.Target|7.Exit")
+    out.append("MENU|1.Move|2.Pickup|3.LookAround|4.Attack|5.MovePet|6.ChekcInfo|7.Exit")
         .append("\n");
   }
 

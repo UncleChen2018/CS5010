@@ -306,6 +306,29 @@ public class World implements GameModel {
     roomList.get(destLocation).addCharacer(player);
   }
 
+  /**
+   * Sets the location of a pet to the specified destination location. with the
+   * room info updated too.
+   *
+   * @param destLocation The index of the destination location to set for the
+   *                     player.
+   * @throws IllegalArgumentException if destLocation is not a valid location.
+   */
+  public void setPetLocation(int destLocation) {
+    if (!isLocationValid(destLocation)) {
+      throw new IllegalArgumentException(
+          String.format("Illegal argument: location %d", destLocation));
+    }
+
+    int originLocaion = pet.getLocation();
+    // change pet position to new
+    pet.setLocation(destLocation);
+    // remove from the origin room
+    roomList.get(originLocaion).setPetOut();
+    // add to the dest room
+    roomList.get(destLocation).setPetIn();
+  }
+
   @Override
   public void moveTargetNextRoom() {
     int curLocation = targetCharacter.getLocation();
@@ -389,7 +412,8 @@ public class World implements GameModel {
     return player.getLocation();
   }
 
-  private boolean isLocationValid(int roomIndex) {
+  @Override
+  public boolean isLocationValid(int roomIndex) {
     return roomIndex >= 0 && roomIndex < roomList.size();
 
   }
@@ -551,6 +575,11 @@ public class World implements GameModel {
   @Override
   public String getTargetString() {
     return targetCharacter.toString();
+  }
+
+  @Override
+  public String getPetString() {
+    return pet.toString();
   }
 
   @Override
