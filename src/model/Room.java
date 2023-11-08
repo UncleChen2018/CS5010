@@ -72,7 +72,6 @@ public interface Room {
    */
   String getSpaceInfo();
 
-
   /**
    * Get a list of characters in the room.
    *
@@ -131,4 +130,15 @@ public interface Room {
    * @return A formatted string containing neighbor information.
    */
   String queryRoomNeighbors();
+
+  /**
+   * Sets the pet as inside the specified room.
+   */
+  void setPetIn();
+
+  /**
+   * Sets the pet as outside the specified room.
+   */
+  void setPetOut();
+
 }

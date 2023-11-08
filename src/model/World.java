@@ -60,9 +60,9 @@ public class World implements GameModel {
     String roleName = scanner.nextLine().trim();
     this.targetCharacter = new TargetCharacter(roleName, fullHealth);
 
-    // parse the pet
+    // parse the pet and give it the same place as target.
     String petName = scanner.nextLine().trim();
-    pet = new Pet(petName, 0);
+    pet = new Pet(petName, targetCharacter.getLocation());
 
     // parse the space number;
     int spaceNumber = scanner.nextInt();
@@ -79,6 +79,9 @@ public class World implements GameModel {
 
     // New: add target to room.
     roomList.get(targetCharacter.getLocation()).setTargetIn();
+    
+    // New: add pet to the same room as target.
+    roomList.get(targetCharacter.getLocation()).setPetIn();
 
     // parse the item number and put into room
     int itemNumber = scanner.nextInt();

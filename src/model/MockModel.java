@@ -53,6 +53,7 @@ public class MockModel implements GameModel {
    * @param source file or string match certain format.
    */
   @Override
+  //TODO need update
   public void setupNewWorld(Readable source) throws InputMismatchException {
     log.append("setupNewWorld called\n");
     roomList = new ArrayList<Room>();
@@ -278,6 +279,7 @@ public class MockModel implements GameModel {
   }
 
   @Override
+  //TODO update
   public String getDetails() {
     log.append("getDetails called\n");
     String worldInfo = String.format(

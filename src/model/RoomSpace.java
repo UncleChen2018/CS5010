@@ -5,6 +5,7 @@ import java.util.ArrayList;
 /**
  * Rooms in the world, with index, rectangle coordinate it can be represented,
  * room name, arrays of containing item, neighbor rooms and other visible rooms.
+ * Also contain the pet's infomation.
  */
 public class RoomSpace implements Room {
 
@@ -18,6 +19,7 @@ public class RoomSpace implements Room {
   private ArrayList<Room> visbleRoomSpaces;
   private ArrayList<Player> characterList;
   private boolean isTargetIn;
+  private boolean isPetIn;
 
   /**
    * Initialize room in the world.
@@ -43,6 +45,15 @@ public class RoomSpace implements Room {
     this.visbleRoomSpaces = new ArrayList<Room>();
     this.characterList = new ArrayList<Player>();
     isTargetIn = false;
+    isPetIn = false;
+  }
+  
+  public void setPetIn() {
+    isPetIn = true;
+  }
+  
+  public void setPetOut() {
+    isPetIn = false;
   }
 
   public void addNeighbor(RoomSpace neighbor) {
