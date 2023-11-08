@@ -24,6 +24,8 @@ public class World implements GameModel {
   private ArrayList<Item> itemList;
   private ArrayList<Player> playerList;
 
+  private Pet pet;
+
   public World() {
   }
 
@@ -57,6 +59,10 @@ public class World implements GameModel {
     int fullHealth = scanner.nextInt();
     String roleName = scanner.nextLine().trim();
     this.targetCharacter = new TargetCharacter(roleName, fullHealth);
+
+    // parse the pet
+    String petName = scanner.nextLine().trim();
+    pet = new Pet(petName, 0);
 
     // parse the space number;
     int spaceNumber = scanner.nextInt();
@@ -262,8 +268,9 @@ public class World implements GameModel {
   public String getDetails() {
     String worldInfo = String.format(
         "World [World name = %s, room number =  %d, item number = %d, "
-            + "target charater = %s, player number = %d].",
-        worldName, roomList.size(), itemList.size(), targetCharacter.getName(), playerList.size());
+            + "target charater = %s, pet = %s, player number = %d].",
+        worldName, roomList.size(), itemList.size(), targetCharacter.getName(), pet.getName(),
+        playerList.size());
     return worldInfo;
   }
 
