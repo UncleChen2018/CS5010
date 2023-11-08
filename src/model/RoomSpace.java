@@ -47,11 +47,11 @@ public class RoomSpace implements Room {
     isTargetIn = false;
     isPetIn = false;
   }
-  
+
   public void setPetIn() {
     isPetIn = true;
   }
-  
+
   public void setPetOut() {
     isPetIn = false;
   }
@@ -105,7 +105,6 @@ public class RoomSpace implements Room {
     return itemList;
   }
 
-
   /**
    * Give a string that describes the name, items and visible spaces from the
    * room.
@@ -158,8 +157,8 @@ public class RoomSpace implements Room {
     stringBuilder.append("Room: ").append(this).append("\n").append("Items: ")
         .append(itemList.size() > 0 ? itemList : "No Item").append("\n").append("Player: ")
         .append(characterList.size() > 0 ? characterList : "No Player").append("\n")
-        .append("Target: ").append(isTargetIn ? "Found" : "Not Found").append("\n")
-        .append("Pet: ").append(isPetIn ? "Found" : "Not Found").append("\n");
+        .append("Target: ").append(isTargetIn ? "Found" : "Not Found").append("\n").append("Pet: ")
+        .append(isPetIn ? "Found" : "Not Found").append("\n");
 
     return stringBuilder.toString();
   }
@@ -177,6 +176,28 @@ public class RoomSpace implements Room {
       stringBuilder.append(room).append("\n");
     }
     return stringBuilder.toString();
+  }
+
+  @Override
+  public boolean isPetIn() {
+    return isPetIn;
+  }
+  
+
+  @Override
+  public boolean isRoomInvisible() {
+    if (characterList.size() > 1) {
+      return false;
+    }
+    if (isPetIn) {
+      return true;
+    }
+    for (Room neighbor : neighboRoomSpaces) {
+      if (neighbor.getCharacterList().size() >= 1) {
+        return false;
+      }
+    }
+    return true;
   }
 
 }

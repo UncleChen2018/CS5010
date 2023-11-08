@@ -293,9 +293,75 @@ public interface GameModel {
    * @return if the index is valid in this world.
    */
   boolean isLocationValid(int location);
-  
-  
 
+  /**
+   * Retrieves the health value of the target.
+   *
+   * @return An integer representing the health of the target.
+   */
   int getTargetHealth();
+
+  /**
+   * Retrieves the damage value of the specified item.
+   *
+   * @param itemId The ID of the item to retrieve the damage value for.
+   * @return An integer representing the damage of the item.
+   */
+  int getItemDamage(int itemId);
+
+  /**
+   * Retrieves the name of the item with the specified ID.
+   *
+   * @param itemId The ID of the item to retrieve the name for.
+   * @return A String representing the name of the item.
+   */
+  String getItemName(int itemId);
+
+  /**
+   * Performs an attack on the target with the specified amount of damage.
+   *
+   * @param damage The amount of damage to inflict on the target.
+   */
+  void attackTarget(int damage);
+
+  /**
+   * Removes the specified item from the inventory of the player.
+   *
+   * @param playerId The ID of the player from whose inventory the item will be
+   *                 removed.
+   * @param itemId   The ID of the item to be removed.
+   */
+  void removePlayerItem(int playerId, int itemId);
+
+  /**
+   * Sets the player with the specified ID as the winner of the game.
+   *
+   * @param playerId The ID of the player to be set as the winner.
+   */
+  void setWinner(int playerId);
+
+  /**
+   * Retrieves the ID of the player who is the winner of the game.
+   *
+   * @return An integer representing the ID of the winning player.
+   */
+  int getWinner();
+
+  /**
+   * Checks if the game is over.
+   *
+   * @return {@code true} if the game is over, {@code false} otherwise.
+   */
+  boolean isGameOver();
+
+  /**
+   * Checks if the player is currently visible by other player. A room is visible
+   * if other player in the same or neighboring room. If pet exits, then the room
+   * is invisible to player in neighboring room.
+   *
+   * @param playerId the player id to be judged if visible.
+   * @return {@code true} if the room is visible, {@code false} otherwise.
+   */
+  boolean isAttackInvisible(int playerId);
 
 }

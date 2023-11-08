@@ -141,4 +141,13 @@ public interface Room {
    */
   void setPetOut();
 
+  /**
+   * Checks if the pet is currently inside the room.
+   *
+   * @return {@code true} if the pet is inside, {@code false} otherwise.
+   */
+  boolean isPetIn();
+  
+  boolean isRoomInvisible();
+
 }

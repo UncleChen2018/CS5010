@@ -116,7 +116,7 @@ public class CommandController implements GameController {
       out.append("Settting finished, game started.\n\n\n");
 
       // begin to take turn.
-      while (currentTurn < maxTurn && model.getTargetHealth()>0) {
+      while (currentTurn < maxTurn && !model.isGameOver()) {
         out.append(String.format("[TURN %d]\n", currentTurn + 1));
         int activePlayer = model.getCurrentPlayer(currentTurn);
         out.append(String.format("Player %s's turn", model.getPlayerString(activePlayer)))

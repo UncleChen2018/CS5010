@@ -24,8 +24,9 @@ public class MockModel implements GameModel {
   private ArrayList<Room> roomList;
   private ArrayList<Item> itemList;
   private ArrayList<Player> playerList;
-  
+
   private Pet pet;
+  private int winnerId;
 
   public MockModel(StringBuilder log) {
     this.log = log;
@@ -620,7 +621,7 @@ public class MockModel implements GameModel {
 
   @Override
   public ArrayList<Integer> getRoomCharacter(int location) {
-    log.append(String.format("getRoomCharacter called, location = %d", location));
+    log.append(String.format("getRoomCharacter called, location = %d", location)).append("\n");
 
     ArrayList<Integer> retList = new ArrayList<Integer>();
     for (Player player : roomList.get(location).getCharacterList()) {
@@ -631,24 +632,75 @@ public class MockModel implements GameModel {
 
   @Override
   public void setPetLocation(int destLocation) {
-    log.append(String.format("setPetLocation called, location = %d", destLocation));
+    log.append(String.format("setPetLocation called, location = %d", destLocation)).append("\n");
     if (!isLocationValid(destLocation)) {
       throw new IllegalArgumentException(
           String.format("Illegal argument: location %d", destLocation));
     }
   }
 
-
   @Override
   public String getPetString() {
     log.append(String.format("getPetString called")).append("\n");
     return pet.toString();
   }
-  
+
   @Override
   public int getTargetHealth() {
-    log.append(String.format("getPetString called")).append("\n");
+    log.append(String.format("getTargetHealth called")).append("\n");
     return targetCharacter.getHealth();
   }
+
+  @Override
+  public int getItemDamage(int itemId) {
+    log.append(String.format("getItemDamage called, itemid = %d", itemId)).append("\n");
+    return itemList.get(itemId).getItemDamage();
+  }
+
+  @Override
+  public String getItemName(int itemId) {
+    log.append(String.format("getItemName called, itemid = %d", itemId)).append("\n");
+    return itemList.get(itemId).getItemName();
+  }
+
+  @Override
+  public void attackTarget(int damage) {
+    log.append(String.format("attackTarget called, damage = %d", damage)).append("\n");
+    targetCharacter.setHealth(targetCharacter.getHealth() - damage);
+  }
+
+  @Override
+  public void removePlayerItem(int playerId, int itemId) {
+    log.append(
+        String.format("removePlayerItem called, playerId = %d, itemId = %d", playerId, itemId))
+        .append("\n");
+    playerList.get(playerId).removeItem(itemId);
+  }
   
+  @Override
+  public void setWinner(int playerId) {
+    log.append(String.format("setWinner called, playerId = %d", playerId)).append("\n");
+    winnerId = playerId;
+  }
+
+  @Override
+  public int getWinner() {
+    log.append(String.format("gettWinner called")).append("\n");
+    return winnerId;
+  }
+  
+  @Override
+  public boolean isGameOver() {
+    log.append(String.format("gameOver called")).append("\n");
+    return winnerId != -1;
+  }
+  
+  @Override
+  public boolean isAttackInvisible(int playerId) {
+    log.append(String.format("isAttackInvisible called, playerId = %d", playerId)).append("\n");
+    int location = playerList.get(playerId).getLocation();
+    return roomList.get(location).isRoomInvisible();
+  }
+  
+
 }

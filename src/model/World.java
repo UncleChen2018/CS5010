@@ -26,6 +26,8 @@ public class World implements GameModel {
 
   private Pet pet;
 
+  private int winnerId;
+
   public World() {
   }
 
@@ -47,6 +49,7 @@ public class World implements GameModel {
     roomList = new ArrayList<Room>();
     itemList = new ArrayList<Item>();
     playerList = new ArrayList<Player>();
+    winnerId = -1;
 
     Scanner scanner = new Scanner(source);
 
@@ -600,4 +603,48 @@ public class World implements GameModel {
   public int getTargetHealth() {
     return targetCharacter.getHealth();
   }
+
+  @Override
+  public int getItemDamage(int itemId) {
+    return itemList.get(itemId).getItemDamage();
+  }
+
+  @Override
+  public String getItemName(int itemId) {
+    return itemList.get(itemId).getItemName();
+  }
+
+  @Override
+  public void attackTarget(int damage) {
+    targetCharacter.setHealth(targetCharacter.getHealth() - damage);
+  }
+
+  @Override
+  public void removePlayerItem(int playerId, int itemId) {
+    playerList.get(playerId).removeItem(itemId);
+  }
+
+  @Override
+  public void setWinner(int playerId) {
+    winnerId = playerId;
+  }
+
+  @Override
+  public int getWinner() {
+    return winnerId;
+  }
+
+  @Override
+  public boolean isGameOver() {
+    return winnerId != -1;
+  }
+
+  @Override
+  public boolean isAttackInvisible(int playerId) {
+    int location = playerList.get(playerId).getLocation();
+    return roomList.get(location).isRoomInvisible();
+  }
+  
+  
+
 }

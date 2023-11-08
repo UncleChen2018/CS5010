@@ -50,6 +50,10 @@ public class Player extends MovableCharacter {
     }
   }
 
+  public void removeItem(int itemId) {
+    itemList.remove(itemId);
+  }
+
   public ArrayList<Item> getItemList() {
     return itemList;
   }
