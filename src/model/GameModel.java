@@ -293,5 +293,9 @@ public interface GameModel {
    * @return if the index is valid in this world.
    */
   boolean isLocationValid(int location);
+  
+  
+
+  int getTargetHealth();
 
 }

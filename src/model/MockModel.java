@@ -53,7 +53,6 @@ public class MockModel implements GameModel {
    * @param source file or string match certain format.
    */
   @Override
-  //TODO need update
   public void setupNewWorld(Readable source) throws InputMismatchException {
     log.append("setupNewWorld called\n");
     roomList = new ArrayList<Room>();
@@ -71,10 +70,10 @@ public class MockModel implements GameModel {
     int fullHealth = scanner.nextInt();
     String roleName = scanner.nextLine().trim();
     this.targetCharacter = new TargetCharacter(roleName, fullHealth);
-    
-    // parse the pet
+
+    // parse the pet and give it the same place as target.
     String petName = scanner.nextLine().trim();
-    pet = new Pet(petName, 0);
+    pet = new Pet(petName, targetCharacter.getLocation());
 
     // parse the space number;
     int spaceNumber = scanner.nextInt();
@@ -91,6 +90,9 @@ public class MockModel implements GameModel {
 
     // New: add target to room.
     roomList.get(targetCharacter.getLocation()).setTargetIn();
+
+    // New: add pet to the same room as target.
+    roomList.get(targetCharacter.getLocation()).setPetIn();
 
     // parse the item number and put into room
     int itemNumber = scanner.nextInt();
@@ -279,7 +281,6 @@ public class MockModel implements GameModel {
   }
 
   @Override
-  //TODO update
   public String getDetails() {
     log.append("getDetails called\n");
     String worldInfo = String.format(
@@ -629,14 +630,25 @@ public class MockModel implements GameModel {
   }
 
   @Override
-  public void setPetLocation(int location) {
-    // TODO Auto-generated method stub
-    
+  public void setPetLocation(int destLocation) {
+    log.append(String.format("setPetLocation called, location = %d", destLocation));
+    if (!isLocationValid(destLocation)) {
+      throw new IllegalArgumentException(
+          String.format("Illegal argument: location %d", destLocation));
+    }
   }
+
 
   @Override
   public String getPetString() {
-    // TODO Auto-generated method stub
-    return null;
+    log.append(String.format("getPetString called")).append("\n");
+    return pet.toString();
   }
+  
+  @Override
+  public int getTargetHealth() {
+    log.append(String.format("getPetString called")).append("\n");
+    return targetCharacter.getHealth();
+  }
+  
 }

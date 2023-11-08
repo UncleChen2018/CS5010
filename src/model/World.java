@@ -595,4 +595,9 @@ public class World implements GameModel {
     }
     return retList;
   }
+
+  @Override
+  public int getTargetHealth() {
+    return targetCharacter.getHealth();
+  }
 }
