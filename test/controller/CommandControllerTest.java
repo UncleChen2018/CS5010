@@ -48,8 +48,7 @@ public class CommandControllerTest {
         + "default value 2\n" + "Set control for player 0 to Computer? (y|n, default no)\n"
         + "What you will add: Player 0, with name Jimmy, initial location at room 0, "
         + "item capacity = 2, controlled by HUMAN\n"
-        + "Add this player to game(y) or abort(n), default y\n"
-        + "Player 0 successfully added.\n"
+        + "Add this player to game(y) or abort(n), default y\n" + "Player 0 successfully added.\n"
         + "Totally 1 player, add more?(y|n)Enter name for player 1:\n"
         + "Set location for player 1, enter number between 0 and 20, or press "
         + "enter to set default value 0\n"
@@ -58,8 +57,7 @@ public class CommandControllerTest {
         + "Set control for player 1 to Computer? (y|n, default no)\n"
         + "What you will add: Player 1, with name Ai, initial location at"
         + " room 0, item capacity = 1, controlled by COMPUTER\n"
-        + "Add this player to game(y) or abort(n), default y\n"
-        + "Player 1 successfully added.\n"
+        + "Add this player to game(y) or abort(n), default y\n" + "Player 1 successfully added.\n"
         + "Totally 2 player, add more?(y|n)Enter name for player 2:\n"
         + "Set location for player 2, enter number between 0 and 20, or "
         + "press enter to set default value 0\n"
@@ -68,8 +66,7 @@ public class CommandControllerTest {
         + "Set control for player 2 to Computer? (y|n, default no)\n"
         + "What you will add: Player 2, with name Penny, initial location "
         + "at room 3, item capacity = 3, controlled by HUMAN\n"
-        + "Add this player to game(y) or abort(n), default y\n"
-        + "Player 2 successfully added.\n"
+        + "Add this player to game(y) or abort(n), default y\n" + "Player 2 successfully added.\n"
         + "Totally 3 player, add more?(y|n)Settting finished, game started.\n" + "\n" + "\n"
         + "[TURN 1]\n" + "Player No.0 \"Jimmy\"'s turn\n"
         + "Please select one of the option below\n"
@@ -592,15 +589,184 @@ public class CommandControllerTest {
     String expectedOutput = "Player No.1 \"Ai\" try to look around from No.0 \"Armory\"\n"
         + "Computer look around result ommitted.";
     assertTrue(out.toString().contains(expectedOutput));
-    // Test call the right move method
-    // assertEquals(baseOutput, out.toString());
-    // String expectedLog = "setPlayerLocation called, playerIndex = 0, destLocation
-    // = 3";
-    // assertTrue(log.toString().contains(expectedLog));
-    // // assertEquals(expectedLog, log.toString());
-    // // test turn passed.
-    // expectedLog = "getCurrentPlayer called, turn = 2";
-    // assertTrue(log.toString().contains(expectedLog));
+
+  }
+
+  // Here the new test for attack, succeed without item.
+  @Test
+  public void testAttackSucceedWithouItem() {
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "\n" // Enter game
+        + "4\n" // Player 0 attack with no item
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+
+    GameController controller = new CommandController(in, out, worldData, 100, 2, 4);
+    controller.start(mockModel);
+    String expectedOutput = "Player No.0 \"Jimmy\" try to attack \"Doctor Lucky\" "
+        + "using poking in the eye ...\n" + "" + "Attack successfully, target get damage of 1.";
+    // assertEquals(expectedOutput, out.toString());
+
+    assertTrue(out.toString().contains(expectedOutput));
+    assertEquals(49, mockModel.getTargetHealth());
+    String expectedLog = "attackTarget called, damage = 1";
+    assertTrue(log.toString().contains(expectedLog));
+    // assertEquals(expectedLog, log.toString());
+
+  }
+
+  
+  @Test
+  public void testAttackSucceedWithItem() {
+    String inputString = "\n" + "Jimmy\n4\n2\n\n\n" + "\n" // Enter game
+        + "2\n1\n" // Choose to pick up 
+        + "3\n3\n3\n" // wait 3 turns
+        + "4\n1\n" // Player 0 attack 
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+
+    GameController controller = new CommandController(in, out, worldData, 100, 2, 4);
+    controller.start(mockModel);
+    //the output string should contain item and give damage of 2
+    String expectedOutput = "Player No.0 \"Jimmy\" try to attack \"Doctor Lucky\""
+        + " using Letter Opener ...\n"
+        + "Attack successfully, target get damage of 2.";
+    //assertEquals(expectedOutput, out.toString());
+    
+    
+
+    assertTrue(out.toString().contains(expectedOutput));
+    assertEquals(48, mockModel.getTargetHealth());
+    String expectedLog = "attackTarget called, damage = 2";
+    //assertEquals(expectedLog, log.toString());
+    assertTrue(log.toString().contains(expectedLog));
+    expectedLog = "removePlayerItem called, playerId = 0, itemId = 1";
+    assertTrue(log.toString().contains(expectedLog));
+    
+   
+
+  }
+  
+  
+  
+  @Test
+  public void testAttackSucceedWithPetSeenByOthersNeighborRoom() {
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nPenny\n4\n3\n\n\n" + "\n" // Enter game
+        + "4\n" // Player 0 attack with no item
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    // let computer pickup item
+    GameController controller = new CommandController(in, out, worldData, 100, 2, 4);
+    controller.start(mockModel);
+    // Test out put the AI player pick up item.
+    String expectedOutput = "Player No.0 \"Jimmy\" try to attack \"Doctor Lucky\" "
+        + "using poking in the eye ...\n" + "" + "Attack successfully, target get damage of 1.";
+    // assertEquals(expectedOutput, out.toString());
+    // String expectedLog = "XX";
+    assertTrue(out.toString().contains(expectedOutput));
+    String expectedLog = "attackTarget called, damage = 1";
+    // assertEquals(expectedLog, log.toString());
+    assertTrue(log.toString().contains(expectedLog));
+
+  }
+  
+  
+  
+  @Test
+  public void testAttackFailedNoTargetIn() {
+    String inputString = "\n" + "Jimmy\n3\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "\n" // Enter game
+        + "4\n" // Player 0 attack with no item
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+
+    // let computer pickup item
+    GameController controller = new CommandController(in, out, worldData, 100, 2, 4);
+    controller.start(mockModel);
+    // Test out put the Ai player pick up item.
+    String expectedOutput = "Target not in this room, cannot attack";
+    //assertEquals(expectedOutput, out.toString());
+    // String expectedLog = "XX";
+    assertTrue(out.toString().contains(expectedOutput));
+
+    // assertEquals(expectedLog, log.toString());
+
+  }
+  
+  
+  
+
+  
+
+
+  @Test
+  public void testAttackFailedSeenByOthersSameRoom() {
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "\n" // Enter game
+        + "4\n" // Player 0 attack with no item
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+
+    // let computer pickup item
+    GameController controller = new CommandController(in, out, worldData, 100, 2, 4);
+    controller.start(mockModel);
+    // Test out put the Ai player pick up item.
+    String expectedOutput = "Player No.0 \"Jimmy\" try to attack \"Doctor Lucky\" "
+        + "using poking in the eye ...\n" + "" + "Someone has seen you, attack has to stop...";
+    // assertEquals(expectedOutput, out.toString());
+    // String expectedLog = "XX";
+    assertTrue(out.toString().contains(expectedOutput));
+
+    // assertEquals(expectedLog, log.toString());
+
+  }
+
+  @Test
+  public void testAttackFailedWithPetSeenByOthersSameRoom() {
+    String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nPenny\n1\n3\n\n\n" + "y\nJack\n1\n3\n\n\n"
+        + "\n" // Enter game
+        + "5\n1\n" // Player 0 move pet to room1
+        + "4\n" // Player 1 attack with no item, with pet in it
+        + "7\n"; // Quit game.
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    // let computer pickup itme
+    GameController controller = new CommandController(in, out, worldData, 100, 2, 4);
+    controller.start(mockModel);
+    // Test out put the Ai player pick up item.
+    String expectedOutput = "Player No.1 \"Penny\" try to attack \"Doctor Lucky\" "
+        + "using poking in the eye ...\n" + "" + "Someone has seen you, attack has to stop...";
+    //assertEquals(expectedOutput, out.toString());
+    // String expectedLog = "XX";
+    assertTrue(out.toString().contains(expectedOutput));
+
+    // assertEquals(expectedLog, log.toString());
 
   }
 

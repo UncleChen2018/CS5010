@@ -264,6 +264,7 @@ public class CommandController implements GameController {
               break;
           }
         } else {
+          //TODO: make computer being able to attack.
           int nextInt = generator.getNextNumber();
           int curLocation = model.getPlayerLocation(activePlayer);
           // let computer choose which action to take
