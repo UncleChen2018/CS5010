@@ -39,7 +39,8 @@ public class AttackTarget extends TurnBaseCommand {
     // TODO think ways to test, and give more message feed back.
     if (model.isAttackInvisible(playerId)) {
       model.attackTarget(damage);
-      stringBuilder.append(String.format("Attack successfully, target get damage of %d\n", damage));
+      stringBuilder
+          .append(String.format("Attack successfully, target get damage of %d.\n", damage));
       if (itemId != -1) {
         model.removePlayerItem(playerId, itemId);
         stringBuilder.append(String.format("%s is removed.\n", model.getItemString(itemId)));

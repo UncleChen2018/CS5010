@@ -620,7 +620,7 @@ public class World implements GameModel {
 
   @Override
   public void removePlayerItem(int playerId, int itemId) {
-    playerList.get(playerId).removeItem(itemId);
+    playerList.get(playerId).removeItem(itemList.get(itemId));
   }
 
   @Override
@@ -643,6 +643,13 @@ public class World implements GameModel {
     int location = playerList.get(playerId).getLocation();
     return roomList.get(location).isRoomInvisible();
   }
+
+  @Override
+  public String queryPlayerItems(int playerId) {
+    return playerList.get(playerId).getItemList().toString();
+  }
+  
+  
   
   
 

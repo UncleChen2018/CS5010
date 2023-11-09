@@ -674,8 +674,9 @@ public class MockModel implements GameModel {
     log.append(
         String.format("removePlayerItem called, playerId = %d, itemId = %d", playerId, itemId))
         .append("\n");
-    playerList.get(playerId).removeItem(itemId);
+    playerList.get(playerId).removeItem(itemList.get(itemId));
   }
+ 
   
   @Override
   public void setWinner(int playerId) {
@@ -702,5 +703,9 @@ public class MockModel implements GameModel {
     return roomList.get(location).isRoomInvisible();
   }
   
-
+  @Override
+  public String queryPlayerItems(int playerId) {
+    log.append(String.format("queryPlayerItems called, playerId = %d", playerId)).append("\n");
+    return playerList.get(playerId).getItemList().toString();
+  }
 }

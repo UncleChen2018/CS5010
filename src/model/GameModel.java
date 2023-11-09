@@ -364,4 +364,13 @@ public interface GameModel {
    */
   boolean isAttackInvisible(int playerId);
 
+  /**
+   * Queries and retrieves detailed information about the player's item with the
+   * specified ID.
+   *
+   * @param playerId the ID of the player
+   * @return a formatted string containing player's item details
+   */
+  String queryPlayerItems(int playerId);
+
 }

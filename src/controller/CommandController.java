@@ -188,12 +188,45 @@ public class CommandController implements GameController {
               cmd = new LookAround(activePlayer);
               break;
             case "4":
-              cmd = new AttackTarget(activePlayer);
+              //TODO: test visible and pet.
+              displayTargetInfo();
+              if (location != model.getTargetLocation()) {
+                out.append("Target not in this room, cannot attack\n");
+                break;
+              }
+
+              if (model.getPlayerItems(activePlayer).size() != 0) {
+                while (true) {
+                  out.append("Items you are carring:\n");
+                  out.append(model.queryPlayerItems(activePlayer)).append("\n");
+                  out.append("Enter the item id you want to use, press enter to skip using item\n");
+                  line = scan.nextLine().trim();
+                  if (line.isEmpty()) {
+                    cmd = new AttackTarget(activePlayer);
+                    break;
+                  } else {
+                    try {
+                      int itemId = Integer.parseInt(line);
+                      if (model.getPlayerItems(activePlayer).contains(itemId)) {
+                        cmd = new AttackTarget(activePlayer, itemId);
+                        break;
+                      } else {
+                        out.append(
+                            String.format("Player does not have itemid %d, try again.\n", itemId));
+                      }
+                    } catch (NumberFormatException e) {
+                      out.append("Wrong format for an integer, try gain.\n");
+                    }
+                  }
+                }
+              } else {
+                cmd = new AttackTarget(activePlayer);
+              }
+
               break;
             case "5":
               while (true) {
-                int playerLocation = model.getPlayerLocation(activePlayer);
-                out.append(model.queryRoomNeighbors(playerLocation));
+                out.append(model.queryRoomNeighbors(location));
                 displayTargetInfo();
                 out.append(
                     String.format("Enter the room index to move the pet to (between %d and %d):\n",
