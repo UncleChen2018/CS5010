@@ -50,7 +50,6 @@ public class World implements GameModel {
     itemList = new ArrayList<Item>();
     playerList = new ArrayList<Player>();
     winnerId = -1;
-
     Scanner scanner = new Scanner(source);
 
     // parse the World

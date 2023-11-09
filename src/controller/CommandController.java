@@ -188,7 +188,7 @@ public class CommandController implements GameController {
               cmd = new LookAround(activePlayer);
               break;
             case "4":
-
+              cmd = new AttackTarget(activePlayer);
               break;
             case "5":
               while (true) {
