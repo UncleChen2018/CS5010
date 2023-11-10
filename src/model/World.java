@@ -6,8 +6,11 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.Stack;
 
 /**
  * The world contains all room, target character and items. It can create those
@@ -25,6 +28,11 @@ public class World implements GameModel {
   private ArrayList<Player> playerList;
 
   private Pet pet;
+  // Keep track of the location that is visited by pet.
+  private Set<Room> petVisitedRoom;
+  private Room petNextRoom;
+  private boolean petNeedTraceback = false;
+  private Stack<Room> petTrace = new Stack<>();
 
   private int winnerId;
 
@@ -84,6 +92,12 @@ public class World implements GameModel {
 
     // New: add pet to the same room as target.
     roomList.get(targetCharacter.getLocation()).setPetIn();
+
+    // New: set the visitedByPet to null
+    petVisitedRoom = new HashSet<>();
+    // add the first location to pet visited.
+    Room petInitialRoom = roomList.get(pet.getLocation());
+    resetPetTrace(petInitialRoom);
 
     // parse the item number and put into room
     int itemNumber = scanner.nextInt();
@@ -648,9 +662,95 @@ public class World implements GameModel {
   public String queryPlayerItems(int playerId) {
     return playerList.get(playerId).getItemList().toString();
   }
-  
-  
-  
-  
+
+  @Override
+  public int getPetLocation() {
+    return pet.getLocation();
+  }
+
+//TODO remove the print out for both world and mock
+  @Override
+  public void movePetNextRoom() {
+    if (pet.isStunned()) {
+      pet.wakeUp();
+      return;
+    }
+
+    System.out.println("Before scan next" + petTrace.toString());
+    System.out.println(petVisitedRoom.toString());
+    getPetNextRoom();
+    System.out.println("After scan next" + petTrace.toString());
+    // which next room the pet should move
+    Room nextRoom;
+    if (!petNeedTraceback) {
+      nextRoom = petNextRoom;
+    } else {
+      if (!petTrace.empty()) {
+        nextRoom = petTrace.peek();
+      } else {
+        throw new IllegalStateException("Wrong pet trace");
+      }
+    }
+    System.out.println("After PopOut" + petTrace.toString());
+    System.out.println("Next Room:" + nextRoom.toString());
+
+    // deal with the move
+    setPetLocation(nextRoom.getSpaceIndex());
+
+    // deal with the visited and trace if not a trace back visit.
+    if (!petNeedTraceback) {
+      petVisitedRoom.add(nextRoom);
+      // check if all visited, begin next turn.
+      petTrace.push(nextRoom);
+    }
+
+    System.out.println("After Tracing" + petTrace.toString());
+    System.out.println(petVisitedRoom.toString());
+  }
+
+  private void getPetNextRoom() {
+    Room curRoom = roomList.get(pet.getLocation());
+    // see if all room is visited.
+    if (petVisitedRoom.size() == roomList.size()) {
+      resetPetTrace(curRoom);
+    }
+
+    // in case the pet is in the room with no neighbor
+    if (curRoom.getNeighbors().size() == 0) {
+      petNextRoom = curRoom;
+      petNeedTraceback = false;
+      return;
+    }
+
+    for (Room neighboRoom : curRoom.getNeighbors()) {
+      if (!petVisitedRoom.contains(neighboRoom)) {
+        petNeedTraceback = false;
+        petNextRoom = neighboRoom;
+        return;
+      }
+    }
+    // means the current room has no more to be visited, get it out
+
+    petNeedTraceback = true;
+    petTrace.pop();
+  }
+
+  private void resetPetTrace(Room initialRoom) {
+    // clear the pet visited record in this world.
+    petVisitedRoom.clear();
+    // also clear the trace of the cat.
+    petTrace.clear();
+    petNeedTraceback = false;
+    petNextRoom = null;
+    petVisitedRoom.add(initialRoom);
+    petTrace.push(initialRoom);
+  }
+
+  @Override
+  public void teleportPetLocation(int location) {
+    setPetLocation(location);
+    resetPetTrace(roomList.get(location));
+    pet.setStunned();
+  }
 
 }

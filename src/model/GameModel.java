@@ -373,4 +373,25 @@ public interface GameModel {
    */
   String queryPlayerItems(int playerId);
 
+  /**
+   * Move pet to the next room. Pet will move according to the Depth First Search
+   * to different Room.
+   */
+  void movePetNextRoom();
+
+  /**
+   * Returns the current location of the pet.
+   * 
+   * @return The index of the space where the pet is located.
+   */
+  int getPetLocation();
+
+  /**
+   * Teleport pet to the next room. Pet will lose all its memory, and begin a new
+   * start to move according to the Depth First Search to different Room.
+   * 
+   * @param location room's index.
+   */
+  void teleportPetLocation(int location);
+
 }

@@ -4,9 +4,11 @@ package model;
  * The pet class, a special moving character with unique moving logic.
  */
 public class Pet extends MovableCharacter {
+  private boolean stunned;
 
   public Pet(String name, int location) {
     super(name, location);
+    stunned = false;
   }
 
   /**
@@ -19,6 +21,18 @@ public class Pet extends MovableCharacter {
     stringBuilder.append("Target's pet: ").append(this).append("\n").append("Location: ")
         .append(location).append("\n");
     return stringBuilder.toString();
+  }
+
+  public boolean isStunned() {
+    return stunned;
+  }
+
+  public void setStunned() {
+    stunned = true;
+  }
+
+  public void wakeUp() {
+    stunned = false;
   }
 
 }

@@ -6,8 +6,11 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.Stack;
 
 /**
  * The mock model based on the tested World. Will additionally add every method
@@ -26,6 +29,12 @@ public class MockModel implements GameModel {
   private ArrayList<Player> playerList;
 
   private Pet pet;
+  // Keep track of the location that is visited by pet.
+  private Set<Room> petVisitedRoom;
+  private Room petNextRoom;
+  private boolean petNeedTraceback = false;
+  private Stack<Room> petTrace = new Stack<>();
+
   private int winnerId;
 
   public MockModel(StringBuilder log) {
@@ -61,7 +70,7 @@ public class MockModel implements GameModel {
     playerList = new ArrayList<Player>();
     winnerId = -1;
     Scanner scanner = new Scanner(source);
-    
+
     // parse the World
     this.rowSize = scanner.nextInt();
     this.colSize = scanner.nextInt();
@@ -94,6 +103,12 @@ public class MockModel implements GameModel {
 
     // New: add pet to the same room as target.
     roomList.get(targetCharacter.getLocation()).setPetIn();
+
+    // New: set the visitedByPet to null
+    petVisitedRoom = new HashSet<>();
+    // add the first location to pet visited.
+    Room petInitialRoom = roomList.get(pet.getLocation());
+    resetPetTrace(petInitialRoom);
 
     // parse the item number and put into room
     int itemNumber = scanner.nextInt();
@@ -676,8 +691,7 @@ public class MockModel implements GameModel {
         .append("\n");
     playerList.get(playerId).removeItem(itemList.get(itemId));
   }
- 
-  
+
   @Override
   public void setWinner(int playerId) {
     log.append(String.format("setWinner called, playerId = %d", playerId)).append("\n");
@@ -689,23 +703,118 @@ public class MockModel implements GameModel {
     log.append(String.format("gettWinner called")).append("\n");
     return winnerId;
   }
-  
+
   @Override
   public boolean isGameOver() {
     log.append(String.format("gameOver called")).append("\n");
     return winnerId != -1;
   }
-  
+
   @Override
   public boolean isAttackInvisible(int playerId) {
     log.append(String.format("isAttackInvisible called, playerId = %d", playerId)).append("\n");
     int location = playerList.get(playerId).getLocation();
     return roomList.get(location).isRoomInvisible();
   }
-  
+
   @Override
   public String queryPlayerItems(int playerId) {
     log.append(String.format("queryPlayerItems called, playerId = %d", playerId)).append("\n");
     return playerList.get(playerId).getItemList().toString();
   }
+  
+  
+  @Override
+  public int getPetLocation() {
+    log.append(String.format("getPetLocation called")).append("\n");
+    return pet.getLocation();
+  }
+
+  
+
+  @Override
+  public void movePetNextRoom() {
+    log.append(String.format("movePetNextRoom called")).append("\n");
+    if (pet.isStunned()) {
+      pet.wakeUp();
+      return;
+    }
+    System.out.println("Before scan next" + petTrace.toString());
+    System.out.println(petVisitedRoom.toString());
+    getPetNextRoom();
+    System.out.println("After scan next" + petTrace.toString());
+    // which next room the pet should move
+    Room nextRoom;
+    if (!petNeedTraceback) {
+      nextRoom = petNextRoom;
+    } else {
+      if (!petTrace.empty()) {
+        nextRoom = petTrace.peek();
+      } else {
+        throw new IllegalStateException("Wrong pet trace");
+      }
+    }
+    System.out.println("After PopOut" + petTrace.toString());
+    System.out.println("Next Room:" + nextRoom.toString());
+
+    // deal with the move
+    setPetLocation(nextRoom.getSpaceIndex());
+
+    // deal with the visited and trace if not a trace back visit.
+    if (!petNeedTraceback) {
+      petVisitedRoom.add(nextRoom);
+      // check if all visited, begin next turn.
+      petTrace.push(nextRoom);
+    }
+
+    System.out.println("After Tracing" + petTrace.toString());
+    System.out.println(petVisitedRoom.toString());
+  }
+
+  private void getPetNextRoom() {
+    Room curRoom = roomList.get(pet.getLocation());
+    // see if all room is visited.
+    if (petVisitedRoom.size() == roomList.size()) {
+      resetPetTrace(curRoom);
+    }
+
+    // in case the pet is in the room with no neighbor
+    if (curRoom.getNeighbors().size() == 0) {
+      petNextRoom = curRoom;
+      petNeedTraceback = false;
+      return;
+    }
+
+    for (Room neighboRoom : curRoom.getNeighbors()) {
+      if (!petVisitedRoom.contains(neighboRoom)) {
+        petNeedTraceback = false;
+        petNextRoom = neighboRoom;
+        return;
+      }
+    }
+    // means the current room has no more to be visited, get it out
+
+    petNeedTraceback = true;
+    petTrace.pop();
+  }
+
+  private void resetPetTrace(Room initialRoom) {
+    // clear the pet visited record in this world.
+    petVisitedRoom.clear();
+    // also clear the trace of the cat.
+    petTrace.clear();
+    petNeedTraceback = false;
+    petNextRoom = null;
+    petVisitedRoom.add(initialRoom);
+    petTrace.push(initialRoom);
+  }
+  
+  @Override
+  public void teleportPetLocation(int location) {
+    log.append(String.format("teleportPetLocation called, location = %d", location)).append("\n");
+    setPetLocation(location);
+    resetPetTrace(roomList.get(location)); 
+    pet.setStunned();
+  }
+
 }

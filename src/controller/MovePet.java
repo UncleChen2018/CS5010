@@ -20,7 +20,7 @@ public class MovePet extends TurnBaseCommand {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append(String.format("Player %s try to move pet %s to %s\n",
         model.getPlayerString(playerId), model.getPetString(), model.getRoomString(location)));
-    model.setPetLocation(location);
+    model.teleportPetLocation(location);
     stringBuilder
         .append(String.format("Move pet to %s successfully.\n", model.getRoomString(location)));
     return stringBuilder.toString();
