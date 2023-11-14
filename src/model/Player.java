@@ -50,34 +50,54 @@ public class Player extends MovableCharacter {
     }
   }
 
-  
-  /** 
-   * @param item
+  /**
+   * Removes the specified item from the player's item list.
+   *
+   * @param item The item to be removed.
    */
   public void removeItem(Item item) {
     itemList.remove(item);
   }
 
-  
-  /** 
-   * @return ArrayList<Item>
+  /**
+   * Retrieves the list of items owned by the player.
+   *
+   * @return An ArrayList of Item objects representing the player's items.
    */
   public ArrayList<Item> getItemList() {
     return itemList;
   }
 
+  /**
+   * Switches the player's control type to computer play.
+   */
   public void switchToComputerPlay() {
     this.controlType = ControlType.COMPUTER;
   }
 
+  /**
+   * Switches the player's control type to human play.
+   */
   public void switchToHumanPlay() {
     this.controlType = ControlType.HUMAN;
   }
 
+  /**
+   * Checks if the player is a human player.
+   *
+   * @return {@code true} if the player is a human player, {@code false}
+   *         otherwise.
+   */
   public boolean isHumanPlayer() {
     return controlType == ControlType.HUMAN;
   }
 
+  /**
+   * Checks if the player is a computer player.
+   *
+   * @return {@code true} if the player is a computer player, {@code false}
+   *         otherwise.
+   */
   public boolean isComputerPlayer() {
     return controlType == ControlType.COMPUTER;
   }

@@ -53,6 +53,12 @@ public class MockModel implements GameModel {
     setupNewWorld(source);
   }
 
+  /**
+   * Adds the specified item to the given room.
+   *
+   * @param item The item to be added to the room.
+   * @param room The room to which the item will be added.
+   */
   private void addItemToRoom(Item item, Room room) {
     room.addItem(item);
   }
@@ -140,8 +146,13 @@ public class MockModel implements GameModel {
     }
   }
 
-
-
+  /**
+   * @param beg1
+   * @param end1
+   * @param beg2
+   * @param end2
+   * @return boolean
+   */
   // test if [beg1,end1] and [beg2, end2] has over lap
   private static boolean isOverlap(int beg1, int end1, int beg2, int end2) {
     // test if either beg2 or end2 fall out of range
@@ -152,6 +163,11 @@ public class MockModel implements GameModel {
     }
   }
 
+  /**
+   * @param thisSpace
+   * @param otherSpace
+   * @return boolean
+   */
   private static boolean isNeighborRect(Room thisSpace, Room otherSpace) {
     boolean result = false;
     // if two room share the same wall,then they are neighbor
@@ -209,11 +225,20 @@ public class MockModel implements GameModel {
   }
 
   // rerun {row, col} of the world.
-
+  /**
+   * Retrieves the list of rooms representing the world space.
+   *
+   * @return An ArrayList of Room objects representing the world space.
+   */
   public ArrayList<Room> getWorldSpace() {
     return roomList;
   }
 
+  /**
+   * Retrieves the name of the world.
+   *
+   * @return A string representing the name of the world.
+   */
   public String getWorldName() {
     return worldName;
   }
@@ -362,7 +387,6 @@ public class MockModel implements GameModel {
     roomList.get(destLocation).setPetIn();
   }
 
-  
   @Override
   public void moveTargetNextRoom() {
     log.append("moveTargetNextRoom called\n");
@@ -389,11 +413,14 @@ public class MockModel implements GameModel {
     return targetCharacter.getLocation();
   }
 
-
+  /**
+   * Retrieves the list of items in the current context.
+   *
+   * @return An ArrayList of Item objects representing the items.
+   */
   public ArrayList<Item> getItems() {
     return itemList;
   }
-
 
   @Override
   public int getPlayerCount() {
@@ -655,8 +682,6 @@ public class MockModel implements GameModel {
     return retList;
   }
 
-
-
   @Override
   public String getPetString() {
     log.append(String.format("getPetString called")).append("\n");
@@ -725,15 +750,12 @@ public class MockModel implements GameModel {
     log.append(String.format("queryPlayerItems called, playerId = %d", playerId)).append("\n");
     return playerList.get(playerId).getItemList().toString();
   }
-  
-  
+
   @Override
   public int getPetLocation() {
     log.append(String.format("getPetLocation called")).append("\n");
     return pet.getLocation();
   }
-
-  
 
   @Override
   public void movePetNextRoom() {
@@ -757,7 +779,6 @@ public class MockModel implements GameModel {
       }
     }
 
-
     // deal with the move
     setPetLocation(nextRoom.getSpaceIndex());
 
@@ -767,7 +788,6 @@ public class MockModel implements GameModel {
       // check if all visited, begin next turn.
       petTrace.push(nextRoom);
     }
-
 
   }
 
@@ -808,12 +828,12 @@ public class MockModel implements GameModel {
     petVisitedRoom.add(initialRoom);
     petTrace.push(initialRoom);
   }
-  
+
   @Override
   public void teleportPetLocation(int location) {
     log.append(String.format("teleportPetLocation called, location = %d", location)).append("\n");
     setPetLocation(location);
-    resetPetTrace(roomList.get(location)); 
+    resetPetTrace(roomList.get(location));
     pet.setStunned();
   }
 

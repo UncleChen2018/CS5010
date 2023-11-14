@@ -6,6 +6,12 @@ package model;
 public class Pet extends MovableCharacter {
   private boolean stunned;
 
+  /**
+   * Constructs a pet with the specified name and initial location.
+   *
+   * @param name     The name of the pet.
+   * @param location The initial location of the pet.
+   */
   public Pet(String name, int location) {
     super(name, location);
     stunned = false;
@@ -23,18 +29,25 @@ public class Pet extends MovableCharacter {
     return stringBuilder.toString();
   }
 
-  
-  /** 
-   * @return boolean
+  /**
+   * Checks if the pet is currently stunned.
+   *
+   * @return {@code true} if the pet is stunned, {@code false} otherwise.
    */
   public boolean isStunned() {
     return stunned;
   }
 
+  /**
+   * Sets the pet to be stunned.
+   */
   public void setStunned() {
     stunned = true;
   }
 
+  /**
+   * Wakes up the pet, removing the stunned status.
+   */
   public void wakeUp() {
     stunned = false;
   }
