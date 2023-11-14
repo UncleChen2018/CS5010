@@ -147,7 +147,13 @@ public interface Room {
    * @return {@code true} if the pet is inside, {@code false} otherwise.
    */
   boolean isPetIn();
-  
+
+  /**
+   * Checks if the room is marked as invisible.
+   *
+   * @return {@code true} if the room is marked as invisible, {@code false}
+   *         otherwise.
+   */
   boolean isRoomInvisible();
 
 }

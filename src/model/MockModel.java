@@ -37,6 +37,12 @@ public class MockModel implements GameModel {
 
   private int winnerId;
 
+  /**
+   * Constructor for creating a MockModel with a specified log.
+   *
+   * @param log The StringBuilder used to store the log of method calls and their
+   *            inputs/outputs.
+   */
   public MockModel(StringBuilder log) {
     this.log = log;
   }
@@ -387,10 +393,21 @@ public class MockModel implements GameModel {
     roomList.get(nextLocation).setTargetIn();
   }
 
+  /**
+   * Retrieves the target character in the game.
+   *
+   * @return The TargetCharacter object representing the target character.
+   */
   public TargetCharacter getTarget() {
     return targetCharacter;
   }
 
+  /**
+   * Retrieves the room at the specified index in the game world.
+   *
+   * @param index The index of the room to retrieve.
+   * @return The Room object representing the room at the specified index.
+   */
   public Room getRoomSpace(int index) {
     return roomList.get(index);
   }
@@ -459,6 +476,12 @@ public class MockModel implements GameModel {
     return player.getLocation();
   }
 
+  /**
+   * Checks if the specified room index is a valid index within the game world.
+   *
+   * @param roomIndex The index of the room to check.
+   * @return {@code true} if the room index is valid, {@code false} otherwise.
+   */
   public boolean isLocationValid(int roomIndex) {
     return roomIndex >= 0 && roomIndex < roomList.size();
 

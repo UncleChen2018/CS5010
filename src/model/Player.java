@@ -124,10 +124,21 @@ public class Player extends MovableCharacter {
     return String.format("No.%d \"%s\"", playerId, name);
   }
 
+  /**
+   * Checks if the player has reached the maximum item capacity.
+   *
+   * @return {@code true} if the player has reached the item capacity,
+   *         {@code false} otherwise.
+   */
   public boolean reachItemCapacity() {
     return itemList.size() == capacity;
   }
 
+  /**
+   * Retrieves the unique identifier of the player.
+   *
+   * @return The player's unique identifier.
+   */
   public int getPlayerId() {
     return this.playerId;
   }

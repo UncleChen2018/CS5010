@@ -1,7 +1,8 @@
 package model;
 
 /**
- * Represents objects that can move between spaces in the game, existing temporarily in only one place.
+ * Represents objects that can move between spaces in the game, existing
+ * temporarily in only one place.
  */
 public interface Movable {
 
