@@ -303,7 +303,7 @@ public class CommandController implements GameController {
                   break;
               }
             } else {
-              actionChoice = nextInt % 3;
+              actionChoice = nextInt % 4;
             }
 
             switch (actionChoice) {

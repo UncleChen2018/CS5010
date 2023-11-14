@@ -5,6 +5,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import model.GameModel;
 import model.MockModel;
 import model.World;
@@ -722,27 +728,84 @@ public class CommandControllerTest {
   // test pet travels using just Computer player.
   @Test
   public void testPetDfsTravel() {
-    String inputString = "\n" + "Ai\n0\n1\ny\n\n"
-        + "\n" // Enter game
+    String inputString = "\n" + "Ai\n0\n1\ny\n\n" + "\n" // Enter game
     ;
     StringBuffer out = new StringBuffer();
     StringBuilder log = new StringBuilder();
     StringReader in = new StringReader(inputString);
 
     GameModel mockModel = new MockModel(log);
-    GameModel model = new World();
-    // let computer pickup itme
-    GameController controller = new CommandController(in, out, worldData, 10,2,2);
+    // let computer always look around
+    GameController controller = new CommandController(in, out, worldData, 28, 2);
     controller.start(mockModel);
     // Test out put the Ai player pick up item.
-    String expectedOutput = "Player No.1 \"Penny\" try to attack \"Doctor Lucky\" "
-        + "using poking in the eye ...\n" + "" + "Someone has seen you, attack has to stop...";
-    assertEquals(expectedOutput, out.toString());
+
+    List<Integer> posList = new ArrayList<>();
+    String patternString = "Pet:\\s*\\[.+pos = (\\d+)\\]";
+    Pattern pattern = Pattern.compile(patternString);
+    Matcher matcher = pattern.matcher(out.toString());
+
+    while (matcher.find()) {
+      int posValue = Integer.parseInt(matcher.group(1));
+      posList.add(posValue);
+    }
+
+    List<Integer> expctedList = Arrays.asList(0, 1, 3, 4, 5, 15, 7, 6, 7, 15, 20, 2, 20, 15, 5, 4,
+        19, 8, 14, 16, 9, 11, 12, 10, 13, 10, 18, 17);
+
+    assertEquals(expctedList, posList);
+
     // String expectedLog = "XX";
-    assertTrue(out.toString().contains(expectedOutput));
+    // assertTrue(out.toString().contains(expectedOutput));
 
     // assertEquals(expectedLog, log.toString());
 
   }
 
+  // test pet travels after teleport.
+  @Test
+  public void testPetDfsTravelAfterBeenMoved() {
+    String inputString = "\n" + "Ai\n0\n1\ny\n\n" + "\n" // Enter game
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    // let computer always look around
+
+    int[] randomOrder = new int[31];
+    randomOrder[0] = 3;
+    for (int i = 1; i < 31; i++) {
+      randomOrder[i] = 2;
+    }
+    GameController controller = new CommandController(in, out, worldData, 36, randomOrder);
+    controller.start(mockModel);
+    // Test out put the Ai player pick up item.
+
+    List<Integer> posList = new ArrayList<>();
+    String patternString = "Pet:\\s*\\[.+pos = (\\d+)\\]";
+    Pattern pattern = Pattern.compile(patternString);
+    Matcher matcher = pattern.matcher(out.toString());
+
+    while (matcher.find()) {
+      int posValue = Integer.parseInt(matcher.group(1));
+      posList.add(posValue);
+    }
+
+    List<Integer> expctedList = Arrays.asList(0, 1, 2, 20, 15, 5, 4, 0, 1, 3, 8, 14, 16, 9, 11, 12,
+        10, 13, 10, 18, 17, 18, 10, 12, 11, 9, 16, 14, 8, 19, 8, 3, 1, 2, 20, 15);
+
+    //assertEquals("", out.toString());
+
+    assertEquals(expctedList, posList);
+
+    // assertTrue(out.toString().contains(expectedOutput))
+
+    // String expectedLog = "XX";
+    // assertTrue(out.toString().contains(expectedOutput));
+
+    // assertEquals(expectedLog, log.toString());
+
+  }
 }
