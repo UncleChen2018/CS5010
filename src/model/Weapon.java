@@ -113,6 +113,11 @@ public class Weapon implements Item {
     return stringBuilder.toString();
   }
 
+  /**
+   * Returns the unique identifier of the item.
+   *
+   * @return The item's unique identifier.
+   */
   public int getItemId() {
     return this.itemId;
   }
