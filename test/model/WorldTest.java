@@ -2,12 +2,16 @@ package model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,20 +27,20 @@ public class WorldTest {
    */
   @Before
   public void testSetup() {
-    String input = "36 30 Doctor Lucky's Mansion\n" + "50 Doctor Lucky\n" + "21\n"
-        + "22 19 23 26 Armory\n" + "16 21 21 28 Billiard Room\n" + "28 0 35 5 Carriage House\n"
-        + "12 11 21 20 Dining Hall\n" + "22 13 25 18 Drawing Room\n" + "26 13 27 18 Foyer\n"
-        + "28 26 35 29 Green House\n" + "30 20 35 25 Hedge Maze\n" + "16 3 21 10 Kitchen\n"
-        + "0 3 5 8 Lancaster Room\n" + "4 23 9 28 Library\n" + "2 9 7 14 Lilac Room\n"
-        + "2 15 7 22 Master Suite\n" + "0 23 3 28 Nursery\n" + "10 5 15 10 Parlor\n"
-        + "28 12 35 19 Piazza\n" + "6 3 9 8 Servants' Quarters\n" + "8 11 11 20 Tennessee Room\n"
-        + "10 21 15 26 Trophy Room\n" + "22 5 23 12 Wine Cellar\n" + "30 6 35 11 Winter Garden\n"
-        + "20\n" + "8 3 Crepe Pan\n" + "4 2 Letter Opener\n" + "12 2 Shoe Horn\n"
-        + "8 3 Sharp Knife\n" + "0 3 Revolver\n" + "15 3 Civil War Cannon\n" + "2 4 Chain Saw\n"
-        + "16 2 Broom Stick\n" + "1 2 Billiard Cue\n" + "19 2 Rat Poison\n" + "6 2 Trowel\n"
-        + "2 4 Big Red Hammer\n" + "6 2 Pinking Shears\n" + "18 3 Duck Decoy\n" + "13 2 Bad Cream\n"
-        + "18 2 Monkey Hand\n" + "11 2 Tight Hat\n" + "19 2 Piece of Rope\n" + "9 3 Silken Cord\n"
-        + "7 2 Loud Noise";
+    String input = "36 30 Doctor Lucky's Mansion\n" + "50 Doctor Lucky\n" + "Fortune the Cat\n"
+        + "21\n" + "22 19 23 26 Armory\n" + "16 21 21 28 Billiard Room\n"
+        + "28 0 35 5 Carriage House\n" + "12 11 21 20 Dining Hall\n" + "22 13 25 18 Drawing Room\n"
+        + "26 13 27 18 Foyer\n" + "28 26 35 29 Green House\n" + "30 20 35 25 Hedge Maze\n"
+        + "16 3 21 10 Kitchen\n" + "0 3 5 8 Lancaster Room\n" + "4 23 9 28 Library\n"
+        + "2 9 7 14 Lilac Room\n" + "2 15 7 22 Master Suite\n" + "0 23 3 28 Nursery\n"
+        + "10 5 15 10 Parlor\n" + "28 12 35 19 Piazza\n" + "6 3 9 8 Servants' Quarters\n"
+        + "8 11 11 20 Tennessee Room\n" + "10 21 15 26 Trophy Room\n" + "22 5 23 12 Wine Cellar\n"
+        + "30 6 35 11 Winter Garden\n" + "20\n" + "8 3 Crepe Pan\n" + "4 2 Letter Opener\n"
+        + "12 2 Shoe Horn\n" + "8 3 Sharp Knife\n" + "0 3 Revolver\n" + "15 3 Civil War Cannon\n"
+        + "2 4 Chain Saw\n" + "16 2 Broom Stick\n" + "1 2 Billiard Cue\n" + "19 2 Rat Poison\n"
+        + "6 2 Trowel\n" + "2 4 Big Red Hammer\n" + "6 2 Pinking Shears\n" + "18 3 Duck Decoy\n"
+        + "13 2 Bad Cream\n" + "18 2 Monkey Hand\n" + "11 2 Tight Hat\n" + "19 2 Piece of Rope\n"
+        + "9 3 Silken Cord\n" + "7 2 Loud Noise\n";
     model = new World(new StringReader(input));
     assertNotNull(model);
     model.addNewPlayer("Jimmy", 0, 2, true);
@@ -68,7 +72,7 @@ public class WorldTest {
   public void testGetDetails() {
     String expectedDetails = "World [World name = Doctor Lucky's Mansion,"
         + " room number =  21, item number = 20, "
-        + "target charater = Doctor Lucky, player number = 3].";
+        + "target charater = Doctor Lucky, pet = Fortune the Cat, player number = 3].";
     String actualDetails = model.getDetails();
     assertEquals(expectedDetails, actualDetails);
   }
@@ -318,7 +322,7 @@ public class WorldTest {
     String details = model.queryRoomDetails(0);
     String expectedString = "-------------------ROOM DETAILS-------------------\n"
         + "Room: No.0 \"Armory\"\n" + "Items: [No.4 \"Revolver\" Damage:3]\n"
-        + "Player: [No.0 \"Jimmy\", No.1 \"AI\"]\n" + "Target: Found\n" + "";
+        + "Player: [No.0 \"Jimmy\", No.1 \"AI\"]\n" + "Target: Found\n" + "Pet: Found\n";
 
     assertEquals(expectedString, details);
 
@@ -326,7 +330,7 @@ public class WorldTest {
     details = model.queryRoomDetails(1);
     expectedString = "-------------------ROOM DETAILS-------------------\n"
         + "Room: No.1 \"Billiard Room\"\n" + "Items: [No.8 \"Billiard Cue\" Damage:2]\n"
-        + "Player: No Player\n" + "Target: Not Found\n" + "";
+        + "Player: No Player\n" + "Target: Not Found\n" + "Pet: Not Found\n";
 
     assertEquals(expectedString, details);
 
@@ -334,7 +338,7 @@ public class WorldTest {
     details = model.queryRoomDetails(3);
     expectedString = "-------------------ROOM DETAILS-------------------\n"
         + "Room: No.3 \"Dining Hall\"\n" + "Items: No Item\n" + "Player: [No.2 \"Penny\"]\n"
-        + "Target: Not Found\n" + "";
+        + "Target: Not Found\n" + "Pet: Not Found\n";
 
     assertEquals(expectedString, details);
 
@@ -364,7 +368,8 @@ public class WorldTest {
   public void testQueryTargetDetails() {
     String detailsFound = model.queryTargetDetails();
     String expectedStringFound = "-------------------Target DETAILS-------------------\n"
-        + "Target: \"Doctor Lucky\"\n" + "Health: 50\n" + "Location: 0\n" + "";
+        + "Target: \"Doctor Lucky\"\n" + "Health: 50\n" + "Location: 0\n"
+        + "Target's pet: \"Fortune the Cat\"\n" + "Location: 0\n";
     assertEquals(expectedStringFound, detailsFound);
   }
 
@@ -525,6 +530,220 @@ public class WorldTest {
     ArrayList<Integer> expectedCharactersNotInRoom = new ArrayList<>();
 
     assertEquals(expectedCharactersNotInRoom, charactersNotInRoom);
+  }
+
+  @Test
+  public void testSetPetLocation() {
+    model.setPetLocation(8); // Assuming there is a valid room index
+    assertEquals(8, model.getPetLocation());
+  }
+
+  @Test
+  public void testGetInitialPetLocation() {
+    // Assuming the initial pet location is set during world setup
+    int initialPetLocation = model.getPetLocation();
+    assertEquals(initialPetLocation, model.getPetLocation());
+  }
+
+  @Test
+  public void testPetMovementForCompleteAround() {
+
+    model.teleportPetLocation(0); // Assuming there is a valid room index
+
+    List<Integer> actualLocations = new ArrayList<>();
+
+    Set<Integer> uniqueNumbers = new HashSet<>();
+    int i = 0;
+    for (; i < 100 && uniqueNumbers.size() < model.getRoomCount(); i++) {
+      model.movePetNextRoom();
+      actualLocations.add(model.getPetLocation());
+      uniqueNumbers.add(model.getPetLocation());
+    }
+    List<Integer> expectedLocations = Arrays.asList(0, 1, 3, 4, 5, 15, 7, 6, 7, 15, 20, 2, 20, 15,
+        5, 4, 19, 8, 14, 16, 9, 11, 12, 10, 13, 10, 18, 17);
+
+    assertEquals(expectedLocations, actualLocations);
+  }
+
+  @Test
+  public void testPetMovementForCompleteAroundTwice() {
+
+    model.teleportPetLocation(0); // Assuming there is a valid room index
+
+    List<Integer> actualLocations = new ArrayList<>();
+
+    Set<Integer> uniqueNumbers = new HashSet<>();
+    int i = 0;
+    for (; i < 100 && uniqueNumbers.size() < model.getRoomCount() * 2; i++) {
+      model.movePetNextRoom();
+      actualLocations.add(model.getPetLocation());
+      uniqueNumbers.add(model.getPetLocation());
+    }
+    List<Integer> expectedLocations = Arrays.asList(0, 1, 3, 4, 5, 15, 7, 6, 7, 15, 20, 2, 20, 15,
+        5, 4, 19, 8, 14, 16, 9, 11, 12, 10, 13, 10, 18, 17, 3, 0, 1, 18, 10, 12, 11, 9, 16, 14, 8,
+        19, 4, 5, 15, 7, 6, 7, 15, 20, 2, 20, 15, 5, 4, 19, 8, 14, 16, 9, 11, 12, 13, 10, 12, 11, 9,
+        16, 14, 3, 0, 1, 18, 17, 18, 1, 0, 4, 5, 15, 7, 6, 7, 15, 20, 2, 20, 15, 5, 4, 19, 8, 3, 0,
+        1, 18, 10, 12, 11, 9, 16, 14);
+    assertEquals(expectedLocations, actualLocations);
+  }
+
+  @Test
+  public void testPetMovementForCompleteAroundAlter() {
+
+    model.teleportPetLocation(2); // Assuming there is a valid room index
+    List<Integer> actualLocations = new ArrayList<>();
+    Set<Integer> uniqueNumbers = new HashSet<>();
+    int i = 0;
+    for (; i < 100 && uniqueNumbers.size() < model.getRoomCount(); i++) {
+      model.movePetNextRoom();
+      actualLocations.add(model.getPetLocation());
+      uniqueNumbers.add(model.getPetLocation());
+    }
+    List<Integer> expectedLocations = Arrays.asList(2, 20, 15, 5, 4, 0, 1, 3, 8, 14, 16, 9, 11, 12,
+        10, 13, 10, 18, 17, 18, 10, 12, 11, 9, 16, 14, 8, 19, 8, 3, 1, 0, 4, 5, 15, 7, 6);
+    assertEquals(expectedLocations, actualLocations);
+
+  }
+
+  @Test
+  public void testTeleportPetLocation() {
+    // Ensure that calling teleportPetLocation updates the pet's location
+    int newPetLocation = 10; // Replace with a valid room index
+    model.teleportPetLocation(newPetLocation);
+    assertEquals(newPetLocation, model.getPetLocation());
+  }
+
+  @Test
+  public void testPetStunnedAfterTeleport() {
+    // Ensure that the pet is stunned after teleporting
+    model.teleportPetLocation(5); // Assuming there is a valid room index
+    model.movePetNextRoom();
+    assertEquals(5, model.getPetLocation());
+  }
+
+  @Test
+  public void testPetMovementAfterStun() {
+    // Ensure that the pet can move after waking up from stun
+    model.teleportPetLocation(5); // Assuming there is a valid room index
+    int initialPetLocation = model.getPetLocation();
+    model.movePetNextRoom();
+    assertEquals(initialPetLocation, model.getPetLocation());
+    model.movePetNextRoom();
+    assertNotEquals(initialPetLocation, model.getPetLocation());
+  }
+
+  @Test
+  public void testAttackTarget() {
+    // Assuming initial target health is not zero
+    int initialTargetHealth = model.getTargetHealth();
+    model.attackTarget(10); // Assuming an arbitrary damage value
+    assertEquals(initialTargetHealth - 10, model.getTargetHealth());
+  }
+
+  @Test
+  public void testIsAttackInvisiblePlayerSameRoom() {
+    // Scenario 1a: Players in the same room
+    int room = 0; // the room
+    // int neighborRoom = 3; // the neighbor room
+    int nonNeighborRoom = 18; // the non neighbor room
+
+    model.setPlayerLocation(0, room);
+    model.setPlayerLocation(1, room);
+    model.setPlayerLocation(2, nonNeighborRoom);
+
+    // add pet to other location
+    model.setPetLocation(1);
+
+    assertFalse(model.isAttackInvisible(0));
+
+  }
+
+  @Test
+  public void testIsAttackInvisiblePlayerSameRoomWithPet() {
+    // Scenario 1b: Players in the same room have pet
+    int room = 0; // the room
+    // int neighborRoom = 3; // the neighbor room
+    int nonNeighborRoom = 18; // the non neighbor room
+
+    model.setPlayerLocation(0, room);
+    model.setPlayerLocation(1, room);
+    model.setPlayerLocation(2, nonNeighborRoom);
+
+    // add pet to this location
+    model.setPetLocation(room);
+
+    assertFalse(model.isAttackInvisible(0));
+
+  }
+
+  @Test
+  public void testIsAttackInvisiblePlayerNeighborRoom() {
+    // Scenario 2: Players in the neighbor room
+    int room = 0; // the room
+    int neighborRoom = 3; // the neighbor room
+    int nonNeighborRoom = 18; // the non neighbor room
+
+    model.setPlayerLocation(0, room);
+    model.setPlayerLocation(1, neighborRoom);
+    model.setPlayerLocation(2, nonNeighborRoom);
+
+    // add pet to other location
+    model.setPetLocation(1);
+
+    assertFalse(model.isAttackInvisible(0));
+
+  }
+
+  @Test
+  public void testIsAttackInvisiblePlayerNeighborRoomWithPet() {
+    // Scenario 2: Players in the neighbor room
+    int room = 0; // the room
+    int neighborRoom = 3; // the neighbor room
+    // int nonNeighborRoom = 18; // the non neighbor room
+
+    model.setPlayerLocation(0, room);
+    model.setPlayerLocation(1, neighborRoom);
+    model.setPlayerLocation(2, neighborRoom);
+
+    // add pet to other location
+    model.setPetLocation(room);
+
+    assertTrue(model.isAttackInvisible(0));
+
+  }
+
+  @Test
+  public void testIsAttackInvisiblePlayerNonNeighborRoom() {
+    // Scenario 3: Players in non-neighbor rooms
+    int room = 0; // the room
+    // int neighborRoom = 3; // the neighbor room
+    int nonNeighborRoom = 18; // the non-neighbor room
+
+    model.setPlayerLocation(0, room);
+    model.setPlayerLocation(1, nonNeighborRoom);
+    model.setPlayerLocation(2, nonNeighborRoom);
+
+    // add pet to other location
+    model.setPetLocation(1);
+
+    assertTrue(model.isAttackInvisible(0));
+  }
+
+  @Test
+  public void testIsAttackInvisiblePlayerNonNeighborRoomWithPet() {
+    // Scenario 3: Players in non-neighbor rooms
+    int room = 0; // the room
+    // int neighborRoom = 3; // the neighbor room
+    int nonNeighborRoom = 18; // the non-neighbor room
+
+    model.setPlayerLocation(0, room);
+    model.setPlayerLocation(1, nonNeighborRoom);
+    model.setPlayerLocation(2, nonNeighborRoom);
+
+    // add pet to this location
+    model.setPetLocation(room);
+
+    assertTrue(model.isAttackInvisible(0));
   }
 
 }
