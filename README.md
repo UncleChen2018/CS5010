@@ -1,4 +1,14 @@
 # Milestone Projects of  CS5010
+## MileStone3
+
+### Update
+
+- Add pets
+- Add room info print include pets
+- Add attack logic, now the game has winner if any one kills the target.
+
+citation
+
 ## MileStone2 
 
 ### How to use

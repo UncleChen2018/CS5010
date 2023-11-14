@@ -16,7 +16,7 @@ import org.junit.Test;
 public class CommandControllerTest {
   private Readable worldData;
 
-  private String baseOutput; // base out put
+
 
   /**
    * Set up the basic input and expected out put.
@@ -37,41 +37,7 @@ public class CommandControllerTest {
         + "6 2 Trowel\n" + "2 4 Big Red Hammer\n" + "6 2 Pinking Shears\n" + "18 3 Duck Decoy\n"
         + "13 2 Bad Cream\n" + "18 2 Monkey Hand\n" + "11 2 Tight Hat\n" + "19 2 Piece of Rope\n"
         + "9 3 Silken Cord\n" + "7 2 Loud Noise\n");
-    baseOutput = "Initializing the world map and drawing...finished\n"
-        + "World [World name = Doctor Lucky's Mansion, room number =  21, "
-        + "item number = 20, target charater = Doctor Lucky, pet = Fortune the Cat, "
-        + "player number = 0].\n" + "Save the map to png file?(y|n), default n\n"
-        + "Set at least one player before the game begins:\n" + "Enter name for player 0:\n"
-        + "Set location for player 0, enter number between 0 and 20, or press enter to set"
-        + " default value 0\n"
-        + "Set item capacity for player 0, enter number greater than 0, or press enter to set "
-        + "default value 2\n" + "Set control for player 0 to Computer? (y|n, default no)\n"
-        + "What you will add: Player 0, with name Jimmy, initial location at room 0, "
-        + "item capacity = 2, controlled by HUMAN\n"
-        + "Add this player to game(y) or abort(n), default y\n" + "Player 0 successfully added.\n"
-        + "Totally 1 player, add more?(y|n)Enter name for player 1:\n"
-        + "Set location for player 1, enter number between 0 and 20, or press "
-        + "enter to set default value 0\n"
-        + "Set item capacity for player 1, enter number greater than 0, or"
-        + " press enter to set default value 2\n"
-        + "Set control for player 1 to Computer? (y|n, default no)\n"
-        + "What you will add: Player 1, with name Ai, initial location at"
-        + " room 0, item capacity = 1, controlled by COMPUTER\n"
-        + "Add this player to game(y) or abort(n), default y\n" + "Player 1 successfully added.\n"
-        + "Totally 2 player, add more?(y|n)Enter name for player 2:\n"
-        + "Set location for player 2, enter number between 0 and 20, or "
-        + "press enter to set default value 0\n"
-        + "Set item capacity for player 2, enter number greater than 0, "
-        + "or press enter to set default value 2\n"
-        + "Set control for player 2 to Computer? (y|n, default no)\n"
-        + "What you will add: Player 2, with name Penny, initial location "
-        + "at room 3, item capacity = 3, controlled by HUMAN\n"
-        + "Add this player to game(y) or abort(n), default y\n" + "Player 2 successfully added.\n"
-        + "Totally 3 player, add more?(y|n)Settting finished, game started.\n" + "\n" + "\n"
-        + "[TURN 1]\n" + "Player No.0 \"Jimmy\"'s turn\n"
-        + "Please select one of the option below\n"
-        + "MENU|1.Move|2.Pickup|3.LookAround|4.Attack|5.MovePet|6.ChekcInfo|7.Exit\n"
-        + "Player end game in the process, now quiting.\n";
+  
   }
 
   @Test
