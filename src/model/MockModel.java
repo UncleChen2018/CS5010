@@ -146,13 +146,6 @@ public class MockModel implements GameModel {
     }
   }
 
-  /**
-   * @param beg1
-   * @param end1
-   * @param beg2
-   * @param end2
-   * @return boolean
-   */
   // test if [beg1,end1] and [beg2, end2] has over lap
   private static boolean isOverlap(int beg1, int end1, int beg2, int end2) {
     // test if either beg2 or end2 fall out of range
@@ -163,11 +156,6 @@ public class MockModel implements GameModel {
     }
   }
 
-  /**
-   * @param thisSpace
-   * @param otherSpace
-   * @return boolean
-   */
   private static boolean isNeighborRect(Room thisSpace, Room otherSpace) {
     boolean result = false;
     // if two room share the same wall,then they are neighbor
