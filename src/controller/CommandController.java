@@ -7,12 +7,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import javax.imageio.ImageIO;
-import javax.lang.model.element.ModuleElement;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import model.GameModel;
-import model.World;
 
 /**
  * The implementation of the controller using the command pattern. This
@@ -117,11 +115,12 @@ public class CommandController implements GameController {
         line = scan.nextLine().trim();
       }
       out.append("Settting finished, game started.\n\n\n");
+      int activePlayer = model.getCurrentPlayer(currentTurn);
 
       // begin to take turn.
       while (currentTurn < maxTurn && !model.isGameOver()) {
         out.append(String.format("[TURN %d]\n", currentTurn + 1));
-        int activePlayer = model.getCurrentPlayer(currentTurn);
+        activePlayer = model.getCurrentPlayer(currentTurn);
         out.append(String.format("Player %s's turn", model.getPlayerString(activePlayer)))
             .append("\n");
         displayBasicInfo();
@@ -317,7 +316,7 @@ public class CommandController implements GameController {
                 nextInt = generator.getNextNumber();
                 ArrayList<Integer> items = model.getRoomItems(curLocation);
                 int pickId = nextInt % items.size();
-                cmd = new PickUpItem(activePlayer, pickId);
+                cmd = new PickUpItem(activePlayer,items.get(pickId));
                 break;
               case 2:
                 cmd = new LookAround(activePlayer);
@@ -349,9 +348,13 @@ public class CommandController implements GameController {
           cmd = null;
         }
       }
-      if (currentTurn == maxTurn) {
-        out.append("Max turn reached, game exit\n");
+      if (model.isGameOver()) {
+        out.append(String.format("Opps, %s is dead, %s is the winner!\n", model.getTargetString(),
+            model.getPlayerString(activePlayer)));
+      } else {
+        out.append("Max turn reached\n");
       }
+      out.append("Game exited...\n");
       frame.dispose();
 
     } catch (IOException ioe) {

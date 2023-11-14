@@ -20,7 +20,6 @@ public class NewDriver {
   public static void main(String[] args) {
     //
     if (args.length != 3) {
-      System.out.println("Need to input source");
       System.out.println("Usage: java - jar Driver.jar -f filename MAXTURN to read from file");
       System.out.println("or: java - jar Driver.jar -s worlddata MAXTURN to read from string");
       return;

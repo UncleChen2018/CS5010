@@ -10,11 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import model.GameModel;
 import model.MockModel;
-import model.World;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -471,9 +468,10 @@ public class CommandControllerTest {
     GameController controller = new CommandController(in, out, worldData, 2);
     controller.start(mockModel);
     // Test max turn reached.
-    String expectedOutput = "Max turn reached, game exit";
+    String expectedOutput = "Max turn reached";
     // assertEquals(baseOutput, out.toString());
     assertTrue(out.toString().contains(expectedOutput));
+    assertTrue(out.toString().contains("Game exited..."));
     // assertEquals(expectedLog, log.toString());
 
   }
@@ -526,8 +524,9 @@ public class CommandControllerTest {
     GameController controller = new CommandController(in, out, worldData, 100, 1, 4);
     controller.start(mockModel);
     // Test out put the Ai player pick up item.
-    String expectedOutput = "Player No.1 \"Ai\" try to pick up No.0 \"Crepe Pan\" Damage:3\n"
+    String expectedOutput = "Player No.1 \"Ai\" try to pick up No.4 \"Revolver\" Damage:3\n"
         + "Pick up successfully.";
+    //assertEquals(expectedOutput, out.toString());
     assertTrue(out.toString().contains(expectedOutput));
     // Test call the right move method
     // assertEquals(baseOutput, out.toString());
@@ -728,8 +727,8 @@ public class CommandControllerTest {
   // test pet travels using just Computer player.
   @Test
   public void testPetDfsTravel() {
-    String inputString = "\n" + "Ai\n0\n1\ny\n\n" + "\n" // Enter game
-    ;
+    String inputString = "\n" + "Ai\n0\n1\ny\n\n" + "\n"; // Enter game
+
     StringBuffer out = new StringBuffer();
     StringBuilder log = new StringBuilder();
     StringReader in = new StringReader(inputString);
@@ -765,8 +764,7 @@ public class CommandControllerTest {
   // test pet travels after teleport.
   @Test
   public void testPetDfsTravelAfterBeenMoved() {
-    String inputString = "\n" + "Ai\n0\n1\ny\n\n" + "\n" // Enter game
-    ;
+    String inputString = "\n" + "Ai\n0\n1\ny\n\n" + "\n"; // Enter game
     StringBuffer out = new StringBuffer();
     StringBuilder log = new StringBuilder();
     StringReader in = new StringReader(inputString);
@@ -781,8 +779,7 @@ public class CommandControllerTest {
     }
     GameController controller = new CommandController(in, out, worldData, 36, randomOrder);
     controller.start(mockModel);
-    // Test out put the Ai player pick up item.
-
+    // Parse out the pet's trace into a list.
     List<Integer> posList = new ArrayList<>();
     String patternString = "Pet:\\s*\\[.+pos = (\\d+)\\]";
     Pattern pattern = Pattern.compile(patternString);
@@ -796,7 +793,7 @@ public class CommandControllerTest {
     List<Integer> expctedList = Arrays.asList(0, 1, 2, 20, 15, 5, 4, 0, 1, 3, 8, 14, 16, 9, 11, 12,
         10, 13, 10, 18, 17, 18, 10, 12, 11, 9, 16, 14, 8, 19, 8, 3, 1, 2, 20, 15);
 
-    //assertEquals("", out.toString());
+    // assertEquals("", out.toString());
 
     assertEquals(expctedList, posList);
 
@@ -808,4 +805,74 @@ public class CommandControllerTest {
     // assertEquals(expectedLog, log.toString());
 
   }
+
+  // Test for winner
+  @Test
+  public void testWinnerEndGame() {
+    worldData = new StringReader("36 30 Doctor Lucky's Mansion\n" + "1 Doctor Lucky\n"
+        + "Fortune the Cat\n" + "21\n" + "22 19 23 26 Armory\n" + "16 21 21 28 Billiard Room\n"
+        + "28 0 35 5 Carriage House\n" + "12 11 21 20 Dining Hall\n" + "22 13 25 18 Drawing Room\n"
+        + "26 13 27 18 Foyer\n" + "28 26 35 29 Green House\n" + "30 20 35 25 Hedge Maze\n"
+        + "16 3 21 10 Kitchen\n" + "0 3 5 8 Lancaster Room\n" + "4 23 9 28 Library\n"
+        + "2 9 7 14 Lilac Room\n" + "2 15 7 22 Master Suite\n" + "0 23 3 28 Nursery\n"
+        + "10 5 15 10 Parlor\n" + "28 12 35 19 Piazza\n" + "6 3 9 8 Servants' Quarters\n"
+        + "8 11 11 20 Tennessee Room\n" + "10 21 15 26 Trophy Room\n" + "22 5 23 12 Wine Cellar\n"
+        + "30 6 35 11 Winter Garden\n" + "20\n" + "8 3 Crepe Pan\n" + "4 2 Letter Opener\n"
+        + "12 2 Shoe Horn\n" + "8 3 Sharp Knife\n" + "0 3 Revolver\n" + "15 3 Civil War Cannon\n"
+        + "2 4 Chain Saw\n" + "16 2 Broom Stick\n" + "1 2 Billiard Cue\n" + "19 2 Rat Poison\n"
+        + "6 2 Trowel\n" + "2 4 Big Red Hammer\n" + "6 2 Pinking Shears\n" + "18 3 Duck Decoy\n"
+        + "13 2 Bad Cream\n" + "18 2 Monkey Hand\n" + "11 2 Tight Hat\n" + "19 2 Piece of Rope\n"
+        + "9 3 Silken Cord\n" + "7 2 Loud Noise\n");
+    String inputString = "\n" + "Ai\n0\n1\ny\n\n" + "\n"; // AI Enter game
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameController controller = new CommandController(in, out, worldData, 36);
+    controller.start(mockModel);
+    String expectedOutput = "Opps, \"Doctor Lucky\" is dead, No.0 \"Ai\" is the winner!";
+    // assertEquals("", out.toString());
+    assertTrue(out.toString().contains(expectedOutput));
+    assertTrue(out.toString().contains("Game exited..."));
+    // assertEquals(expectedLog, log.toString());
+  }
+
+
+  
+  // TODO test computer always kill with the most powerful item.
+  @Test
+  public void testComputerAttackWithBestItem() {
+    String inputString = "\n" + "Ai\n4\n2\ny\n\n" + "\n"; // Enter game
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    // [turn 1]: 1,0: pick up item at room 4; tar=0
+    // [turn 2]: 0,0: move to place 0; tar=1
+    // [turn 3]: 1,0: pick up item at room 0; tar=2
+    // [turn 4]: 0,2: move to room 2; tar=3
+    // [turn 5]: then kill will happen.
+    int[] randomOrder = new int[] { 1, 0, 0, 0, 1, 0, 0, 2 };
+    GameController controller = new CommandController(in, out, worldData, 10, randomOrder);
+
+    controller.start(mockModel);
+    // the output string should contain item and give damage of 2
+    String expectedOutput = "Player No.0 \"Ai\" try to attack \"Doctor Lucky\" using Revolver ...\n"
+        + "Attack successfully, target get damage of 3.\n"
+        + "No.4 \"Revolver\" Damage:3 is removed.\n";
+    // assertEquals(expectedOutput, out.toString());
+
+    assertTrue(out.toString().contains(expectedOutput));
+    assertEquals(47, mockModel.getTargetHealth());
+
+    String expectedLog = "attackTarget called, damage = 3";
+    // assertEquals(expectedLog, log.toString());
+    assertTrue(log.toString().contains(expectedLog));
+    expectedLog = "removePlayerItem called, playerId = 0, itemId = 4";
+    assertTrue(log.toString().contains(expectedLog));
+
+  }
+
 }
