@@ -10,6 +10,12 @@ package controller;
 public abstract class TurnBaseCommand implements SimpleCommand {
   protected int playerId;
 
+  /**
+   * Constructs a new turn-based command with the specified player ID.
+   *
+   * @param playerId The unique identifier of the player associated with the
+   *                 command.
+   */
   protected TurnBaseCommand(int playerId) {
     this.playerId = playerId;
   }

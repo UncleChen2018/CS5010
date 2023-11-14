@@ -45,6 +45,10 @@ public class Weapon implements Item {
     }
   }
 
+  
+  /** 
+   * @return String
+   */
   @Override
   public String toString() {
     return String.format("No.%d \"%s\" Damage:%d", itemId, itemName, itemDamage);

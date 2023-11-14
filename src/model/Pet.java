@@ -23,6 +23,10 @@ public class Pet extends MovableCharacter {
     return stringBuilder.toString();
   }
 
+  
+  /** 
+   * @return boolean
+   */
   public boolean isStunned() {
     return stunned;
   }

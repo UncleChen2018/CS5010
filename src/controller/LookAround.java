@@ -6,7 +6,11 @@ import model.GameModel;
  * Look around make a player has the ability to get its neighbors detail.
  */
 public class LookAround extends TurnBaseCommand {
-
+  /**
+   * Creates a new "Look Around" command for the specified player.
+   *
+   * @param playerId The unique identifier of the player initiating the command.
+   */
   public LookAround(int playerId) {
     super(playerId);
   }

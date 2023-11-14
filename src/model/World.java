@@ -44,6 +44,11 @@ public class World implements GameModel {
     setupNewWorld(source);
   }
 
+  
+  /** 
+   * @param item
+   * @param room
+   */
   private void addItemToRoom(Item item, Room room) {
     room.addItem(item);
   }

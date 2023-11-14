@@ -1,6 +1,7 @@
 package controller;
 
 import model.GameModel;
+
 /**
  * A command to pick up an item.
  */
@@ -8,6 +9,12 @@ import model.GameModel;
 public class PickUpItem extends TurnBaseCommand {
   private int itemId;
 
+  /**
+   * Creates a new "Pick Up Item" command for the specified player and item.
+   *
+   * @param playerId The unique identifier of the player initiating the action.
+   * @param itemId   The identifier of the item to be picked up.
+   */
   public PickUpItem(int playerId, int itemId) {
     super(playerId);
     this.itemId = itemId;

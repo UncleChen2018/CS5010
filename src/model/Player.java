@@ -50,10 +50,18 @@ public class Player extends MovableCharacter {
     }
   }
 
+  
+  /** 
+   * @param item
+   */
   public void removeItem(Item item) {
     itemList.remove(item);
   }
 
+  
+  /** 
+   * @return ArrayList<Item>
+   */
   public ArrayList<Item> getItemList() {
     return itemList;
   }

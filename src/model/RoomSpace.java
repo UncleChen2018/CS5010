@@ -56,6 +56,10 @@ public class RoomSpace implements Room {
     isPetIn = false;
   }
 
+  
+  /** 
+   * @param neighbor
+   */
   public void addNeighbor(RoomSpace neighbor) {
     neighboRoomSpaces.add(neighbor);
   }

@@ -316,7 +316,7 @@ public class CommandController implements GameController {
                 nextInt = generator.getNextNumber();
                 ArrayList<Integer> items = model.getRoomItems(curLocation);
                 int pickId = nextInt % items.size();
-                cmd = new PickUpItem(activePlayer,items.get(pickId));
+                cmd = new PickUpItem(activePlayer, items.get(pickId));
                 break;
               case 2:
                 cmd = new LookAround(activePlayer);

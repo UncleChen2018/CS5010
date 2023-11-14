@@ -12,5 +12,11 @@ import model.GameModel;
  */
 
 public interface SimpleCommand {
+  /**
+   * Executes the command on the provided {@code GameModel}.
+   *
+   * @param model The game model on which the command is executed.
+   * @return A string representing the result or outcome of the command execution.
+   */
   String execute(GameModel model);
 }

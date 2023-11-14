@@ -10,6 +10,13 @@ public class MovePet extends TurnBaseCommand {
 
   private int location;
 
+  /**
+   * Creates a new "Move Pet" command for the specified player and target
+   * location.
+   *
+   * @param playerId The unique identifier of the player initiating the move.
+   * @param location The target location to move the pet to.
+   */
   public MovePet(int playerId, int location) {
     super(playerId);
     this.location = location;

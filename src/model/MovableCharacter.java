@@ -12,11 +12,19 @@ public abstract class MovableCharacter implements Movable {
     this.location = location;
   }
 
+  
+  /** 
+   * @param spaceIndex
+   */
   @Override
   public void setLocation(int spaceIndex) {
     this.location = spaceIndex;
   }
 
+  
+  /** 
+   * @return String
+   */
   @Override
   public String getName() {
     return this.name;

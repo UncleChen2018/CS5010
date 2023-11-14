@@ -19,6 +19,10 @@ public class TargetCharacter extends MovableCharacter {
     health = fullHealth;
   }
 
+  
+  /** 
+   * @return String
+   */
   public String getName() {
     return name;
   }

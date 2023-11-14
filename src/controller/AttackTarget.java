@@ -11,11 +11,24 @@ public class AttackTarget extends TurnBaseCommand {
   // if use item
   private int itemId;
 
-  // the default attack, itemId = -1
+  /**
+   * Creates an {@code AttackTarget} instance with the default attack (no item
+   * used).
+   *
+   * @param playerId The ID of the player initiating the attack.
+   */
   public AttackTarget(int playerId) {
     this(playerId, -1);
   }
 
+  /**
+   * Creates an {@code AttackTarget} instance with a specific item used in the
+   * attack.
+   *
+   * @param playerId The ID of the player initiating the attack.
+   * @param itemId   The ID of the item used in the attack. Use -1 for the default
+   *                 attack with no item.
+   */
   public AttackTarget(int playerId, int itemId) {
     super(playerId);
     this.itemId = itemId;
