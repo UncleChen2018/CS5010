@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.StringReader;
 import model.GameModel;
 import model.MockModel;
+import model.World;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,8 +17,6 @@ import org.junit.Test;
  */
 public class CommandControllerTest {
   private Readable worldData;
-
-
 
   /**
    * Set up the basic input and expected out put.
@@ -37,7 +37,7 @@ public class CommandControllerTest {
         + "6 2 Trowel\n" + "2 4 Big Red Hammer\n" + "6 2 Pinking Shears\n" + "18 3 Duck Decoy\n"
         + "13 2 Bad Cream\n" + "18 2 Monkey Hand\n" + "11 2 Tight Hat\n" + "19 2 Piece of Rope\n"
         + "9 3 Silken Cord\n" + "7 2 Loud Noise\n");
-  
+
   }
 
   @Test
@@ -118,7 +118,7 @@ public class CommandControllerTest {
     GameController controller = new CommandController(in, out, worldData, 100);
     controller.start(mockModel);
     assertTrue(log.toString().contains("setupNewWorld called"));
-    //assertEquals(baseOutput, out.toString());
+    // assertEquals(baseOutput, out.toString());
 
     // Test add Human player
     String expectedLog = "addNewPlayer called, name = Jimmy, initLocation = 0,"
@@ -490,7 +490,7 @@ public class CommandControllerTest {
     // Test out put the Ai player move right.
     String expectedOutput = "Player No.1 \"Ai\" try to move to No.3 \"Dining Hall\"\n"
         + "Move to neighbor successfully.";
-    //assertEquals(expectedOutput, out.toString());
+    // assertEquals(expectedOutput, out.toString());
     assertTrue(out.toString().contains(expectedOutput));
     // Test call the right move method
     // assertEquals(baseOutput, out.toString());
@@ -584,13 +584,12 @@ public class CommandControllerTest {
 
   }
 
-  
   @Test
   public void testAttackSucceedWithItem() {
     String inputString = "\n" + "Jimmy\n4\n2\n\n\n" + "\n" // Enter game
-        + "2\n1\n" // Choose to pick up 
+        + "2\n1\n" // Choose to pick up
         + "3\n3\n3\n" // wait 3 turns
-        + "4\n1\n" // Player 0 attack 
+        + "4\n1\n" // Player 0 attack
         + "7\n"; // Quit game.
     ;
     StringBuffer out = new StringBuffer();
@@ -601,28 +600,21 @@ public class CommandControllerTest {
 
     GameController controller = new CommandController(in, out, worldData, 100, 2, 4);
     controller.start(mockModel);
-    //the output string should contain item and give damage of 2
+    // the output string should contain item and give damage of 2
     String expectedOutput = "Player No.0 \"Jimmy\" try to attack \"Doctor Lucky\""
-        + " using Letter Opener ...\n"
-        + "Attack successfully, target get damage of 2.";
-    //assertEquals(expectedOutput, out.toString());
-    
-    
+        + " using Letter Opener ...\n" + "Attack successfully, target get damage of 2.";
+    // assertEquals(expectedOutput, out.toString());
 
     assertTrue(out.toString().contains(expectedOutput));
     assertEquals(48, mockModel.getTargetHealth());
     String expectedLog = "attackTarget called, damage = 2";
-    //assertEquals(expectedLog, log.toString());
+    // assertEquals(expectedLog, log.toString());
     assertTrue(log.toString().contains(expectedLog));
     expectedLog = "removePlayerItem called, playerId = 0, itemId = 1";
     assertTrue(log.toString().contains(expectedLog));
-    
-   
 
   }
-  
-  
-  
+
   @Test
   public void testAttackSucceedWithPetSeenByOthersNeighborRoom() {
     String inputString = "\n" + "Jimmy\n0\n2\n\n\n" + "y\nPenny\n4\n3\n\n\n" + "\n" // Enter game
@@ -648,9 +640,7 @@ public class CommandControllerTest {
     assertTrue(log.toString().contains(expectedLog));
 
   }
-  
-  
-  
+
   @Test
   public void testAttackFailedNoTargetIn() {
     String inputString = "\n" + "Jimmy\n3\n2\n\n\n" + "y\nAi\n0\n1\ny\n\n" + "\n" // Enter game
@@ -668,19 +658,13 @@ public class CommandControllerTest {
     controller.start(mockModel);
     // Test out put the Ai player pick up item.
     String expectedOutput = "Target not in this room, cannot attack";
-    //assertEquals(expectedOutput, out.toString());
+    // assertEquals(expectedOutput, out.toString());
     // String expectedLog = "XX";
     assertTrue(out.toString().contains(expectedOutput));
 
     // assertEquals(expectedLog, log.toString());
 
   }
-  
-  
-  
-
-  
-
 
   @Test
   public void testAttackFailedSeenByOthersSameRoom() {
@@ -727,7 +711,33 @@ public class CommandControllerTest {
     // Test out put the Ai player pick up item.
     String expectedOutput = "Player No.1 \"Penny\" try to attack \"Doctor Lucky\" "
         + "using poking in the eye ...\n" + "" + "Someone has seen you, attack has to stop...";
-    //assertEquals(expectedOutput, out.toString());
+    // assertEquals(expectedOutput, out.toString());
+    // String expectedLog = "XX";
+    assertTrue(out.toString().contains(expectedOutput));
+
+    // assertEquals(expectedLog, log.toString());
+
+  }
+
+  // test pet travels using just Computer player.
+  @Test
+  public void testPetDfsTravel() {
+    String inputString = "\n" + "Ai\n0\n1\ny\n\n"
+        + "\n" // Enter game
+    ;
+    StringBuffer out = new StringBuffer();
+    StringBuilder log = new StringBuilder();
+    StringReader in = new StringReader(inputString);
+
+    GameModel mockModel = new MockModel(log);
+    GameModel model = new World();
+    // let computer pickup itme
+    GameController controller = new CommandController(in, out, worldData, 10,2,2);
+    controller.start(mockModel);
+    // Test out put the Ai player pick up item.
+    String expectedOutput = "Player No.1 \"Penny\" try to attack \"Doctor Lucky\" "
+        + "using poking in the eye ...\n" + "" + "Someone has seen you, attack has to stop...";
+    assertEquals(expectedOutput, out.toString());
     // String expectedLog = "XX";
     assertTrue(out.toString().contains(expectedOutput));
 

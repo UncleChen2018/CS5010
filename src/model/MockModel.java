@@ -140,6 +140,8 @@ public class MockModel implements GameModel {
     }
   }
 
+
+
   // test if [beg1,end1] and [beg2, end2] has over lap
   private static boolean isOverlap(int beg1, int end1, int beg2, int end2) {
     // test if either beg2 or end2 fall out of range
@@ -338,6 +340,29 @@ public class MockModel implements GameModel {
     roomList.get(destLocation).addCharacer(player);
   }
 
+  /**
+   * Sets the location of a pet to the specified destination location. with the
+   * room info updated too.
+   *
+   * @param destLocation The index of the destination location to set for the
+   *                     player.
+   * @throws IllegalArgumentException if destLocation is not a valid location.
+   */
+  public void setPetLocation(int destLocation) {
+    if (!isLocationValid(destLocation)) {
+      throw new IllegalArgumentException(
+          String.format("Illegal argument: location %d", destLocation));
+    }
+    int originLocaion = pet.getLocation();
+    // change pet position to new
+    pet.setLocation(destLocation);
+    // remove from the origin room
+    roomList.get(originLocaion).setPetOut();
+    // add to the dest room
+    roomList.get(destLocation).setPetIn();
+  }
+
+  
   @Override
   public void moveTargetNextRoom() {
     log.append("moveTargetNextRoom called\n");
@@ -630,14 +655,7 @@ public class MockModel implements GameModel {
     return retList;
   }
 
-  @Override
-  public void setPetLocation(int destLocation) {
-    log.append(String.format("setPetLocation called, location = %d", destLocation)).append("\n");
-    if (!isLocationValid(destLocation)) {
-      throw new IllegalArgumentException(
-          String.format("Illegal argument: location %d", destLocation));
-    }
-  }
+
 
   @Override
   public String getPetString() {
