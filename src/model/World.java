@@ -732,5 +732,7 @@ public class World implements GameModel {
     resetPetTrace(roomList.get(location));
     pet.setStunned();
   }
+  
+  
 
 }
