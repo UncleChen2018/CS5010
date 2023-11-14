@@ -96,7 +96,7 @@ public class CommandController implements GameController {
       image = model.drawWorld();
       out.append("finished\n");
       displayGameInfo();
-      //System.out.println(model.getRoomNeighbors(15));
+      // System.out.println(model.getRoomNeighbors(15));
 
       // show the map and ask for save.
       String line;
@@ -124,6 +124,7 @@ public class CommandController implements GameController {
         int activePlayer = model.getCurrentPlayer(currentTurn);
         out.append(String.format("Player %s's turn", model.getPlayerString(activePlayer)))
             .append("\n");
+        displayBasicInfo();
 
         int location = model.getPlayerLocation(activePlayer);
         SimpleCommand cmd = null;
@@ -326,7 +327,7 @@ public class CommandController implements GameController {
                 int moveTo = nextInt % model.getRoomCount();
                 cmd = new MovePet(activePlayer, moveTo);
                 break;
-                
+
               default:
                 throw new IllegalStateException("Computer made invaild choice");
             }
@@ -337,10 +338,9 @@ public class CommandController implements GameController {
           try {
 
             out.append(cmd.execute(model));
-            //out.append(model.queryPlayerDetails(activePlayer));
+            // out.append(model.queryPlayerDetails(activePlayer));
             model.moveTargetNextRoom();
             model.movePetNextRoom();
-            out.append(Integer.toString(model.getPetLocation())).append("\n");
             currentTurn += 1;
           } catch (IllegalArgumentException | IllegalStateException e) {
             out.append(e.getMessage()).append("\n");
@@ -491,6 +491,17 @@ public class CommandController implements GameController {
 
   private void displayTargetInfo() throws IOException {
     out.append(model.queryTargetDetails()).append("\n");
+  }
+
+  private void displayBasicInfo() throws IOException {
+    out.append(String.format(
+        "Target:\n    [%s, pos = %d, hp = %d]\n" + "Pet:\n    [%s, pos = %d]\n" + "Player: \n",
+        model.getTargetString(), model.getTargetLocation(), model.getTargetHealth(),
+        model.getPetString(), model.getPetLocation()));
+    for (int i = 0; i < model.getPlayerCount(); i++) {
+      out.append(String.format("    [%s, pos = %d]\n", model.getPlayerString(i),
+          model.getPlayerLocation(i)));
+    }
   }
 
   private class NumberGenerator {

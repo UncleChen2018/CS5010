@@ -369,26 +369,10 @@ public class World implements GameModel {
     return targetCharacter.getLocation();
   }
 
-  /**
-   * Print out the room info in a formatted way.
-   * 
-   * @param index the index of the room array
-   */
-  public void printRoomInfo(int index) {
-    Room room = getRoomSpace(index);
-    System.out.println(String.format("[Room No.%d: %s's information]", index, room.getSpaceName()));
-    System.out.println(String.format("Neighbors: %s", room.getNeighbors()));
-    System.out.println(String.format("Visible: %s", room.getVisibles()));
-    System.out.println(String.format("Items: %s", room.getSpaceItem()));
-  }
-
   public ArrayList<Item> getItems() {
     return itemList;
   }
 
-  public void printItemInfo(int index) {
-    System.out.println(itemList.get(index).queryDetails());
-  }
 
   @Override
   public int getPlayerCount() {
@@ -668,18 +652,17 @@ public class World implements GameModel {
     return pet.getLocation();
   }
 
-//TODO remove the print out for both world and mock
+
   @Override
   public void movePetNextRoom() {
+    //jump this turn.
     if (pet.isStunned()) {
       pet.wakeUp();
       return;
     }
 
-    System.out.println("Before scan next" + petTrace.toString());
-    System.out.println(petVisitedRoom.toString());
     getPetNextRoom();
-    System.out.println("After scan next" + petTrace.toString());
+
     // which next room the pet should move
     Room nextRoom;
     if (!petNeedTraceback) {
@@ -691,8 +674,7 @@ public class World implements GameModel {
         throw new IllegalStateException("Wrong pet trace");
       }
     }
-    System.out.println("After PopOut" + petTrace.toString());
-    System.out.println("Next Room:" + nextRoom.toString());
+
 
     // deal with the move
     setPetLocation(nextRoom.getSpaceIndex());
@@ -704,8 +686,6 @@ public class World implements GameModel {
       petTrace.push(nextRoom);
     }
 
-    System.out.println("After Tracing" + petTrace.toString());
-    System.out.println(petVisitedRoom.toString());
   }
 
   private void getPetNextRoom() {
