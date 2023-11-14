@@ -49,7 +49,7 @@
 
 ### Example run
 
-1. begin the program: ***java -jar NewDriver.jar -f "map_easy.txt" 100***, this means use the default map, run for 100 turn. You will see the the loading info, if finished, a brief word description will show, as well as the map window pop out, you can drag it aside and choose if save it to a png file.
+1. begin the program: java -jar NewDriver.jar -f "map_easy.txt" 100, this means use the default map, run for 100 turn. You will see the the loading info, if finished, a brief word description will show, as well as the map window pop out, you can drag it aside and choose if save it to a png file.
 
 2. set up the player: here we add three player, "Jimmy", location =4 capacity = 2, human player; "AI", location = 1, capacity = 2,  computer player;  Remember to enter y to let them be added, and enter y again to begin game.
 

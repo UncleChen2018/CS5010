@@ -36,18 +36,26 @@ public class World implements GameModel {
 
   private int winnerId;
 
+  /**
+   * Constructs an empty world.
+   */
   public World() {
   }
 
-  // initialize the world using source.
+  /**
+   * Initializes the world using the provided source.
+   *
+   * @param source The source used to initialize the world.
+   */
   public World(Readable source) {
     setupNewWorld(source);
   }
 
-  
-  /** 
-   * @param item
-   * @param room
+  /**
+   * Adds the specified item to the given room.
+   *
+   * @param item The item to be added.
+   * @param room The room to which the item will be added.
    */
   private void addItemToRoom(Item item, Room room) {
     room.addItem(item);
@@ -201,12 +209,20 @@ public class World implements GameModel {
     return isOverlap(y1a, y2a, y1b, y2b) || isOverlap(x1a, x2a, x1b, x2b);
   }
 
-  // rerun {row, col} of the world.
-
+  /**
+   * Returns the list of rooms in the world.
+   *
+   * @return ArrayList of rooms representing the world space.
+   */
   public ArrayList<Room> getWorldSpace() {
     return roomList;
   }
 
+  /**
+   * Returns the name of the world.
+   *
+   * @return The name of the world.
+   */
   public String getWorldName() {
     return worldName;
   }
@@ -362,10 +378,21 @@ public class World implements GameModel {
     roomList.get(nextLocation).setTargetIn();
   }
 
+  /**
+   * Returns the target character in the world.
+   *
+   * @return The target character.
+   */
   public TargetCharacter getTarget() {
     return targetCharacter;
   }
 
+  /**
+   * Returns the room at the specified index in the world space.
+   *
+   * @param index The index of the room.
+   * @return The room at the specified index.
+   */
   public Room getRoomSpace(int index) {
     return roomList.get(index);
   }
@@ -375,10 +402,14 @@ public class World implements GameModel {
     return targetCharacter.getLocation();
   }
 
+  /**
+   * Returns the list of items in the world.
+   *
+   * @return The list of items.
+   */
   public ArrayList<Item> getItems() {
     return itemList;
   }
-
 
   @Override
   public int getPlayerCount() {
@@ -504,6 +535,7 @@ public class World implements GameModel {
     item.setStoredLoacation(-1);
   }
 
+  @Override
   public String queryRoomDetails(int location) {
     return roomList.get(location).queryDetails();
   }
@@ -658,10 +690,9 @@ public class World implements GameModel {
     return pet.getLocation();
   }
 
-
   @Override
   public void movePetNextRoom() {
-    //jump this turn.
+    // jump this turn.
     if (pet.isStunned()) {
       pet.wakeUp();
       return;
@@ -680,7 +711,6 @@ public class World implements GameModel {
         throw new IllegalStateException("Wrong pet trace");
       }
     }
-
 
     // deal with the move
     setPetLocation(nextRoom.getSpaceIndex());
@@ -738,7 +768,5 @@ public class World implements GameModel {
     resetPetTrace(roomList.get(location));
     pet.setStunned();
   }
-  
-  
 
 }

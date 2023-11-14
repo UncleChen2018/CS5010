@@ -45,35 +45,53 @@ public class Weapon implements Item {
     }
   }
 
-  
-  /** 
-   * @return String
-   */
   @Override
   public String toString() {
     return String.format("No.%d \"%s\" Damage:%d", itemId, itemName, itemDamage);
   }
 
+  /**
+   * Retrieves the damage value of the item.
+   *
+   * @return An integer representing the damage value of the item.
+   */
   public int getItemDamage() {
     return itemDamage;
   }
 
+  /**
+   * Retrieves the name of the item.
+   *
+   * @return A String representing the name of the item.
+   */
   public String getItemName() {
     return itemName;
   }
 
+  @Override
   public int getStoredLoacation() {
     return storedLocation;
   }
 
+  @Override
   public void setStoredLoacation(int index) {
     this.storedLocation = index;
   }
 
+  /**
+   * Retrieves the owner of the item.
+   *
+   * @return A Player object representing the owner of the item.
+   */
   public Player getOwner() {
     return owner;
   }
 
+  /**
+   * Sets the owner of the item.
+   *
+   * @param owner A Player object to set as the owner of the item.
+   */
   public void setOwner(Player owner) {
     this.owner = owner;
   }
