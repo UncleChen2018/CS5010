@@ -25,7 +25,9 @@ public class LookAround extends TurnBaseCommand {
       int playerLocation = model.getPlayerLocation(playerId);
       stringBuilder.append(model.queryRoomDetails(playerLocation)).append("\n");
       for (int i : model.getRoomNeighbors(playerLocation)) {
-        stringBuilder.append(model.queryRoomDetails(i)).append("\n");
+        if (i != model.getPetLocation()) {
+          stringBuilder.append(model.queryRoomDetails(i)).append("\n");
+        }
       }
     } else {
       stringBuilder.append("Computer look around result ommitted.\n");
