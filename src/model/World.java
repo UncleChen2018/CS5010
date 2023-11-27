@@ -17,7 +17,7 @@ import java.util.Stack;
  * parts and initialize their status, as well as manipulate them later. It also
  * give representation of the world map in the buffered image for view models.
  */
-public class World implements GameModel {
+public class World implements GameModel, ViewModel {
   private String worldName;
   private int rowSize;
   private int colSize;
