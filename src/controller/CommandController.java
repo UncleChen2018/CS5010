@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import model.GameModel;
+import view.GameView;
 
 /**
  * The implementation of the controller using the command pattern. This
@@ -20,8 +21,9 @@ import model.GameModel;
 public class CommandController implements GameController {
 
   private GameModel model;
-  private final Appendable out;
-  private final Scanner scan;
+  private GameView view;
+  private Appendable out;
+  private Scanner scan;
   private int maxTurn;
   private int currentTurn;
   private Readable worldData;
@@ -29,9 +31,20 @@ public class CommandController implements GameController {
   private JFrame frame;
   private NumberGenerator generator;
 
+  /**
+   * New standard controller, which 
+   * @param model
+   * @param view
+   */
+  public CommandController(GameModel model, GameView view) {
+    this.model = model;
+    this.view = view;
+  }
+
   // Build a controller, so the in, out, and MaxTurn is set.
   // This is the default constructor, which use random to generate choice of
   // computer controlling.
+
   /**
    * Constructs a CommandController with the specified input, output, world
    * source, and turn limit.
