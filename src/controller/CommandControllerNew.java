@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.desktop.AboutHandler;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +11,11 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import org.hamcrest.core.Is;
+
 import model.GameModel;
+import model.ViewModel;
 import view.GameView;
 
 /**
@@ -18,10 +23,11 @@ import view.GameView;
  * controller manages the game flow and interactions with the user or computer
  * players.
  */
-public class CommandController implements GameController {
+public class CommandControllerNew implements GameControllerNew {
 
   private GameModel model;
   private GameView view;
+
   private Appendable out;
   private Scanner scan;
   private int maxTurn;
@@ -31,21 +37,18 @@ public class CommandController implements GameController {
   private JFrame frame;
   private NumberGenerator generator;
 
-  //TODO rewrite t
-  
+  // new constructor that accept view and model.
   /**
-   * New standard controller, which 
    * @param model
    * @param view
+   * @param worldSource
+   * @param turnLimit
    */
-  public CommandController(GameModel model, GameView view) {
+  public CommandControllerNew(GameModel model, GameView view) {
     this.model = model;
     this.view = view;
-  }
 
-  // Build a controller, so the in, out, and MaxTurn is set.
-  // This is the default constructor, which use random to generate choice of
-  // computer controlling.
+  }
 
   /**
    * Constructs a CommandController with the specified input, output, world
@@ -60,13 +63,16 @@ public class CommandController implements GameController {
    *                                  positive.
    */
 
-  public CommandController(Readable in, Appendable out, Readable worldSource, int turnLimit) {
+  // this is the constructor for the text based, which is left unchange.
+  public CommandControllerNew(Readable in, Appendable out, Readable worldSource, int turnLimit) {
+
     if (in == null || out == null || worldSource == null) {
       throw new IllegalArgumentException("Readable and Appendable can't be null");
     }
     if (turnLimit <= 0) {
       throw new IllegalArgumentException("Max turn must be positive");
     }
+
     this.out = out;
     scan = new Scanner(in);
 
@@ -75,6 +81,8 @@ public class CommandController implements GameController {
     maxTurn = turnLimit;
     currentTurn = 0;
     generator = new NumberGenerator();
+    // TODO: complete the configureView
+    // this.view.configureView(this);
 
   }
 
@@ -92,15 +100,38 @@ public class CommandController implements GameController {
    *                                  positive.
    */
 
-  public CommandController(Readable in, Appendable out, Readable worldSource, int turnLimit,
+  public CommandControllerNew(Readable in, Appendable out, Readable worldSource, int turnLimit,
       int... numbers) {
     this(in, out, worldSource, turnLimit);
     generator = new NumberGenerator(numbers);
 
   }
 
+  /**
+   * @param worldSource
+   */
+  public void setWorldResource(Readable worldSource) {
+    this.worldData = worldSource;
+  }
+
+  /**
+   * @param turnLimit
+   */
+  public void setMaxTurn(int turnLimit) {
+    this.maxTurn = turnLimit;
+  }
+
+  public void executeGmae() {
+    start(this.model);
+  }
+
   @Override
   public void start(GameModel model) {
+
+    if (view.getInputSource() != null && view.getOutputDestination() != null) {
+      this.scan = new Scanner(view.getInputSource());
+      this.out = view.getOutputDestination();
+    }
     this.model = model;
     try {
       // The initializing phase before game.

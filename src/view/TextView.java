@@ -6,32 +6,39 @@ import controller.GameController;
 /**
  * The text-based view.
  */
-public class ConsoleView implements GameView {
+public class TextView implements GameView {
 
   private Readable input;
   private Appendable output;
 
-  public ConsoleView(Readable input, Appendable output) {
+  public TextView(Readable input, Appendable output) {
     this.input = input;
     this.output = output;
   }
 
   @Override
   public void configureView(GameController controller) {
-    // TODO Auto-generated method stub
 
   }
 
   @Override
   public void display() {
-    // TODO Auto-generated method stub
-
   }
 
   @Override
   public void refresh() {
-    // TODO Auto-generated method stub
+  }
 
+  @Override
+  public Readable getInputSource() {
+    // TODO Auto-generated method stub
+    return this.input;
+  }
+
+  @Override
+  public Appendable getOutputDestination() {
+    // TODO Auto-generated method stub
+    return this.output;
   }
 
 }

@@ -10,7 +10,7 @@ import java.util.InputMismatchException;
  * game process, as well as reveal details of the current states.
  * 
  */
-public interface GameModel {
+public interface GameModel extends ViewModel {
   /**
    * Set up the new world before it can be used.
    * 

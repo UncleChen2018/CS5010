@@ -15,7 +15,7 @@ import model.ViewModel;
 /**
  * The GUI view based on Jframe.
  */
-public class GuiView implements GameView {
+public class GraphView implements GameView {
 
   // the view model, which is the read only subset of game model.
   ViewModel model;
@@ -29,7 +29,7 @@ public class GuiView implements GameView {
    * 
    * @param model the read only model which support the data toe display.
    */
-  public GuiView(ViewModel model) {
+  public GraphView(ViewModel model) {
     this.model = model;
     initializeGUI();
   }
@@ -110,6 +110,16 @@ public class GuiView implements GameView {
   public void refresh() {
     // TODO Auto-generated method stub
 
+  }
+
+  @Override
+  public Readable getInputSource() {
+    return null;
+  }
+
+  @Override
+  public Appendable getOutputDestination() {
+    return null;
   }
 
 }
