@@ -114,9 +114,7 @@ public class CommandControllerNew implements GameControllerNew {
 
   }
 
-  /**
-   * @param worldSource
-   */
+  @Override
   public void setWorldResource(Readable worldSource) {
     this.worldData = worldSource;
   }
@@ -146,6 +144,7 @@ public class CommandControllerNew implements GameControllerNew {
       processTextGame();
     }
     if (view.requiresGuiOutput()) {
+      view.configureView(this);
       processGraphicGame();
     }
 

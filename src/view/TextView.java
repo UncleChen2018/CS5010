@@ -2,6 +2,7 @@ package view;
 
 import java.io.InputStreamReader;
 import controller.GameController;
+import controller.GameControllerNew;
 
 /**
  * The text-based view.
@@ -17,7 +18,7 @@ public class TextView implements GameView {
   }
 
   @Override
-  public void configureView(GameController controller) {
+  public void configureView(GameControllerNew controller) {
 
   }
 

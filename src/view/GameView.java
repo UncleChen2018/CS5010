@@ -1,6 +1,7 @@
 package view;
 
 import controller.GameController;
+import controller.GameControllerNew;
 
 /**
  * The game view interface, which contain the view's method for the controller
@@ -15,12 +16,13 @@ public interface GameView {
   //Method to get the output destination of the view (e.g., PrintStream or Appendable)
   Appendable getOutputDestination();
 
-  void configureView(GameController controller);
+  void configureView(GameControllerNew controller);
 
   void display();
 
   void refresh();
   
   boolean requiresGuiOutput();
+
   
 }

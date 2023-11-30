@@ -1,11 +1,19 @@
 package view;
 
 import controller.GameController;
+import controller.GameControllerNew;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileReader;
+
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -58,15 +66,33 @@ public class GraphView implements GameView {
     }
 
     frame.add(worldPanel);
-    setupMenu();  
   }
 
-  private void setupMenu() {
+  @Override
+  public void configureView(GameControllerNew controller) {
     JMenuItem loadWorld = new JMenuItem("Load World");
+
     loadWorld.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        // Handle new game
+        JFileChooser fileChooser = new JFileChooser("./");
+
+        // Create a file filter to show only .txt files
+        FileFilter txtFilter = new FileNameExtensionFilter("Text files (*.txt)", "txt");
+        fileChooser.setFileFilter(txtFilter);
+
+        int result = fileChooser.showOpenDialog(frame);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+          // User selected a file
+          File selectedFile = fileChooser.getSelectedFile();
+          // Assuming you have a reference to your GameController
+          if (controller != null) {
+            // TODO: Pass the selected file to your controller method
+            // controller.setWorldResource(null);
+            System.out.println(selectedFile.getPath());
+          }
+        }
       }
     });
 
@@ -74,7 +100,7 @@ public class GraphView implements GameView {
     restartGame.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        // Handle continue game
+
       }
     });
 
@@ -82,7 +108,8 @@ public class GraphView implements GameView {
     quitItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        // Handle quitting the game
+        // TODO:need the controller to do this.
+        System.exit(0);
       }
     });
 
@@ -92,13 +119,6 @@ public class GraphView implements GameView {
     menuBar.add(restartGame);
     menuBar.add(quitItem);
     frame.setJMenuBar(menuBar);
-  }
-  
-  
-
-  @Override
-  public void configureView(GameController controller) {
-    // TODO Auto-generated method stub
 
   }
 
@@ -130,5 +150,4 @@ public class GraphView implements GameView {
     return true;
   }
 
-  
 }
