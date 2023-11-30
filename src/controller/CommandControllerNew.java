@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.desktop.AboutHandler;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,9 +10,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
-import org.hamcrest.core.Is;
-
 import model.GameModel;
 import model.ViewModel;
 import view.GameView;
@@ -47,7 +43,18 @@ public class CommandControllerNew implements GameControllerNew {
   public CommandControllerNew(GameModel model, GameView view) {
     this.model = model;
     this.view = view;
+    generator = new NumberGenerator();
+  }
 
+  /**
+   * @param model
+   * @param view
+   * @param numbers
+   */
+  public CommandControllerNew(GameModel model, GameView view, int... numbers) {
+    this.model = model;
+    this.view = view;
+    generator = new NumberGenerator(numbers);
   }
 
   /**
@@ -127,12 +134,33 @@ public class CommandControllerNew implements GameControllerNew {
 
   @Override
   public void start(GameModel model) {
+    // every time you start the game, the round should be zero.
+    this.model = model;
+    currentTurn = 0;
+    
 
     if (view.getInputSource() != null && view.getOutputDestination() != null) {
       this.scan = new Scanner(view.getInputSource());
       this.out = view.getOutputDestination();
+      this.model = model;
+      processTextGame();
     }
-    this.model = model;
+    if (view.requiresGuiOutput()) {
+      processGraphicGame();
+    }
+
+  }
+  
+  
+  // the method to run gui game.
+  //TODO finish it.
+  private void processGraphicGame() {
+    view.display();
+
+  }
+
+  private void processTextGame() {
+
     try {
       // The initializing phase before game.
       out.append("Initializing the world map and drawing...");
@@ -406,7 +434,6 @@ public class CommandControllerNew implements GameControllerNew {
     } catch (IOException ioe) {
       throw new IllegalStateException("Append failed", ioe);
     }
-
   }
 
   // help method, display information for certain player.

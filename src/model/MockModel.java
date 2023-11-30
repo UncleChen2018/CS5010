@@ -228,12 +228,9 @@ public class MockModel implements GameModel {
     return roomList;
   }
 
-  /**
-   * Retrieves the name of the world.
-   *
-   * @return A string representing the name of the world.
-   */
+  @Override
   public String getWorldName() {
+    log.append("getWorldName called\n");
     return worldName;
   }
 

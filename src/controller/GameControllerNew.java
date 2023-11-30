@@ -9,7 +9,7 @@ public interface GameControllerNew {
   /**
    * Starts the game using the provided {@code GameModel}. This method initiates
    * the game and sets up the necessary components based on the provided game
-   * model.
+   * model.Every time it runs, it means a new start of game.
    *
    * @param model The {@code GameModel} containing the initial configuration and
    *              state of the game.
@@ -27,7 +27,7 @@ public interface GameControllerNew {
   void setMaxTurn(int turnLimit);
 
   /**
-   * 
+   * This is the game runner.
    */
   void executeGmae();
 

@@ -7,7 +7,6 @@ import java.io.StringReader;
 import model.GameModel;
 import model.World;
 import view.GameView;
-import view.GraphView;
 import view.TextView;
 
 /**

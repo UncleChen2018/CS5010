@@ -20,5 +20,7 @@ public interface GameView {
   void display();
 
   void refresh();
-
+  
+  boolean requiresGuiOutput();
+  
 }

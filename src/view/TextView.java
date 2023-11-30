@@ -40,5 +40,10 @@ public class TextView implements GameView {
     // TODO Auto-generated method stub
     return this.output;
   }
+  
+  @Override
+  public boolean requiresGuiOutput() {
+    return false;
+  }
 
 }

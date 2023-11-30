@@ -218,11 +218,7 @@ public class World implements GameModel, ViewModel {
     return roomList;
   }
 
-  /**
-   * Returns the name of the world.
-   *
-   * @return The name of the world.
-   */
+  @Override
   public String getWorldName() {
     return worldName;
   }

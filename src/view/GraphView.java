@@ -2,6 +2,8 @@ package view;
 
 import controller.GameController;
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
@@ -10,6 +12,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.plaf.basic.BasicMenuItemUI;
+
 import model.ViewModel;
 
 /**
@@ -35,7 +40,7 @@ public class GraphView implements GameView {
   }
 
   private void initializeGUI() {
-    frame = new JFrame("Game Title");
+    frame = new JFrame("Kill Doctor Lucky");
     frame.setSize(800, 600); // Initial size
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -53,23 +58,20 @@ public class GraphView implements GameView {
     }
 
     frame.add(worldPanel);
-    setupMenu();
-
-    frame.setVisible(true);
+    setupMenu();  
   }
 
   private void setupMenu() {
-
-    JMenuItem newGameItem = new JMenuItem("New Game");
-    newGameItem.addActionListener(new ActionListener() {
+    JMenuItem loadWorld = new JMenuItem("Load World");
+    loadWorld.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         // Handle new game
       }
     });
 
-    JMenuItem continueGameItem = new JMenuItem("Continue Game");
-    continueGameItem.addActionListener(new ActionListener() {
+    JMenuItem restartGame = new JMenuItem("Restart Game");
+    restartGame.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         // Handle continue game
@@ -84,15 +86,15 @@ public class GraphView implements GameView {
       }
     });
 
-    JMenu fileMenu = new JMenu("File");
-    fileMenu.add(newGameItem);
-    fileMenu.add(continueGameItem);
-    fileMenu.add(quitItem);
     JMenuBar menuBar = new JMenuBar();
-    menuBar.add(fileMenu);
-
+    menuBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+    menuBar.add(loadWorld);
+    menuBar.add(restartGame);
+    menuBar.add(quitItem);
     frame.setJMenuBar(menuBar);
   }
+  
+  
 
   @Override
   public void configureView(GameController controller) {
@@ -100,9 +102,10 @@ public class GraphView implements GameView {
 
   }
 
+  // make the GUI visible
   @Override
   public void display() {
-    // TODO Auto-generated method stub
+    frame.setVisible(true);
 
   }
 
@@ -122,4 +125,10 @@ public class GraphView implements GameView {
     return null;
   }
 
+  @Override
+  public boolean requiresGuiOutput() {
+    return true;
+  }
+
+  
 }
