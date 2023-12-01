@@ -2,6 +2,8 @@ package controller;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -119,23 +121,40 @@ public class CommandControllerNew implements GameControllerNew {
     this.worldData = worldSource;
   }
 
-  /**
-   * @param turnLimit
-   */
+  @Override
+  public void loadWorldFile(String filePath) {
+    try {
+      worldData = new FileReader(filePath);
+      model.setupNewWorld(worldData);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
   public void setMaxTurn(int turnLimit) {
     this.maxTurn = turnLimit;
   }
 
+  @Override
   public void executeGmae() {
     start(this.model);
   }
+  
+  @Override
+  public void exitGame() {
+    view.showFarewellMessage();
+    //System.exit(0);
+    
+  }
+
+  
 
   @Override
   public void start(GameModel model) {
     // every time you start the game, the round should be zero.
     this.model = model;
     currentTurn = 0;
-    
 
     if (view.getInputSource() != null && view.getOutputDestination() != null) {
       this.scan = new Scanner(view.getInputSource());
@@ -149,12 +168,12 @@ public class CommandControllerNew implements GameControllerNew {
     }
 
   }
-  
-  
+
   // the method to run gui game.
-  //TODO finish it.
+  // TODO finish it.
   private void processGraphicGame() {
     view.display();
+    view.showWelcomeMessage();
 
   }
 

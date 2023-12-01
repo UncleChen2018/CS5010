@@ -31,4 +31,16 @@ public interface GameControllerNew {
    */
   void executeGmae();
 
+  /**
+   * Loads the game map data from a specified file path.
+   *
+   * @param filePath The file path from which to load the game map data.
+   */
+  void loadWorldFile(String filePath);
+
+  /**
+   * 
+   */
+  void exitGame();
+
 }

@@ -23,6 +23,10 @@ public interface GameView {
   void refresh();
   
   boolean requiresGuiOutput();
+  
+  void showWelcomeMessage();
+
+  void showFarewellMessage();
 
   
 }

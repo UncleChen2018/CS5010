@@ -47,4 +47,17 @@ public class TextView implements GameView {
     return false;
   }
 
+  
+  
+  @Override
+  public void showWelcomeMessage() {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void showFarewellMessage() {
+    // TODO Auto-generated method stub 
+  }
+
 }

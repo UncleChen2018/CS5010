@@ -32,7 +32,7 @@
    2. get detailed information for the current room the player is in, include items and other characters in the room    
 
 2. Turn cost look around should also help player see all detailed information of the neighboring room so it is worthy the turn.
-3. Moving a pet  can put the pet to any valid room or can only make the pet to a neighbor. And the moving is more like a teleporting and the player is still in the original room. And will the moving will cause the pet to change its depth-first-traversal logic?
+3. Moving a pet  can put the pet to any valid room . And the moving is more like a teleporting and the player is still in the original room. And the moving will cause the pet to change its depth-first-traversal logic。
 4. If attack is seen by others, the attack is cancelled but the turn is consumed.
 
 ### Limitations
@@ -284,4 +284,3 @@ citation: no
       
 
 git hub: https://github.com/UncleChen2018/CS5010MileStone
-

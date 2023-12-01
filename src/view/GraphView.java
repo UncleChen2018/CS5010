@@ -13,12 +13,15 @@ import java.io.FileReader;
 
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.plaf.basic.BasicMenuItemUI;
@@ -88,9 +91,8 @@ public class GraphView implements GameView {
           File selectedFile = fileChooser.getSelectedFile();
           // Assuming you have a reference to your GameController
           if (controller != null) {
-            // TODO: Pass the selected file to your controller method
-            // controller.setWorldResource(null);
-            System.out.println(selectedFile.getPath());
+            controller.loadWorldFile(selectedFile.getPath());
+            System.out.println(model.getWorldName());
           }
         }
       }
@@ -108,8 +110,7 @@ public class GraphView implements GameView {
     quitItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        // TODO:need the controller to do this.
-        System.exit(0);
+        controller.exitGame();
       }
     });
 
@@ -120,6 +121,62 @@ public class GraphView implements GameView {
     menuBar.add(quitItem);
     frame.setJMenuBar(menuBar);
 
+  }
+  
+  
+  
+  
+
+  @Override
+  public void showWelcomeMessage() {
+    String welcomeMessage = "Welcome to the Game!\n\n"
+        + "This game was created by Eric Chen.\n"
+        + "It is based on Java's Swing GUI library.\n"
+        + "Enjoy playing!";
+    JOptionPane optionPane = new JOptionPane(welcomeMessage,
+        JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[] {}, null);
+
+    JDialog dialog = optionPane.createDialog(frame, "Open Screen");
+    dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+
+    // Add a custom button to the dialog
+    JButton okButton = new JButton("OK");
+    okButton.addActionListener(e -> {
+      dialog.dispose();
+    });
+
+    optionPane.setOptions(new Object[] {okButton});
+    dialog.setContentPane(optionPane);
+
+    // Make the dialog visible
+    dialog.pack();
+    dialog.setLocationRelativeTo(frame);
+    dialog.setVisible(true);
+    
+  }
+
+  @Override
+  public void showFarewellMessage() {
+    JOptionPane optionPane = new JOptionPane("Thank you for playing the game!",
+        JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[] {}, null);
+
+    JDialog dialog = optionPane.createDialog(frame, "Farewell");
+    dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+
+    // Add a custom button to the dialog
+    JButton okButton = new JButton("OK");
+    okButton.addActionListener(e -> {
+      dialog.dispose();
+      System.exit(0);
+    });
+
+    optionPane.setOptions(new Object[] {okButton});
+    dialog.setContentPane(optionPane);
+
+    // Make the dialog visible
+    dialog.pack();
+    dialog.setLocationRelativeTo(frame);
+    dialog.setVisible(true);
   }
 
   // make the GUI visible
