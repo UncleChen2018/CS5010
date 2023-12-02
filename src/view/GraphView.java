@@ -18,6 +18,7 @@ import java.io.FileReader;
 
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -68,39 +69,35 @@ public class GraphView implements GameView {
 
     // create Jpanel
     frame.setLayout(new GridBagLayout());
-    //set the minimum size of the window.
+    // set the minimum size of the window.
     frame.setMinimumSize(new Dimension(300, 300));
-    
-    
+
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.weightx = 0.7; // 70% of the horizontal space for worldPanel
     constraints.weighty = 1.0; // Fill the whole height
     constraints.fill = GridBagConstraints.BOTH;
     worldPanel = createWorldPanel();
-    
+
     JScrollPane worldScrollPane = new JScrollPane(worldPanel);
     worldScrollPane.setMinimumSize(new Dimension(210, 300));
     worldScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     worldScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-    
+
     frame.add(worldScrollPane, constraints);
-       
 
     constraints = new GridBagConstraints();
-    //constraints.gridx = 1; // Next column
+    // constraints.gridx = 1; // Next column
     constraints.weightx = 0.3; // 30% of the horizontal space for infoPanel
     constraints.fill = GridBagConstraints.BOTH;
-    
-    
+
     JPanel infoPanel = createInfoJPanel();
 
     JScrollPane infoScrollPane = new JScrollPane(infoPanel);
     infoScrollPane.setMinimumSize(new Dimension(90, 300));
     infoScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     infoScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-    
+
     frame.add(infoScrollPane, constraints);
-    
 
 //    frame.add(createWorldPanel(), BorderLayout.WEST);
 //    frame.add(createInfoJPanel(), BorderLayout.CENTER);
@@ -121,6 +118,10 @@ public class GraphView implements GameView {
   private JPanel createWorldPanel() {
     worldPanel = new JPanel();
     worldPanel.setBackground(Color.GRAY);
+
+    ImageIcon imageIcon = new ImageIcon("./WorldMap.png");
+    JLabel imageLabel = new JLabel(imageIcon);
+    worldPanel.add(imageLabel);
 
     // Add components to display the word map, player, and target information
     // For example: JLabels for word map, player, and target
