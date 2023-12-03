@@ -1,5 +1,6 @@
 16 23 The Realm of Shadows
 100 Malthael, the Reaper King
+Fortune the Cat
 23
 8 9 9 13 Crypt Entry
 8 14 10 16 Shadow Hall
