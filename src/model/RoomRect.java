@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * This interface represents a room in the world, defining its properties and
  * behaviors.
  */
-public interface Room {
+public interface RoomRect {
 
   /**
    * Get the index of the room in the world.
@@ -49,14 +49,14 @@ public interface Room {
    *
    * @return The list of neighboring rooms.
    */
-  ArrayList<Room> getNeighbors();
+  ArrayList<RoomRect> getNeighbors();
 
   /**
    * Get a list of visible rooms from this room.
    *
    * @return The list of visible rooms.
    */
-  ArrayList<Room> getVisibles();
+  ArrayList<RoomRect> getVisibles();
 
   /**
    * Get a list of items in the room.

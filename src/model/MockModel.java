@@ -24,16 +24,16 @@ public class MockModel implements GameModel {
   private int colSize;
 
   private TargetCharacter targetCharacter;
-  private ArrayList<Room> roomList;
+  private ArrayList<RoomRect> roomList;
   private ArrayList<Item> itemList;
   private ArrayList<Player> playerList;
 
   private Pet pet;
   // Keep track of the location that is visited by pet.
-  private Set<Room> petVisitedRoom;
-  private Room petNextRoom;
+  private Set<RoomRect> petVisitedRoom;
+  private RoomRect petNextRoom;
   private boolean petNeedTraceback = false;
-  private Stack<Room> petTrace = new Stack<>();
+  private Stack<RoomRect> petTrace = new Stack<>();
 
   private int winnerId;
 
@@ -65,7 +65,7 @@ public class MockModel implements GameModel {
    * @param item The item to be added to the room.
    * @param room The room to which the item will be added.
    */
-  private void addItemToRoom(Item item, Room room) {
+  private void addItemToRoom(Item item, RoomRect room) {
     room.addItem(item);
   }
 
@@ -77,7 +77,7 @@ public class MockModel implements GameModel {
   @Override
   public void setupNewWorld(Readable source) throws InputMismatchException {
     log.append("setupNewWorld called\n");
-    roomList = new ArrayList<Room>();
+    roomList = new ArrayList<RoomRect>();
     itemList = new ArrayList<Item>();
     playerList = new ArrayList<Player>();
     winnerId = -1;
@@ -119,7 +119,7 @@ public class MockModel implements GameModel {
     // New: set the visitedByPet to null
     petVisitedRoom = new HashSet<>();
     // add the first location to pet visited.
-    Room petInitialRoom = roomList.get(pet.getLocation());
+    RoomRect petInitialRoom = roomList.get(pet.getLocation());
     resetPetTrace(petInitialRoom);
 
     // parse the item number and put into room
@@ -136,12 +136,12 @@ public class MockModel implements GameModel {
 
     // fill the neighbors and visible room list
     for (int i = 0; i < roomList.size(); i++) {
-      Room thisSpace = roomList.get(i);
+      RoomRect thisSpace = roomList.get(i);
       for (int j = 0; j < roomList.size(); j++) {
         if (i == j) {
           continue;
         }
-        Room otherSpace = roomList.get(j);
+        RoomRect otherSpace = roomList.get(j);
         if (isNeighborRect(thisSpace, otherSpace)) {
           thisSpace.getNeighbors().add(otherSpace);
         }
@@ -162,7 +162,7 @@ public class MockModel implements GameModel {
     }
   }
 
-  private static boolean isNeighborRect(Room thisSpace, Room otherSpace) {
+  private static boolean isNeighborRect(RoomRect thisSpace, RoomRect otherSpace) {
     boolean result = false;
     // if two room share the same wall,then they are neighbor
     // every room has 4 wall, top: (x1, y1--> y2); right: (x1->x2, y2); bottom:
@@ -202,7 +202,7 @@ public class MockModel implements GameModel {
    * @param otherSpace the other room to be judged if is visible.
    * @return if it's true that from room one, we can see room two.
    */
-  private static boolean isVisible(Room thisSpace, Room otherSpace) {
+  private static boolean isVisible(RoomRect thisSpace, RoomRect otherSpace) {
     // if two room has X or Y overlap, consider them visible to each other
     int[] rectOne = thisSpace.getRoomRect();
     int[] rectTwo = otherSpace.getRoomRect();
@@ -224,7 +224,7 @@ public class MockModel implements GameModel {
    *
    * @return An ArrayList of Room objects representing the world space.
    */
-  public ArrayList<Room> getWorldSpace() {
+  public ArrayList<RoomRect> getWorldSpace() {
     return roomList;
   }
 
@@ -265,7 +265,7 @@ public class MockModel implements GameModel {
 
     graph.drawRect(leftPadding * scale, topPadding * scale, width * scale, height * scale);
 
-    for (Room room : roomList) {
+    for (RoomRect room : roomList) {
       // apply paddings and scaling to draw room's rectangel
       int x1 = room.getRoomRect()[1] + leftPadding;
       int y1 = room.getRoomRect()[0] + topPadding;
@@ -422,7 +422,7 @@ public class MockModel implements GameModel {
    * @param index The index of the room to retrieve.
    * @return The Room object representing the room at the specified index.
    */
-  public Room getRoomSpace(int index) {
+  public RoomRect getRoomSpace(int index) {
     return roomList.get(index);
   }
 
@@ -578,7 +578,7 @@ public class MockModel implements GameModel {
         String.format("pickUpitem called, playerId = %d, " + "itemId = %d", playerId, itemId))
         .append("\n");
     Player player = playerList.get(playerId);
-    Room roomSpace = roomList.get(player.getLocation());
+    RoomRect roomSpace = roomList.get(player.getLocation());
     Item item = itemList.get(itemId);
     // player got the item
     player.addItem(item);
@@ -635,7 +635,7 @@ public class MockModel implements GameModel {
     log.append(String.format("getRoomNeighbors called, location = %d", location)).append("\n");
 
     ArrayList<Integer> retList = new ArrayList<Integer>();
-    for (Room room : roomList.get(location).getNeighbors()) {
+    for (RoomRect room : roomList.get(location).getNeighbors()) {
       retList.add(room.getSpaceIndex());
     }
     return retList;
@@ -793,7 +793,7 @@ public class MockModel implements GameModel {
     getPetNextRoom();
 
     // which next room the pet should move
-    Room nextRoom;
+    RoomRect nextRoom;
     if (!petNeedTraceback) {
       nextRoom = petNextRoom;
     } else {
@@ -817,7 +817,7 @@ public class MockModel implements GameModel {
   }
 
   private void getPetNextRoom() {
-    Room curRoom = roomList.get(pet.getLocation());
+    RoomRect curRoom = roomList.get(pet.getLocation());
     // see if all room is visited.
     if (petVisitedRoom.size() == roomList.size()) {
       resetPetTrace(curRoom);
@@ -830,7 +830,7 @@ public class MockModel implements GameModel {
       return;
     }
 
-    for (Room neighboRoom : curRoom.getNeighbors()) {
+    for (RoomRect neighboRoom : curRoom.getNeighbors()) {
       if (!petVisitedRoom.contains(neighboRoom)) {
         petNeedTraceback = false;
         petNextRoom = neighboRoom;
@@ -843,7 +843,7 @@ public class MockModel implements GameModel {
     petTrace.pop();
   }
 
-  private void resetPetTrace(Room initialRoom) {
+  private void resetPetTrace(RoomRect initialRoom) {
     // clear the pet visited record in this world.
     petVisitedRoom.clear();
     // also clear the trace of the cat.

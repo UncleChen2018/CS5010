@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -52,36 +53,113 @@ public class GraphView implements GameView {
   private JScrollPane worldScrollPane;
   private JScrollPane infoScrollPane;
 
-  private JPanel worldlPanel;
+  private WorldPanel worldlPanel;
 
   private JPanel playerInfoPanel;
   private JPanel resultPanel;
   private JLabel targetLabel;
   private JLabel[] playerLabels;
 
-  private ArrayList<RoomPanel> roomList;
+  private ArrayList<RoomRect> roomList;
 
-  private class RoomPanel extends JPanel {
-    // those are the constrains of grid bag.
-    int gridx;
-    int gridy;
-    int gridwidth;
-    int gridheight;
-    int index;
+  private class RoomRect{
+    private int index;
+    private final Rectangle bounds;
+    public Rectangle realBounds;
+    private boolean hasPlayer;
 
-    /**
-     * @param gridx
-     * @param gridy
-     * @param gridwidth
-     * @param gridheight
-     */
-    public RoomPanel(int gridx, int gridy, int gridwidth, int gridheight, int index) {
-      this.gridx = gridx;
-      this.gridy = gridy;
-      this.gridwidth = gridwidth;
-      this.gridheight = gridheight;
+    public RoomRect(int index, Rectangle bounds) {
       this.index = index;
-      this.setBorder(new LineBorder(Color.BLACK, 2));
+      this.bounds = bounds;
+      this.realBounds = new Rectangle();
+      this.hasPlayer = false;
+    }
+
+    public int getIndex() {
+      return index;
+    }
+
+    public Rectangle getBounds() {
+      return realBounds;
+    }
+
+    public boolean hasPlayer() {
+      return hasPlayer;
+    }
+
+    public void setPlayer(boolean hasPlayer) {
+      this.hasPlayer = hasPlayer;
+    }
+    
+    public void setBounds(int xRatio, int yRatio) {
+      int ratio = Math.min(xRatio, yRatio);
+      realBounds.x = bounds.x * ratio;
+      realBounds.y = bounds.y * ratio;
+      realBounds.width = bounds.width * ratio;
+      realBounds.height = bounds.height * ratio;
+      
+      
+    }
+
+  }
+
+  class WorldPanel extends JPanel {
+    private ArrayList<RoomRect> roomList;
+
+    public WorldPanel() {
+      this.roomList = new ArrayList<>();
+      // addMouseListener(new RoomClickListener());
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+      super.paintComponent(g);
+      if(roomList.size() == 0) {
+        return;
+      }
+      // the x span
+      int ratio_x = getWidth()/ model.getWorldSize()[1];
+      // the y span
+      int ratio_y = getHeight()/ model.getWorldSize()[0];
+      
+
+
+      
+      for (RoomRect room : roomList) {
+        room.setBounds(ratio_x,ratio_y);
+        Rectangle bounds = room.getBounds();
+        g.drawRect(room.getBounds().x, room.getBounds().y, room.getBounds().width,
+            room.getBounds().height);
+        
+        int roomMaxX = bounds.x + bounds.width;
+        int roomMaxY = bounds.y + bounds.height;
+
+        if (room.hasPlayer()) {
+          g.setColor(Color.RED); // Change color for player
+          g.fillRect(room.getBounds().x, room.getBounds().y, room.getBounds().width,
+              room.getBounds().height);
+          g.setColor(Color.BLACK); // Reset color
+        }
+      }
+      revalidate();
+    }
+
+    public ArrayList<RoomRect> getRoomRect(ViewModel model) {
+      roomList = new ArrayList<>();
+      for (int i = 0; i < model.getRoomCount(); i++) {
+        int[] rect = model.getRoomRect(i);
+        int x1 = rect[1];
+        int y1 = rect[0];
+        int x2 = rect[3];
+        int y2 = rect[2];
+        int rectX = x1;
+        int rectY = y1;
+        int rectWidth = (x2 - x1);
+        int rectHeight = (y2 - y1);
+        roomList.add(new RoomRect(i, new Rectangle(rectX,rectY,rectWidth,rectHeight)));
+      }
+      return roomList;
+
     }
 
   }
@@ -118,11 +196,11 @@ public class GraphView implements GameView {
     constraints.weighty = 1.0; // Fill the whole height
     constraints.fill = GridBagConstraints.BOTH;
 
-    worldlPanel = new JPanel();
+    worldlPanel = new WorldPanel();
     worldlPanel.setMinimumSize(new Dimension(300, 300)); // Set minimum size
 
     worldScrollPane = new JScrollPane(worldlPanel);
-    worldScrollPane.setMinimumSize(new Dimension(210, 300));
+    worldScrollPane.setMinimumSize(new Dimension(300, 300));
     worldScrollPane.setBackground(Color.GRAY);
     worldScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     worldScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -184,44 +262,11 @@ public class GraphView implements GameView {
   @Override
   public void drawMap() {
     worldlPanel.removeAll();
-    roomList = getRoomRect(this.model);
-    worldlPanel.setLayout(new GridBagLayout());
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.fill = GridBagConstraints.BOTH;
-    gbc.weightx = 1.0; // Set weightx to 1.0 to make rooms expand horizontally
-    gbc.weighty = 1.0; // Set weighty to 1.0 to make rooms expand vertically
-    for (RoomPanel room : roomList) {
-      gbc.gridx = room.gridx;
-      gbc.gridy = room.gridy;
-      gbc.gridwidth = room.gridwidth;
-      gbc.gridheight = room.gridheight;
-      //gbc.anchor = GridBagConstraints.CENTER; // Set anchor to center to fill the entire cell
-      System.out.println(String.format("%d: %d, %d, %d, %d", room.index, gbc.gridx, gbc.gridy,
-          gbc.gridwidth, gbc.gridheight));
-      worldlPanel.add(room, gbc);
-      worldlPanel.revalidate();
-    }
+    worldlPanel.getRoomRect(model);
+    System.out.println("Rect loaded");
     
     worldlPanel.revalidate();
     worldlPanel.repaint();
-  }
-
-  private ArrayList<RoomPanel> getRoomRect(ViewModel model) {
-    roomList = new ArrayList<>();
-    for (int i = 0; i < model.getRoomCount(); i++) {
-      int[] rect = model.getRoomRect(i);
-      int x1 = rect[1];
-      int y1 = rect[0];
-      int x2 = rect[3];
-      int y2 = rect[2];
-      int rectX = x1;
-      int rectY = y1;
-      int rectWidth = (x2 - x1);
-      int rectHeight = (y2 - y1);
-      roomList.add(new RoomPanel(rectX, rectY, rectWidth, rectHeight, i));
-    }
-    return roomList;
-
   }
 
   @Override
@@ -244,7 +289,7 @@ public class GraphView implements GameView {
           File selectedFile = fileChooser.getSelectedFile();
           // Assuming you have a reference to your GameController
           if (controller != null) {
-            
+
             controller.loadWorldFile(selectedFile.getPath());
             // System.out.println(model.getWorldName());
           }
