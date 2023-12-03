@@ -307,6 +307,23 @@ public class MockModel implements GameModel {
   public String toString() {
     return worldName;
   }
+  
+  @Override
+  public int[] getRoomRect(int index) {
+    log.append(String.format("getRoomRect called, index = %d\n", index));
+    return roomList.get(index).getRoomRect();
+  }
+  
+  @Override
+  public int[] getWorldSize() {
+    return new int[]{this.rowSize, this.colSize};
+  }
+  
+  
+  @Override
+  public String getRoomName(int index) {
+    return roomList.get(index).getSpaceName();
+  }
 
   @Override
   public String getName() {

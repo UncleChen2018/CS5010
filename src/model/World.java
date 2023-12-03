@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -217,6 +218,7 @@ public class World implements GameModel, ViewModel {
   public ArrayList<Room> getWorldSpace() {
     return roomList;
   }
+  
 
   @Override
   public String getWorldName() {
@@ -289,6 +291,22 @@ public class World implements GameModel, ViewModel {
 
     graph.dispose();
     return image;
+  }
+  
+  @Override
+  public int[] getRoomRect(int index) {
+    return roomList.get(index).getRoomRect();
+  }
+  
+  
+  @Override
+  public int[] getWorldSize() {
+    return new int[]{this.rowSize, this.colSize};
+  }
+  
+  @Override
+  public String getRoomName(int index) {
+    return roomList.get(index).getSpaceName();
   }
 
   @Override

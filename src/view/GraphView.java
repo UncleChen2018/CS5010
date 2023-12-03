@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -34,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicMenuItemUI;
 
 import model.ViewModel;
@@ -46,15 +48,44 @@ public class GraphView implements GameView {
   // the view model, which is the read only subset of game model.
   ViewModel model;
   private JFrame frame;
+  // TODO: maybe world panel should get its own class.
   private JScrollPane worldScrollPane;
   private JScrollPane infoScrollPane;
+
+  private JPanel worldlPanel;
+
   private JPanel playerInfoPanel;
   private JPanel resultPanel;
   private JLabel targetLabel;
   private JLabel[] playerLabels;
 
-  private Rectangle roomList;
-  
+  private ArrayList<RoomPanel> roomList;
+
+  private class RoomPanel extends JPanel {
+    // those are the constrains of grid bag.
+    int gridx;
+    int gridy;
+    int gridwidth;
+    int gridheight;
+    int index;
+
+    /**
+     * @param gridx
+     * @param gridy
+     * @param gridwidth
+     * @param gridheight
+     */
+    public RoomPanel(int gridx, int gridy, int gridwidth, int gridheight, int index) {
+      this.gridx = gridx;
+      this.gridy = gridy;
+      this.gridwidth = gridwidth;
+      this.gridheight = gridheight;
+      this.index = index;
+      this.setBorder(new LineBorder(Color.BLACK, 2));
+    }
+
+  }
+
   /**
    * The default constructor.
    * 
@@ -87,16 +118,14 @@ public class GraphView implements GameView {
     constraints.weighty = 1.0; // Fill the whole height
     constraints.fill = GridBagConstraints.BOTH;
 
-    worldScrollPane = new JScrollPane();
+    worldlPanel = new JPanel();
+    worldlPanel.setMinimumSize(new Dimension(300, 300)); // Set minimum size
+
+    worldScrollPane = new JScrollPane(worldlPanel);
     worldScrollPane.setMinimumSize(new Dimension(210, 300));
     worldScrollPane.setBackground(Color.GRAY);
     worldScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     worldScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-    ImageIcon imageIcon = new ImageIcon("./WorldMap.png");
-    JLabel imageLabel = new JLabel(imageIcon);
-    // worldScrollPane.add(imageLabel);
-    worldScrollPane.setViewportView(imageLabel);
 
     frame.add(worldScrollPane, constraints);
   }
@@ -119,12 +148,10 @@ public class GraphView implements GameView {
     JPanel infoPanelView = new JPanel();
     infoPanelView.setLayout(new GridLayout(2, 1)); // Two rows (top and bottom)
     infoPanelView.setBackground(Color.GREEN);
-    
-    //    infoScrollPane.setLayout(new GridLayout(2, 1)); // Two rows (top and bottom)
-    //    infoScrollPane.setBackground(Color.GREEN);
 
-    // Add components to display player information (top) and game result/world
-    // information (bottom)
+    // infoScrollPane.setLayout(new GridLayout(2, 1)); // Two rows (top and bottom)
+    // infoScrollPane.setBackground(Color.GREEN);
+
     infoPanelView.add(createPlayerInfoPanel());
     infoPanelView.add(createResultPanel());
 
@@ -152,18 +179,50 @@ public class GraphView implements GameView {
 
     return resultPanel;
   }
-  
-  
+
+  // draw the world based on the model.
   @Override
   public void drawMap() {
+    worldlPanel.removeAll();
+    roomList = getRoomRect(this.model);
+    worldlPanel.setLayout(new GridBagLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.BOTH;
+    gbc.weightx = 1.0; // Set weightx to 1.0 to make rooms expand horizontally
+    gbc.weighty = 1.0; // Set weighty to 1.0 to make rooms expand vertically
+    for (RoomPanel room : roomList) {
+      gbc.gridx = room.gridx;
+      gbc.gridy = room.gridy;
+      gbc.gridwidth = room.gridwidth;
+      gbc.gridheight = room.gridheight;
+      //gbc.anchor = GridBagConstraints.CENTER; // Set anchor to center to fill the entire cell
+      System.out.println(String.format("%d: %d, %d, %d, %d", room.index, gbc.gridx, gbc.gridy,
+          gbc.gridwidth, gbc.gridheight));
+      worldlPanel.add(room, gbc);
+      worldlPanel.revalidate();
+    }
     
-    
+    worldlPanel.revalidate();
+    worldlPanel.repaint();
   }
-  
-  private void getRoomRect() {
-    for(int i=0; i<mode)
+
+  private ArrayList<RoomPanel> getRoomRect(ViewModel model) {
+    roomList = new ArrayList<>();
+    for (int i = 0; i < model.getRoomCount(); i++) {
+      int[] rect = model.getRoomRect(i);
+      int x1 = rect[1];
+      int y1 = rect[0];
+      int x2 = rect[3];
+      int y2 = rect[2];
+      int rectX = x1;
+      int rectY = y1;
+      int rectWidth = (x2 - x1);
+      int rectHeight = (y2 - y1);
+      roomList.add(new RoomPanel(rectX, rectY, rectWidth, rectHeight, i));
+    }
+    return roomList;
+
   }
-  
 
   @Override
   public void configureView(GameControllerNew controller) {
@@ -185,8 +244,9 @@ public class GraphView implements GameView {
           File selectedFile = fileChooser.getSelectedFile();
           // Assuming you have a reference to your GameController
           if (controller != null) {
+            
             controller.loadWorldFile(selectedFile.getPath());
-            System.out.println(model.getWorldName());
+            // System.out.println(model.getWorldName());
           }
         }
       }
@@ -234,13 +294,13 @@ public class GraphView implements GameView {
   // make the GUI visible
   @Override
   public void display() {
-    //frame.pack();
+    // frame.pack();
     frame.setVisible(true);
   }
 
   @Override
   public void refresh() {
-    // TODO Auto-generated method stub
+    frame.repaint();
 
   }
 
