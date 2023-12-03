@@ -11,8 +11,10 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileReader;
 
@@ -44,14 +46,15 @@ public class GraphView implements GameView {
   // the view model, which is the read only subset of game model.
   ViewModel model;
   private JFrame frame;
-  private JSplitPane splitPane;
-  private JPanel worldPanel;
-  private JPanel infoPanel;
+  private JScrollPane worldScrollPane;
+  private JScrollPane infoScrollPane;
   private JPanel playerInfoPanel;
   private JPanel resultPanel;
   private JLabel targetLabel;
   private JLabel[] playerLabels;
 
+  private Rectangle roomList;
+  
   /**
    * The default constructor.
    * 
@@ -64,7 +67,8 @@ public class GraphView implements GameView {
 
   private void initializeGUI() {
     frame = new JFrame("Kill Doctor Lucky");
-    frame.setSize(800, 600); // Initial size
+    frame.setSize(1200, 800); // Initial size
+    frame.setLocationRelativeTo(null); // in the center
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     // create Jpanel
@@ -72,74 +76,61 @@ public class GraphView implements GameView {
     // set the minimum size of the window.
     frame.setMinimumSize(new Dimension(300, 300));
 
+    createWorldPanel();
+    createInfoPanel();
+
+  }
+
+  private void createWorldPanel() {
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.weightx = 0.7; // 70% of the horizontal space for worldPanel
     constraints.weighty = 1.0; // Fill the whole height
     constraints.fill = GridBagConstraints.BOTH;
-    worldPanel = createWorldPanel();
 
-    JScrollPane worldScrollPane = new JScrollPane(worldPanel);
+    worldScrollPane = new JScrollPane();
     worldScrollPane.setMinimumSize(new Dimension(210, 300));
+    worldScrollPane.setBackground(Color.GRAY);
     worldScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     worldScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-    frame.add(worldScrollPane, constraints);
+    ImageIcon imageIcon = new ImageIcon("./WorldMap.png");
+    JLabel imageLabel = new JLabel(imageIcon);
+    // worldScrollPane.add(imageLabel);
+    worldScrollPane.setViewportView(imageLabel);
 
-    constraints = new GridBagConstraints();
+    frame.add(worldScrollPane, constraints);
+  }
+
+  private void createInfoPanel() {
+
+    GridBagConstraints constraints = new GridBagConstraints();
     // constraints.gridx = 1; // Next column
     constraints.weightx = 0.3; // 30% of the horizontal space for infoPanel
     constraints.fill = GridBagConstraints.BOTH;
 
-    JPanel infoPanel = createInfoJPanel();
-
-    JScrollPane infoScrollPane = new JScrollPane(infoPanel);
+    infoScrollPane = new JScrollPane();
     infoScrollPane.setMinimumSize(new Dimension(90, 300));
     infoScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     infoScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
     frame.add(infoScrollPane, constraints);
 
-//    frame.add(createWorldPanel(), BorderLayout.WEST);
-//    frame.add(createInfoJPanel(), BorderLayout.CENTER);
-
-//    targetLabel = new JLabel("Target Character");
-//    worldPanel.add(targetLabel, BorderLayout.CENTER);
-//
-//    // TODO: need to add method to show the position of player
-//    playerLabels = new JLabel[10];
-//    for (int i = 0; i < playerLabels.length; i++) {
-//      playerLabels[i] = new JLabel("Player " + (i + 1));
-//      worldPanel.add(playerLabels[i], BorderLayout.CENTER);
-//    }
-//
-//    frame.add(worldPanel);
-  }
-
-  private JPanel createWorldPanel() {
-    worldPanel = new JPanel();
-    worldPanel.setBackground(Color.GRAY);
-
-    ImageIcon imageIcon = new ImageIcon("./WorldMap.png");
-    JLabel imageLabel = new JLabel(imageIcon);
-    worldPanel.add(imageLabel);
-
-    // Add components to display the word map, player, and target information
-    // For example: JLabels for word map, player, and target
-
-    return worldPanel;
-  }
-
-  private JPanel createInfoJPanel() {
-    JPanel infoPanel = new JPanel();
-    infoPanel.setLayout(new GridLayout(2, 1)); // Two rows (top and bottom)
-    worldPanel.setBackground(Color.GREEN);
+    // Create a panel to be added to the JScrollPane's viewport
+    JPanel infoPanelView = new JPanel();
+    infoPanelView.setLayout(new GridLayout(2, 1)); // Two rows (top and bottom)
+    infoPanelView.setBackground(Color.GREEN);
+    
+    //    infoScrollPane.setLayout(new GridLayout(2, 1)); // Two rows (top and bottom)
+    //    infoScrollPane.setBackground(Color.GREEN);
 
     // Add components to display player information (top) and game result/world
     // information (bottom)
-    infoPanel.add(createPlayerInfoPanel());
-    infoPanel.add(createResultPanel());
+    infoPanelView.add(createPlayerInfoPanel());
+    infoPanelView.add(createResultPanel());
 
-    return infoPanel;
+    // Set the view component for the JScrollPane
+    infoScrollPane.setViewportView(infoPanelView);
+
   }
 
   private JPanel createPlayerInfoPanel() {
@@ -161,6 +152,18 @@ public class GraphView implements GameView {
 
     return resultPanel;
   }
+  
+  
+  @Override
+  public void drawMap() {
+    
+    
+  }
+  
+  private void getRoomRect() {
+    for(int i=0; i<mode)
+  }
+  
 
   @Override
   public void configureView(GameControllerNew controller) {
@@ -218,57 +221,21 @@ public class GraphView implements GameView {
   public void showWelcomeMessage() {
     String welcomeMessage = "Welcome to the Game!\n\n" + "This game was created by Eric Chen.\n"
         + "It is based on Java's Swing GUI library.\n" + "Enjoy playing!";
-    JOptionPane optionPane = new JOptionPane(welcomeMessage, JOptionPane.INFORMATION_MESSAGE,
-        JOptionPane.DEFAULT_OPTION, null, new Object[] {}, null);
-
-    JDialog dialog = optionPane.createDialog(frame, "Open Screen");
-    dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-
-    // Add a custom button to the dialog
-    JButton okButton = new JButton("OK");
-    okButton.addActionListener(e -> {
-      dialog.dispose();
-    });
-
-    optionPane.setOptions(new Object[] { okButton });
-    dialog.setContentPane(optionPane);
-
-    // Make the dialog visible
-    dialog.pack();
-    dialog.setLocationRelativeTo(frame);
-    dialog.setVisible(true);
-
+    JOptionPane.showMessageDialog(frame, welcomeMessage, "Welcome",
+        JOptionPane.INFORMATION_MESSAGE);
   }
 
   @Override
   public void showFarewellMessage() {
-    JOptionPane optionPane = new JOptionPane("Thank you for playing the game!",
-        JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[] {}, null);
-
-    JDialog dialog = optionPane.createDialog(frame, "Farewell");
-    dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-
-    // Add a custom button to the dialog
-    JButton okButton = new JButton("OK");
-    okButton.addActionListener(e -> {
-      dialog.dispose();
-      System.exit(0);
-    });
-
-    optionPane.setOptions(new Object[] { okButton });
-    dialog.setContentPane(optionPane);
-
-    // Make the dialog visible
-    dialog.pack();
-    dialog.setLocationRelativeTo(frame);
-    dialog.setVisible(true);
+    JOptionPane.showMessageDialog(frame, "Thank you for playing the game!", "Farewell",
+        JOptionPane.INFORMATION_MESSAGE);
   }
 
   // make the GUI visible
   @Override
   public void display() {
+    //frame.pack();
     frame.setVisible(true);
-
   }
 
   @Override

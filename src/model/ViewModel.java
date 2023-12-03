@@ -9,5 +9,13 @@ public interface ViewModel {
    */
   public String getWorldName();
 
+  
+  
+  /**
+   * How many rooms exit in the game.
+   * 
+   * @return the room number.
+   */
+  int getRoomCount();
 
 }

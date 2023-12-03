@@ -60,4 +60,12 @@ public class TextView implements GameView {
     // TODO Auto-generated method stub 
   }
 
+  @Override
+  public void drawMap() {
+    // TODO Auto-generated method stub
+    
+  }
+  
+  
+
 }

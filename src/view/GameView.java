@@ -28,5 +28,7 @@ public interface GameView {
 
   void showFarewellMessage();
 
+  void drawMap();
+
   
 }

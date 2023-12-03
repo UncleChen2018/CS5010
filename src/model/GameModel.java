@@ -100,12 +100,7 @@ public interface GameModel extends ViewModel {
   void addNewPlayer(String name, int initLocation, int capacity, boolean isHumanControl)
       throws IllegalArgumentException;
 
-  /**
-   * How many rooms exit in the game.
-   * 
-   * @return the room number.
-   */
-  int getRoomCount();
+
 
   /**
    * Move target to the next room. Target will move according to the index of
