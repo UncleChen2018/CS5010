@@ -32,7 +32,8 @@ public interface GameControllerNew {
   void executeGmae();
 
   /**
-   * Loads the game map data from a specified file path.
+   * Loads the game map data from a specified file path. And let the view connect
+   * with the model's world data.
    *
    * @param filePath The file path from which to load the game map data.
    */

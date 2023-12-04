@@ -127,9 +127,7 @@ public class CommandControllerNew implements GameControllerNew {
       worldData = new FileReader(filePath);
       model.setupNewWorld(worldData);
       view.drawMap();
-      System.out.println("repaint begin");
       view.refresh();
-      System.out.println("repaint finished");
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }

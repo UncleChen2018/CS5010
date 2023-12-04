@@ -12,9 +12,13 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileReader;
@@ -57,15 +61,24 @@ public class GraphView implements GameView {
 
   private JPanel playerInfoPanel;
   private JPanel resultPanel;
+  private JLabel resultLabel;
+  
+  
   private JLabel targetLabel;
   private JLabel[] playerLabels;
 
+  private JMenuItem loadWorld;
+  private JMenuItem restartGame;
+  private JMenuItem quitItem;
+
+  private JMenuBar menuBar;
+
   private ArrayList<RoomRect> roomList;
 
-  private class RoomRect{
+  private class RoomRect {
     private int index;
     private final Rectangle bounds;
-    public Rectangle realBounds;
+    private Rectangle realBounds;
     private boolean hasPlayer;
 
     public RoomRect(int index, Rectangle bounds) {
@@ -90,20 +103,24 @@ public class GraphView implements GameView {
     public void setPlayer(boolean hasPlayer) {
       this.hasPlayer = hasPlayer;
     }
-    
-    public void setBounds(int xRatio, int yRatio) {
-      int ratio = Math.min(xRatio, yRatio);
+
+    public void setBounds(int ratio) {
       realBounds.x = bounds.x * ratio;
       realBounds.y = bounds.y * ratio;
       realBounds.width = bounds.width * ratio;
       realBounds.height = bounds.height * ratio;
-      
-      
+
+    }
+
+    public boolean containsPoint(Point point) {
+      return realBounds.contains(point);
     }
 
   }
 
   class WorldPanel extends JPanel {
+    private static final int MIN_SCALE_PER_CELL = 10;
+    private static final long serialVersionUID = 5374257364893332638L;
     private ArrayList<RoomRect> roomList;
 
     public WorldPanel() {
@@ -114,33 +131,39 @@ public class GraphView implements GameView {
     @Override
     protected void paintComponent(Graphics g) {
       super.paintComponent(g);
-      if(roomList.size() == 0) {
+      if (roomList.size() == 0) {
         return;
       }
+
+      int horizonCell = model.getWorldSize()[1];
+      int verticalCell = model.getWorldSize()[0];
+
       // the x span
-      int ratio_x = getWidth()/ model.getWorldSize()[1];
+      int ratioX = getWidth() / horizonCell;
       // the y span
-      int ratio_y = getHeight()/ model.getWorldSize()[0];
-      
+      int ratioY = getHeight() / verticalCell;
 
+      int ratio = Math.max(Math.min(ratioX, ratioY), MIN_SCALE_PER_CELL);
 
-      
       for (RoomRect room : roomList) {
-        room.setBounds(ratio_x,ratio_y);
-        Rectangle bounds = room.getBounds();
+        room.setBounds(ratio);
         g.drawRect(room.getBounds().x, room.getBounds().y, room.getBounds().width,
             room.getBounds().height);
-        
-        int roomMaxX = bounds.x + bounds.width;
-        int roomMaxY = bounds.y + bounds.height;
 
         if (room.hasPlayer()) {
           g.setColor(Color.RED); // Change color for player
           g.fillRect(room.getBounds().x, room.getBounds().y, room.getBounds().width,
               room.getBounds().height);
           g.setColor(Color.BLACK); // Reset color
+
         }
       }
+
+      // here make sure at least keep the min size to show the rectangles full.
+      int minWidth = MIN_SCALE_PER_CELL * horizonCell;
+      int minHeight = MIN_SCALE_PER_CELL * verticalCell;
+
+      setPreferredSize(new Dimension(minWidth, minHeight));
       revalidate();
     }
 
@@ -156,10 +179,14 @@ public class GraphView implements GameView {
         int rectY = y1;
         int rectWidth = (x2 - x1);
         int rectHeight = (y2 - y1);
-        roomList.add(new RoomRect(i, new Rectangle(rectX,rectY,rectWidth,rectHeight)));
+        roomList.add(new RoomRect(i, new Rectangle(rectX, rectY, rectWidth, rectHeight)));
       }
       return roomList;
 
+    }
+
+    public ArrayList<RoomRect> getStoredRoomRect() {
+      return roomList;
     }
 
   }
@@ -171,10 +198,10 @@ public class GraphView implements GameView {
    */
   public GraphView(ViewModel model) {
     this.model = model;
-    initializeGUI();
+    initializeFrame();
   }
 
-  private void initializeGUI() {
+  private void initializeFrame() {
     frame = new JFrame("Kill Doctor Lucky");
     frame.setSize(1200, 800); // Initial size
     frame.setLocationRelativeTo(null); // in the center
@@ -184,9 +211,27 @@ public class GraphView implements GameView {
     frame.setLayout(new GridBagLayout());
     // set the minimum size of the window.
     frame.setMinimumSize(new Dimension(300, 300));
+    // JPanel menuBarPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    createMenuBar();
+
+    createMenuBar();
 
     createWorldPanel();
     createInfoPanel();
+
+  }
+
+  private void createMenuBar() {
+    loadWorld = new JMenuItem("Load World");
+    restartGame = new JMenuItem("Restart Game");
+    quitItem = new JMenuItem("Quit");
+
+    menuBar = new JMenuBar();
+    menuBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+    menuBar.add(loadWorld);
+    menuBar.add(restartGame);
+    menuBar.add(quitItem);
+    frame.setJMenuBar(menuBar);
 
   }
 
@@ -251,6 +296,8 @@ public class GraphView implements GameView {
   private JPanel createResultPanel() {
     resultPanel = new JPanel();
     resultPanel.setBackground(Color.WHITE);
+    resultLabel = new JLabel();
+    resultPanel.add(resultLabel);
 
     // Add components to display game result or world information
     // For example: JLabels or JTextAreas for result details
@@ -263,16 +310,43 @@ public class GraphView implements GameView {
   public void drawMap() {
     worldlPanel.removeAll();
     worldlPanel.getRoomRect(model);
-    System.out.println("Rect loaded");
-    
+    // System.out.println(w.size());
     worldlPanel.revalidate();
     worldlPanel.repaint();
+    worldlPanel.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        Point mousePoint = e.getPoint();
+        for (RoomRect room : worldlPanel.getStoredRoomRect()) {
+          if (room.containsPoint(mousePoint)) {
+            // The mouse is hovering over this room
+            String infoString = "Click over Room " + room.getIndex();
+            System.out.println(infoString);
+            resultLabel.setText(infoString);
+            // Add your logic here to handle the hover event
+            break; // Assuming only one room can be hovered at a time
+          }
+        }
+      }
+    });
+    
+    worldlPanel.addMouseMotionListener(new MouseMotionAdapter() {
+      @Override
+      public void mouseMoved(MouseEvent e) {
+          Point mousePoint = e.getPoint();
+          for (RoomRect room : worldlPanel.getStoredRoomRect()) {
+              if (room.containsPoint(mousePoint)) {
+                  //System.out.println("Hovering over Room " + room.getIndex());
+                  // Add your logic here to handle the mouse move event
+                  break;
+              }
+          }
+      }
+  });
   }
 
   @Override
   public void configureView(GameControllerNew controller) {
-    JMenuItem loadWorld = new JMenuItem("Load World");
-
     loadWorld.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -297,7 +371,6 @@ public class GraphView implements GameView {
       }
     });
 
-    JMenuItem restartGame = new JMenuItem("Restart Game");
     restartGame.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -305,20 +378,12 @@ public class GraphView implements GameView {
       }
     });
 
-    JMenuItem quitItem = new JMenuItem("Quit");
     quitItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         controller.exitGame();
       }
     });
-
-    JMenuBar menuBar = new JMenuBar();
-    menuBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-    menuBar.add(loadWorld);
-    menuBar.add(restartGame);
-    menuBar.add(quitItem);
-    frame.setJMenuBar(menuBar);
 
   }
 
