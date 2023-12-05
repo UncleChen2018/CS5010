@@ -138,14 +138,7 @@ public interface GameModel extends ViewModel {
 
   int getItemLocation(int itemId);
 
-  /**
-   * Get String represent the information INSIDE the room.
-   * 
-   * @param location index of the room.
-   * @return String contains room's index, name; items in, characters in and if
-   *         target in;
-   */
-  String queryRoomDetails(int location);
+
 
 
 

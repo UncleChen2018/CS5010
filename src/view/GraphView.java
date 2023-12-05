@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -43,6 +44,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicMenuItemUI;
@@ -64,11 +66,10 @@ public class GraphView implements GameView {
   private WorldPanel worldlPanel;
 
   private JPanel playerInfoPanel;
-  private JPanel resultPanel;
-  private JLabel resultLabel;
+  private JTextArea playerLabel;
 
-  private JLabel targetLabel;
-  private JLabel[] playerLabels;
+  private JPanel resultPanel;
+  private JTextArea resultLabel;
 
   private JMenuItem loadWorld;
   private JMenuItem restartGame;
@@ -77,19 +78,19 @@ public class GraphView implements GameView {
   private JMenuBar menuBar;
 
   private ArrayList<RoomRect> roomList;
-  private JLabel playerLabel;
+
+  private Font largerFont = new Font("Arial", Font.BOLD, 16);
 
   private class RoomRect {
     public final Rectangle bounds;
     private int index;
     private Rectangle realBounds;
-    private boolean hasPlayer;
 
     public RoomRect(int index, Rectangle bounds) {
       this.index = index;
       this.bounds = bounds;
       this.realBounds = new Rectangle();
-      this.hasPlayer = false;
+
     }
 
     public int getIndex() {
@@ -298,10 +299,10 @@ public class GraphView implements GameView {
     constraints.fill = GridBagConstraints.BOTH;
 
     worldlPanel = new WorldPanel();
-    worldlPanel.setMinimumSize(new Dimension(300, 300)); // Set minimum size
+    //worldlPanel.setMinimumSize(new Dimension(300, 300)); // Set minimum size
 
     worldScrollPane = new JScrollPane(worldlPanel);
-    worldScrollPane.setMinimumSize(new Dimension(300, 300));
+    //worldScrollPane.setMinimumSize(new Dimension(300, 300));
     worldScrollPane.setBackground(Color.GRAY);
     worldScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     worldScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -328,9 +329,6 @@ public class GraphView implements GameView {
     infoPanelView.setLayout(new GridLayout(2, 1)); // Two rows (top and bottom)
     infoPanelView.setBackground(Color.GREEN);
 
-    // infoScrollPane.setLayout(new GridLayout(2, 1)); // Two rows (top and bottom)
-    // infoScrollPane.setBackground(Color.GREEN);
-
     infoPanelView.add(createPlayerInfoPanel());
     infoPanelView.add(createResultPanel());
 
@@ -340,26 +338,23 @@ public class GraphView implements GameView {
   }
 
   private JPanel createPlayerInfoPanel() {
-    playerInfoPanel = new JPanel();
+    playerInfoPanel = new JPanel(new BorderLayout());
     playerInfoPanel.setBackground(Color.LIGHT_GRAY);
-    playerLabel = new JLabel("Player Information");
-    playerInfoPanel.add(playerLabel);
-
-    // Add components to display player information
-    // For example: JLabels or JTextAreas for player details
-
+    playerLabel = new JTextArea("Player Information");
+    playerLabel.setFont(largerFont);
+    playerLabel.setEditable(false);
+    playerInfoPanel.add(new JScrollPane(playerLabel), BorderLayout.CENTER);
     return playerInfoPanel;
   }
 
   private JPanel createResultPanel() {
-    resultPanel = new JPanel();
+    resultPanel = new JPanel(new BorderLayout());
     resultPanel.setBackground(Color.WHITE);
-    resultLabel = new JLabel();
-    resultPanel.add(resultLabel);
-
-    // Add components to display game result or world information
-    // For example: JLabels or JTextAreas for result details
-
+    resultLabel = new JTextArea("World Information");
+    resultLabel.setFont(largerFont);
+    resultLabel.setEditable(false);
+    resultPanel.add(new JScrollPane(resultLabel), BorderLayout.CENTER);
+    
     return resultPanel;
   }
 
@@ -377,25 +372,21 @@ public class GraphView implements GameView {
         Point mousePoint = e.getPoint();
         for (RoomRect room : worldlPanel.getStoredRoomRect()) {
           if (room.containsPoint(mousePoint)) {
-            // The mouse is hovering over this room
-            String infoString = "Click over Room " + room.getIndex();
-            System.out.println(infoString);
-            resultLabel.setText(infoString);
-            // Add your logic here to handle the hover event
-            break; // Assuming only one room can be hovered at a time
+            resultLabel.setText(model.queryRoomDetails(room.getIndex()));
+            break;
           }
         }
 
-        // TODO: add player click check
         if (worldlPanel.targetMark.containsPoint(mousePoint)) {
-          playerLabel.setText(model.queryTargetDetails());
+          playerLabel
+              .setText(model.queryTargetDetails());
         }
 
         for (int i = 0; i < model.getPlayerCount(); i++) {
           System.out.println(String.format("check player %d", i));
           if (worldlPanel.playerMarkList.get(i).containsPoint(mousePoint)) {
-            playerLabel.setText(model.queryPlayerDetails(i));
-            System.out.println("Is in ");
+            playerLabel
+                .setText(model.queryPlayerDetails(i));
           }
         }
       }
