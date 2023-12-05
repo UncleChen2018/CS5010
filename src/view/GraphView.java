@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -22,10 +23,13 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -62,8 +66,7 @@ public class GraphView implements GameView {
   private JPanel playerInfoPanel;
   private JPanel resultPanel;
   private JLabel resultLabel;
-  
-  
+
   private JLabel targetLabel;
   private JLabel[] playerLabels;
 
@@ -77,7 +80,7 @@ public class GraphView implements GameView {
 
   private class RoomRect {
     private int index;
-    private final Rectangle bounds;
+    public final Rectangle bounds;
     private Rectangle realBounds;
     private boolean hasPlayer;
 
@@ -92,7 +95,7 @@ public class GraphView implements GameView {
       return index;
     }
 
-    public Rectangle getBounds() {
+    public Rectangle getRealBounds() {
       return realBounds;
     }
 
@@ -120,12 +123,21 @@ public class GraphView implements GameView {
 
   class WorldPanel extends JPanel {
     private static final int MIN_SCALE_PER_CELL = 10;
+    private static final int MAX_PLAYER_NUM = 10;
     private static final long serialVersionUID = 5374257364893332638L;
     private ArrayList<RoomRect> roomList;
+    private CharcterMark targetMark;
+    private ArrayList<CharcterMark> playerMarkList;
 
     public WorldPanel() {
       this.roomList = new ArrayList<>();
       // addMouseListener(new RoomClickListener());
+      targetMark = new CharcterMark("./res/graph/targetIcon.png");
+      playerMarkList = new ArrayList<>(10);
+      for (int i = 0; i < MAX_PLAYER_NUM; i++) {
+        CharcterMark playerMarks = new CharcterMark("./res/graph/player" + i + ".png");
+        playerMarkList.add(playerMarks);
+      }
     }
 
     @Override
@@ -144,19 +156,41 @@ public class GraphView implements GameView {
       int ratioY = getHeight() / verticalCell;
 
       int ratio = Math.max(Math.min(ratioX, ratioY), MIN_SCALE_PER_CELL);
+      int iconSize = ratio;
 
-      for (RoomRect room : roomList) {
+      for (int i = 0; i < roomList.size(); i++) {
+        RoomRect room = roomList.get(i);
         room.setBounds(ratio);
-        g.drawRect(room.getBounds().x, room.getBounds().y, room.getBounds().width,
-            room.getBounds().height);
+        g.drawRect(room.getRealBounds().x, room.getRealBounds().y, room.getRealBounds().width,
+            room.getRealBounds().height);
 
         if (room.hasPlayer()) {
           g.setColor(Color.RED); // Change color for player
-          g.fillRect(room.getBounds().x, room.getBounds().y, room.getBounds().width,
-              room.getBounds().height);
+          g.fillRect(room.getRealBounds().x, room.getRealBounds().y, room.getRealBounds().width,
+              room.getRealBounds().height);
           g.setColor(Color.BLACK); // Reset color
 
         }
+
+        int iconToDraw = 0;
+        if (model.getTargetLocation() == i) {
+          for (; iconToDraw <= 10; iconToDraw++) {
+//            System.out.println(room.bounds);
+//            System.out.println(room.bounds.width);
+//            System.out.println(room.bounds.height);
+
+            int x = iconToDraw % room.bounds.width * ratio + room.getRealBounds().x;
+            int y = iconToDraw / room.bounds.width * ratio + room.getRealBounds().y;
+
+            targetMark.setBounds(x, y, ratio);
+            targetMark.draw(g);
+            System.out.println(String.format("In draw marks, %d, %d, %d", iconToDraw, x, y));
+          }
+
+//          g.drawImage(playerIconList.get(0).getImage(), room.getBounds().x + ratio,
+//              room.getBounds().y + ratio, ratio, ratio, this);
+        }
+
       }
 
       // here make sure at least keep the min size to show the rectangles full.
@@ -185,8 +219,46 @@ public class GraphView implements GameView {
 
     }
 
+    //
+    private class CharcterMark {
+      public Image image;
+      // public int size;
+      public Rectangle bounds;
+
+      public CharcterMark(String imagePath) {
+        try {
+          this.image = ImageIO.read(new File(imagePath));
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+
+      public void setBounds(int x, int y, int size) {
+        // this.image = this.image.getScaledInstance(size, size, Image.SCALE_SMOOTH);
+        this.bounds = new Rectangle(x, y, size, size);
+      }
+
+      public boolean containsPoint(Point point) {
+        return bounds.contains(point);
+      }
+
+      public void draw(Graphics g) {
+        g.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height, null);
+      }
+    }
+
     public ArrayList<RoomRect> getStoredRoomRect() {
       return roomList;
+    }
+
+    private void getIconByPos() {
+
+    }
+
+    // draw icon number N in room with index
+    // TODO: the room should know its target and player list.
+    private void drawAllMarks(RoomRect room) {
+
     }
 
   }
@@ -329,20 +401,20 @@ public class GraphView implements GameView {
         }
       }
     });
-    
+
     worldlPanel.addMouseMotionListener(new MouseMotionAdapter() {
       @Override
       public void mouseMoved(MouseEvent e) {
-          Point mousePoint = e.getPoint();
-          for (RoomRect room : worldlPanel.getStoredRoomRect()) {
-              if (room.containsPoint(mousePoint)) {
-                  //System.out.println("Hovering over Room " + room.getIndex());
-                  // Add your logic here to handle the mouse move event
-                  break;
-              }
+        Point mousePoint = e.getPoint();
+        for (RoomRect room : worldlPanel.getStoredRoomRect()) {
+          if (room.containsPoint(mousePoint)) {
+            // System.out.println("Hovering over Room " + room.getIndex());
+            // Add your logic here to handle the mouse move event
+            break;
           }
+        }
       }
-  });
+    });
   }
 
   @Override

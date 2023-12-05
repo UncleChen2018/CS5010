@@ -108,12 +108,7 @@ public interface GameModel extends ViewModel {
    */
   void moveTargetNextRoom();
 
-  /**
-   * Get target location.
-   * 
-   * @return the room index target is in.
-   */
-  int getTargetLocation();
+
 
   /**
    * Given room location, query its item information.

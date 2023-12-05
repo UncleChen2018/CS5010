@@ -41,5 +41,12 @@ public interface ViewModel {
    * @return the name of the room
    */
   String getRoomName(int index);
+  
+  /**
+   * Get target location.
+   * 
+   * @return the room index target is in.
+   */
+  int getTargetLocation();
 
 }
