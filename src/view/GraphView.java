@@ -16,8 +16,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.File;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -125,28 +129,63 @@ public class GraphView implements GameView {
     constraints.weightx = 0.3; // 30% of the horizontal space for infoPanel
     constraints.fill = GridBagConstraints.BOTH;
 
-//    infoScrollPane = new JScrollPane();
-//    //infoScrollPane.setMinimumSize(new Dimension(90, 300));
-//    infoScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//    infoScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+    infoScrollPane = new JScrollPane();
+    //infoScrollPane.setMinimumSize(new Dimension(90, 300));
+    infoScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    infoScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 
 
     // Create a panel to be added to the JScrollPane's viewport
     JPanel infoPanelView = new JPanel();
-    infoPanelView.setLayout(new GridLayout(2, 1)); // Two rows (top and bottom)
+    infoPanelView.setLayout(new GridLayout(3, 1)); // Two rows (top and bottom)
     infoPanelView.setBackground(Color.GREEN);
 
+    infoPanelView.add(createGameStatusPanel());
     infoPanelView.add(createPlayerInfoPanel());
     infoPanelView.add(createResultPanel());
 
-//    // Set the view component for the JScrollPane
-//    infoScrollPane.setViewportView(infoPanelView);
-//    frame.revalidate();
+    // Set the view component for the JScrollPane
+    infoScrollPane.setViewportView(infoPanelView);
+    frame.revalidate();
     
     frame.add(infoPanelView, constraints);
 
   }
+  
+  
+  private JPanel createGameStatusPanel() {
+    // Create a panel for game status
+    JPanel gameStatusPanel = new JPanel();
+    gameStatusPanel.setBackground(Color.WHITE);
+    gameStatusPanel.setLayout(new BoxLayout(gameStatusPanel, BoxLayout.Y_AXIS));
+
+    // Add components to the game status panel
+    JLabel turnLabel = new JLabel("Turn: ");
+    turnLabel.setFont(largerFont);
+    gameStatusPanel.add(turnLabel);
+
+    // Add a label to display current turn (get from model)
+    JLabel currentTurnLabel = new JLabel(Integer.toString(1));
+    currentTurnLabel.setFont(largerFont);
+    gameStatusPanel.add(currentTurnLabel);
+
+    JLabel currentPlayerLabel = new JLabel("Current Player: ");
+    currentPlayerLabel.setFont(largerFont);
+    gameStatusPanel.add(currentPlayerLabel);
+
+    // Add a label to display the current player (get from model)
+    JLabel currentPlayerNameLabel = new JLabel("XX");
+    currentPlayerNameLabel.setFont(largerFont);
+    gameStatusPanel.add(currentPlayerNameLabel);
+
+    // Add a restart button
+    JButton restartButton = new JButton("Restart");
+    gameStatusPanel.add(restartButton);
+
+    return gameStatusPanel;
+}
+  
 
   private JPanel createPlayerInfoPanel() {
     playerInfoPanel = new JPanel(new BorderLayout());
@@ -154,6 +193,7 @@ public class GraphView implements GameView {
     playerLabel = new JTextArea("Player Information");
     playerLabel.setFont(largerFont);
     playerLabel.setEditable(false);
+    
     
     
     JScrollPane playerScrollPane = new JScrollPane(playerLabel);
