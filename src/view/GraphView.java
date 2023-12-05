@@ -77,11 +77,9 @@ public class GraphView implements GameView {
 
   private JMenuBar menuBar;
 
-  private ArrayList<RoomRect> roomList;
-
   private Font largerFont = new Font("Arial", Font.BOLD, 16);
 
-  private class RoomRect {
+  public class RoomRect {
     public final Rectangle bounds;
     private int index;
     private Rectangle realBounds;
@@ -299,10 +297,10 @@ public class GraphView implements GameView {
     constraints.fill = GridBagConstraints.BOTH;
 
     worldlPanel = new WorldPanel();
-    //worldlPanel.setMinimumSize(new Dimension(300, 300)); // Set minimum size
+    // worldlPanel.setMinimumSize(new Dimension(300, 300)); // Set minimum size
 
     worldScrollPane = new JScrollPane(worldlPanel);
-    //worldScrollPane.setMinimumSize(new Dimension(300, 300));
+    // worldScrollPane.setMinimumSize(new Dimension(300, 300));
     worldScrollPane.setBackground(Color.GRAY);
     worldScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     worldScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -354,7 +352,7 @@ public class GraphView implements GameView {
     resultLabel.setFont(largerFont);
     resultLabel.setEditable(false);
     resultPanel.add(new JScrollPane(resultLabel), BorderLayout.CENTER);
-    
+
     return resultPanel;
   }
 
@@ -378,15 +376,13 @@ public class GraphView implements GameView {
         }
 
         if (worldlPanel.targetMark.containsPoint(mousePoint)) {
-          playerLabel
-              .setText(model.queryTargetDetails());
+          playerLabel.setText(model.queryTargetDetails());
         }
 
         for (int i = 0; i < model.getPlayerCount(); i++) {
           System.out.println(String.format("check player %d", i));
           if (worldlPanel.playerMarkList.get(i).containsPoint(mousePoint)) {
-            playerLabel
-                .setText(model.queryPlayerDetails(i));
+            playerLabel.setText(model.queryPlayerDetails(i));
           }
         }
       }
