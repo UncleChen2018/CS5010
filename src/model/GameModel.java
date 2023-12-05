@@ -39,12 +39,6 @@ public interface GameModel extends ViewModel {
    */
   String getName();
 
-  /**
-   * How many players in this game.
-   * 
-   * @return players number.
-   */
-  int getPlayerCount();
 
   /**
    * Set player to certain space.
@@ -260,14 +254,7 @@ public interface GameModel extends ViewModel {
 
   String getItemString(int itemId);
 
-  /**
-   * Gets a list of character IDs present in the room at the specified location.
-   *
-   * @param location the location of the room
-   * @return a list of character IDs in the room
-   */
 
-  ArrayList<Integer> getRoomCharacter(int location);
 
   /**
    * Gets a formatted string representation of the pet.

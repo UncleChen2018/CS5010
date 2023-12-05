@@ -79,8 +79,8 @@ public class GraphView implements GameView {
   private ArrayList<RoomRect> roomList;
 
   private class RoomRect {
-    private int index;
     public final Rectangle bounds;
+    private int index;    
     private Rectangle realBounds;
     private boolean hasPlayer;
 
@@ -97,14 +97,6 @@ public class GraphView implements GameView {
 
     public Rectangle getRealBounds() {
       return realBounds;
-    }
-
-    public boolean hasPlayer() {
-      return hasPlayer;
-    }
-
-    public void setPlayer(boolean hasPlayer) {
-      this.hasPlayer = hasPlayer;
     }
 
     public void setBounds(int ratio) {
@@ -138,6 +130,7 @@ public class GraphView implements GameView {
         CharcterMark playerMarks = new CharcterMark("./res/graph/player" + i + ".png");
         playerMarkList.add(playerMarks);
       }
+      System.out.println("Marks finished");
     }
 
     @Override
@@ -164,32 +157,7 @@ public class GraphView implements GameView {
         g.drawRect(room.getRealBounds().x, room.getRealBounds().y, room.getRealBounds().width,
             room.getRealBounds().height);
 
-        if (room.hasPlayer()) {
-          g.setColor(Color.RED); // Change color for player
-          g.fillRect(room.getRealBounds().x, room.getRealBounds().y, room.getRealBounds().width,
-              room.getRealBounds().height);
-          g.setColor(Color.BLACK); // Reset color
-
-        }
-
-        int iconToDraw = 0;
-        if (model.getTargetLocation() == i) {
-          for (; iconToDraw <= 10; iconToDraw++) {
-//            System.out.println(room.bounds);
-//            System.out.println(room.bounds.width);
-//            System.out.println(room.bounds.height);
-
-            int x = iconToDraw % room.bounds.width * ratio + room.getRealBounds().x;
-            int y = iconToDraw / room.bounds.width * ratio + room.getRealBounds().y;
-
-            targetMark.setBounds(x, y, ratio);
-            targetMark.draw(g);
-            System.out.println(String.format("In draw marks, %d, %d, %d", iconToDraw, x, y));
-          }
-
-//          g.drawImage(playerIconList.get(0).getImage(), room.getBounds().x + ratio,
-//              room.getBounds().y + ratio, ratio, ratio, this);
-        }
+        drawAllMarks(room, ratio, g);
 
       }
 
@@ -219,7 +187,6 @@ public class GraphView implements GameView {
 
     }
 
-    //
     private class CharcterMark {
       public Image image;
       // public int size;
@@ -228,6 +195,7 @@ public class GraphView implements GameView {
       public CharcterMark(String imagePath) {
         try {
           this.image = ImageIO.read(new File(imagePath));
+          System.out.println(imagePath);
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -251,13 +219,27 @@ public class GraphView implements GameView {
       return roomList;
     }
 
-    private void getIconByPos() {
-
-    }
-
     // draw icon number N in room with index
     // TODO: the room should know its target and player list.
-    private void drawAllMarks(RoomRect room) {
+    private void drawAllMarks(RoomRect room, int ratio, Graphics g) {
+      int location = room.getIndex();
+      int marksToDraw = 0;
+      ArrayList<CharcterMark> toDrawList = new ArrayList<>();
+      if (model.getTargetLocation() == location) {
+        toDrawList.add(targetMark);
+      }
+      for (Integer i : model.getRoomCharacter(location)) {
+        toDrawList.add(playerMarkList.get(i));
+      }
+      for (int iconToDraw = 0; iconToDraw < toDrawList.size(); iconToDraw++) {
+        int x = iconToDraw % room.bounds.width * ratio + room.getRealBounds().x;
+        int y = iconToDraw / room.bounds.width * ratio + room.getRealBounds().y;
+
+        toDrawList.get(iconToDraw).setBounds(x, y, ratio);
+        toDrawList.get(iconToDraw).draw(g);
+        // System.out.println(String.format("In draw marks, %d, %d, %d", iconToDraw, x,
+        // y));
+      }
 
     }
 

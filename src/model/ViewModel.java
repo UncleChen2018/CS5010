@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 /**
  * The read only model use by the view.
  */
@@ -41,12 +43,28 @@ public interface ViewModel {
    * @return the name of the room
    */
   String getRoomName(int index);
-  
+
   /**
    * Get target location.
    * 
    * @return the room index target is in.
    */
   int getTargetLocation();
+
+  /**
+   * How many players in this game.
+   * 
+   * @return players number.
+   */
+  int getPlayerCount();
+  
+  /**
+   * Gets a list of character IDs present in the room at the specified location.
+   *
+   * @param location the location of the room
+   * @return a list of character IDs in the room
+   */
+
+  ArrayList<Integer> getRoomCharacter(int location);
 
 }
