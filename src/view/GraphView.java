@@ -120,13 +120,14 @@ public class GraphView implements GameView {
     private static final long serialVersionUID = 5374257364893332638L;
     private ArrayList<RoomRect> roomList;
     private CharcterMark targetMark;
+    // Note, the index of the player mark should be the same as the player id.
     private ArrayList<CharcterMark> playerMarkList;
 
     public WorldPanel() {
       this.roomList = new ArrayList<>();
       // addMouseListener(new RoomClickListener());
       targetMark = new CharcterMark("./res/graph/targetIcon.png");
-      playerMarkList = new ArrayList<>(10);
+      playerMarkList = new ArrayList<>(MAX_PLAYER_NUM);
       for (int i = 0; i < MAX_PLAYER_NUM; i++) {
         CharcterMark playerMarks = new CharcterMark("./res/graph/player" + i + ".png");
         playerMarkList.add(playerMarks);
@@ -382,6 +383,19 @@ public class GraphView implements GameView {
             resultLabel.setText(infoString);
             // Add your logic here to handle the hover event
             break; // Assuming only one room can be hovered at a time
+          }
+        }
+
+        // TODO: add player click check
+        if (worldlPanel.targetMark.containsPoint(mousePoint)) {
+          playerLabel.setText(model.queryTargetDetails());
+        }
+
+        for (int i = 0; i < model.getPlayerCount(); i++) {
+          System.out.println(String.format("check player %d", i));
+          if (worldlPanel.playerMarkList.get(i).containsPoint(mousePoint)) {
+            playerLabel.setText(model.queryPlayerDetails(i));
+            System.out.println("Is in ");
           }
         }
       }

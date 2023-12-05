@@ -147,23 +147,9 @@ public interface GameModel extends ViewModel {
    */
   String queryRoomDetails(int location);
 
-  /**
-   * Queries and retrieves detailed information about the player with the
-   * specified ID.
-   *
-   * @param playerId the ID of the player
-   * @return a formatted string containing player details
-   */
 
-  String queryPlayerDetails(int playerId);
 
-  /**
-   * Queries and retrieves detailed information about the target.
-   *
-   * @return a formatted string containing target details
-   */
 
-  String queryTargetDetails();
 
   /**
    * Queries and retrieves information about the neighboring rooms of the

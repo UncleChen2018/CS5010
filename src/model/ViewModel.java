@@ -66,5 +66,23 @@ public interface ViewModel {
    */
 
   ArrayList<Integer> getRoomCharacter(int location);
+  
+  /**
+   * Queries and retrieves detailed information about the target.
+   *
+   * @return a formatted string containing target details
+   */
+
+  String queryTargetDetails();
+  
+  /**
+   * Queries and retrieves detailed information about the player with the
+   * specified ID.
+   *
+   * @param playerId the ID of the player
+   * @return a formatted string containing player details
+   */
+
+  String queryPlayerDetails(int playerId);
 
 }
