@@ -13,7 +13,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import model.GameModel;
-import model.ViewModel;
 import view.GameView;
 
 /**
@@ -90,8 +89,6 @@ public class CommandControllerNew implements GameControllerNew {
     maxTurn = turnLimit;
     currentTurn = 0;
     generator = new NumberGenerator();
-    // TODO: complete the configureView
-    // this.view.configureView(this);
 
   }
 
@@ -128,7 +125,9 @@ public class CommandControllerNew implements GameControllerNew {
       model.setupNewWorld(worldData);
       view.drawMap();
       // fix here, try to add one player.
-      view.displayAddPlayer(this);
+      while (model.getPlayerCount() == 0) {
+        view.displayAddPlayer(this);
+      }
       view.refresh();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -144,15 +143,13 @@ public class CommandControllerNew implements GameControllerNew {
   public void executeGmae() {
     start(this.model);
   }
-  
+
   @Override
   public void exitGame() {
     view.showFarewellMessage();
     System.exit(0);
-    
-  }
 
-  
+  }
 
   @Override
   public void start(GameModel model) {
@@ -174,23 +171,25 @@ public class CommandControllerNew implements GameControllerNew {
   }
 
   // the method to run gui game.
-  // TODO finish it.
   private void processGraphicGame() {
     view.display();
     view.showWelcomeMessage();
 
   }
-  
-  
 
   @Override
-  public void setNewPlayer(String playerName, int initialLocation, int itemCapacity,
+  public boolean setNewPlayer(String playerName, int initialLocation, int itemCapacity,
       String controlMode) {
-    
-    model.addNewPlayer(playerName, initialLocation, itemCapacity, "HUMAN".equals(controlMode));
-    System.out.println("Add new player has been called");
-    System.out.println(model.queryPlayerDetails(0));
-    
+    try {
+      model.addNewPlayer(playerName, initialLocation, itemCapacity, "HUMAN".equals(controlMode));
+      view.refresh();
+      
+     
+      return true;
+    } catch (IllegalArgumentException e) {
+      return false;
+    }
+
   }
 
   private void processTextGame() {

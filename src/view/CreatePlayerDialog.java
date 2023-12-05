@@ -102,37 +102,34 @@ public class CreatePlayerDialog extends JDialog {
     add(addButton, constraints);
   }
 
-  private void addListeners() {
-    addButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        // Add logic to handle the button click (e.g., validate input, add player)
-        // Then close the dialog
-        System.out.println(getPlayerName());
-        System.out.println(getInitialLocation());
-        System.out.println(getItemCapacity());
-        System.out.println(getControlMode());
-        setVisible(false);
-
-        playerNameField.setText("");
-        initialLocationField.setText("");
-        itemCapacityField.setSelectedItem(DEFAULT_CAPACITY);
-      }
-    });
-  }
-
   private void addListeners(GameControllerNew controller) {
     addButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
+        boolean addedSuccessfully = controller.setNewPlayer(getPlayerName(), getInitialLocation(),
+            getItemCapacity(), getControlMode());
+        if (addedSuccessfully) {
+          int option = JOptionPane.showConfirmDialog(CreatePlayerDialog.this,
+              String.format("Player added successfully! There is/are %d player(s) now. "
+                  + "Do you want to add more players?", model.getPlayerCount()),
+              "Success", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-
-        controller.setNewPlayer(getPlayerName(), getInitialLocation(), getItemCapacity(),
-            getControlMode());
+          if (option == JOptionPane.YES_OPTION) {
+            // Clear input fields
+            playerNameField.setText("");
+            initialLocationField.setText("");
+            itemCapacityField.setSelectedItem(DEFAULT_CAPACITY);
+          } else {
+            // Hide the dialog if user chooses not to add more players
+            setVisible(false);
+            dispose();
+          }
+        } else {
+          // Handle the case where adding the player was not successful
+          JOptionPane.showMessageDialog(CreatePlayerDialog.this,
+              "Failed to add player. Please check the input.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         
-        playerNameField.setText("");
-        initialLocationField.setText("");
-        itemCapacityField.setSelectedItem(DEFAULT_CAPACITY);
       }
     });
   }

@@ -49,9 +49,9 @@ public interface GameControllerNew {
    * @param initialLocation
    * @param itemCapacity
    * @param controlMode
+   * @return if the set is successfully.
    */
-  void setNewPlayer(String playerName, int initialLocation, int itemCapacity,
+  boolean setNewPlayer(String playerName, int initialLocation, int itemCapacity,
       String controlMode);
-  
 
 }

@@ -77,10 +77,11 @@ public class GraphView implements GameView {
   private JMenuBar menuBar;
 
   private ArrayList<RoomRect> roomList;
+  private JLabel playerLabel;
 
   private class RoomRect {
     public final Rectangle bounds;
-    private int index;    
+    private int index;
     private Rectangle realBounds;
     private boolean hasPlayer;
 
@@ -340,6 +341,8 @@ public class GraphView implements GameView {
   private JPanel createPlayerInfoPanel() {
     playerInfoPanel = new JPanel();
     playerInfoPanel.setBackground(Color.LIGHT_GRAY);
+    playerLabel = new JLabel("Player Information");
+    playerInfoPanel.add(playerLabel);
 
     // Add components to display player information
     // For example: JLabels or JTextAreas for player details
@@ -398,12 +401,15 @@ public class GraphView implements GameView {
       }
     });
   }
-  
+
   @Override
   public void displayAddPlayer(GameControllerNew controller) {
+    JOptionPane.showMessageDialog(frame,
+        "You must create at least one player before the game begins.", "No Players",
+        JOptionPane.INFORMATION_MESSAGE);
     CreatePlayerDialog dialog = new CreatePlayerDialog(frame, model, controller);
     dialog.setVisible(true);
-    
+
   }
 
   @Override
