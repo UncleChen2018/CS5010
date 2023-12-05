@@ -21,10 +21,10 @@ class WorldPanel extends JPanel {
   private static final int MIN_SCALE_PER_CELL = 10;
   private static final int MAX_PLAYER_NUM = 10;
   private static final long serialVersionUID = 5374257364893332638L;
-  private ArrayList<RoomRect> roomList;
-  private CharcterMark targetMark;
+  public ArrayList<RoomRect> roomList;
+  public CharcterMark targetMark;
   // Note, the index of the player mark should be the same as the player id.
-  private ArrayList<CharcterMark> playerMarkList;
+  public ArrayList<CharcterMark> playerMarkList;
   private ViewModel model;
 
   public WorldPanel() {
@@ -98,7 +98,7 @@ class WorldPanel extends JPanel {
   }
   
   
-  private class RoomRect {
+  public class RoomRect {
     public final Rectangle bounds;
     private int index;
     private Rectangle realBounds;
@@ -132,7 +132,7 @@ class WorldPanel extends JPanel {
 
   }
 
-  private class CharcterMark {
+  public class CharcterMark {
     public Image image;
     // public int size;
     public Rectangle bounds;
