@@ -412,7 +412,7 @@ public class GraphView implements GameView {
     JOptionPane.showMessageDialog(frame,
         "You must create at least one player before the game begins.", "No Players",
         JOptionPane.INFORMATION_MESSAGE);
-    CreatePlayerDialog dialog = new CreatePlayerDialog(frame, model, controller);
+    PlayerCreationDialog dialog = new PlayerCreationDialog(frame, model, controller);
     dialog.setVisible(true);
 
   }

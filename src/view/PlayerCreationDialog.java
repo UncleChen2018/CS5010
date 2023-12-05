@@ -20,7 +20,7 @@ import javax.swing.SwingUtilities;
 
 import controller.GameControllerNew;
 
-public class CreatePlayerDialog extends JDialog {
+public class PlayerCreationDialog extends JDialog {
 
   private static final long serialVersionUID = 4080458570669687911L;
   private JTextField playerNameField;
@@ -31,7 +31,7 @@ public class CreatePlayerDialog extends JDialog {
   private ViewModel model;
   private final int DEFAULT_CAPACITY = 2;
 
-  public CreatePlayerDialog(JFrame parentFrame, ViewModel model, GameControllerNew controller) {
+  public PlayerCreationDialog(JFrame parentFrame, ViewModel model, GameControllerNew controller) {
     super(parentFrame, "Create Player", true);
     this.model = model;
     initComponents();
@@ -109,7 +109,7 @@ public class CreatePlayerDialog extends JDialog {
         boolean addedSuccessfully = controller.setNewPlayer(getPlayerName(), getInitialLocation(),
             getItemCapacity(), getControlMode());
         if (addedSuccessfully) {
-          int option = JOptionPane.showConfirmDialog(CreatePlayerDialog.this,
+          int option = JOptionPane.showConfirmDialog(PlayerCreationDialog.this,
               String.format("Player added successfully! There is/are %d player(s) now. "
                   + "Do you want to add more players?", model.getPlayerCount()),
               "Success", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -126,7 +126,7 @@ public class CreatePlayerDialog extends JDialog {
           }
         } else {
           // Handle the case where adding the player was not successful
-          JOptionPane.showMessageDialog(CreatePlayerDialog.this,
+          JOptionPane.showMessageDialog(PlayerCreationDialog.this,
               "Failed to add player. Please check the input.", "Error", JOptionPane.ERROR_MESSAGE);
         }
         
@@ -165,7 +165,7 @@ public class CreatePlayerDialog extends JDialog {
     }
 
     private void showError(String message) {
-      JOptionPane.showMessageDialog(CreatePlayerDialog.this, message, "Input Error",
+      JOptionPane.showMessageDialog(PlayerCreationDialog.this, message, "Input Error",
           JOptionPane.ERROR_MESSAGE);
     }
   }
@@ -185,7 +185,7 @@ public class CreatePlayerDialog extends JDialog {
     }
 
     private void showError(String message) {
-      JOptionPane.showMessageDialog(CreatePlayerDialog.this, message, "Input Error",
+      JOptionPane.showMessageDialog(PlayerCreationDialog.this, message, "Input Error",
           JOptionPane.ERROR_MESSAGE);
     }
   }
@@ -206,25 +206,4 @@ public class CreatePlayerDialog extends JDialog {
     return (String) controlModeComboBox.getSelectedItem();
   }
 
-  public static void main(String[] args) {
-    SwingUtilities.invokeLater(() -> {
-      JFrame frame = new JFrame("Main Frame");
-      frame.setSize(400, 300);
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-      JButton openDialogButton = new JButton("Open Create Player Dialog");
-      openDialogButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          CreatePlayerDialog dialog = new CreatePlayerDialog(frame, null, null);
-          dialog.setPreferredSize(new Dimension(300, 300));
-          dialog.setVisible(true);
-        }
-      });
-
-      frame.add(openDialogButton);
-      frame.setLocationRelativeTo(null);
-      frame.setVisible(true);
-    });
-  }
 }
