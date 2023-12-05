@@ -1,6 +1,9 @@
 package view;
 
 import javax.swing.*;
+
+import model.ViewModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,12 +14,15 @@ public class CreatePlayerDialog extends JDialog {
   private JTextField itemCapacityField;
   private JComboBox<String> controlModeComboBox;
   private JButton addButton;
+  private ViewModel model;
 
-  public CreatePlayerDialog(JFrame parentFrame) {
+  public CreatePlayerDialog(JFrame parentFrame, ViewModel model) {
     super(parentFrame, "Create Player", true);
+    this.model = model;
     initComponents();
     addComponents();
     addListeners();
+    setInputVerifier();
     pack();
     setLocationRelativeTo(parentFrame);
   }
@@ -98,6 +104,10 @@ public class CreatePlayerDialog extends JDialog {
     });
   }
 
+  private void setInputVerifier() {
+    initialLocationField.setInputVerifier(new LocationVerifier());
+  }
+
   private class LocationVerifier extends InputVerifier {
     @Override
     public boolean verify(JComponent input) {
@@ -106,10 +116,21 @@ public class CreatePlayerDialog extends JDialog {
 
       try {
         int location = Integer.parseInt(text);
-        return location >= 0 && location <= 21;
+        if (location >= 0 && location <= 21) {
+          return true;
+        } else {
+          showError("Location must be between 0 and 21.");
+          return false;
+        }
       } catch (NumberFormatException e) {
+        showError("Invalid input. Please enter a valid integer.");
         return false; // Not a valid integer
       }
+    }
+
+    private void showError(String message) {
+      JOptionPane.showMessageDialog(CreatePlayerDialog.this, message, "Input Error",
+          JOptionPane.ERROR_MESSAGE);
     }
   }
 
@@ -139,7 +160,7 @@ public class CreatePlayerDialog extends JDialog {
       openDialogButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-          CreatePlayerDialog dialog = new CreatePlayerDialog(frame);
+          CreatePlayerDialog dialog = new CreatePlayerDialog(frame, null);
           dialog.setPreferredSize(new Dimension(300, 300));
           dialog.setVisible(true);
         }
