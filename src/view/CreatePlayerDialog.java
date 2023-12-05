@@ -11,10 +11,11 @@ import java.awt.event.ActionListener;
 public class CreatePlayerDialog extends JDialog {
   private JTextField playerNameField;
   private JTextField initialLocationField;
-  private JTextField itemCapacityField;
+  private JComboBox<Integer> itemCapacityField;
   private JComboBox<String> controlModeComboBox;
   private JButton addButton;
   private ViewModel model;
+  private final int DEFAULT_CAPACITY = 2;
 
   public CreatePlayerDialog(JFrame parentFrame, ViewModel model) {
     super(parentFrame, "Create Player", true);
@@ -30,14 +31,16 @@ public class CreatePlayerDialog extends JDialog {
   private void initComponents() {
     playerNameField = new JTextField();
     initialLocationField = new JTextField();
-    itemCapacityField = new JTextField();
+    Integer[] capacities = { 1, 2, 3, 4, 5, 6 };
+    itemCapacityField = new JComboBox<Integer>(capacities);
+    itemCapacityField.setSelectedItem(DEFAULT_CAPACITY);
     controlModeComboBox = new JComboBox<>(new String[] { "Human", "Computer" });
     addButton = new JButton("Add Player");
 
     // Set initial width for text fields
     playerNameField.setColumns(15);
     initialLocationField.setColumns(15);
-    itemCapacityField.setColumns(15);
+
   }
 
   private void addComponents() {
@@ -99,13 +102,15 @@ public class CreatePlayerDialog extends JDialog {
 
         playerNameField.setText("");
         initialLocationField.setText("");
-        itemCapacityField.setText("");
+        itemCapacityField.setSelectedItem(DEFAULT_CAPACITY);
       }
     });
   }
 
   private void setInputVerifier() {
+    playerNameField.setInputVerifier(new NonEmptyStringVerifier());
     initialLocationField.setInputVerifier(new LocationVerifier());
+
   }
 
   private class LocationVerifier extends InputVerifier {
@@ -114,9 +119,13 @@ public class CreatePlayerDialog extends JDialog {
       JTextField textField = (JTextField) input;
       String text = textField.getText().trim();
 
+      if (text.isEmpty()) {
+        showError("Location cannot be empty.");
+        return false;
+      }
       try {
         int location = Integer.parseInt(text);
-        if (location >= 0 && location <= 21) {
+        if (location >= 0 && location < model.getRoomCount()) {
           return true;
         } else {
           showError("Location must be between 0 and 21.");
@@ -134,16 +143,36 @@ public class CreatePlayerDialog extends JDialog {
     }
   }
 
+  private class NonEmptyStringVerifier extends InputVerifier {
+    @Override
+    public boolean verify(JComponent input) {
+      JTextField textField = (JTextField) input;
+      String text = textField.getText().trim();
+
+      if (!text.isEmpty()) {
+        return true; // Valid input
+      } else {
+        showError("Name cannot be empty string.");
+        return false;
+      }
+    }
+
+    private void showError(String message) {
+      JOptionPane.showMessageDialog(CreatePlayerDialog.this, message, "Input Error",
+          JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
   public String getPlayerName() {
-    return playerNameField.getText();
+    return playerNameField.getText().trim();
   }
 
   public String getInitialLocation() {
     return initialLocationField.getText();
   }
 
-  public String getItemCapacity() {
-    return itemCapacityField.getText();
+  public Integer getItemCapacity() {
+    return (Integer) itemCapacityField.getSelectedItem();
   }
 
   public String getControlMode() {
