@@ -398,6 +398,13 @@ public class GraphView implements GameView {
       }
     });
   }
+  
+  @Override
+  public void displayAddPlayer(GameControllerNew controller) {
+    CreatePlayerDialog dialog = new CreatePlayerDialog(frame, model, controller);
+    dialog.setVisible(true);
+    
+  }
 
   @Override
   public void configureView(GameControllerNew controller) {

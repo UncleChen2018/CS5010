@@ -1,14 +1,28 @@
 package view;
 
-import javax.swing.*;
-
 import model.ViewModel;
-
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.InputVerifier;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+import controller.GameControllerNew;
 
 public class CreatePlayerDialog extends JDialog {
+
+  private static final long serialVersionUID = 4080458570669687911L;
   private JTextField playerNameField;
   private JTextField initialLocationField;
   private JComboBox<Integer> itemCapacityField;
@@ -17,12 +31,12 @@ public class CreatePlayerDialog extends JDialog {
   private ViewModel model;
   private final int DEFAULT_CAPACITY = 2;
 
-  public CreatePlayerDialog(JFrame parentFrame, ViewModel model) {
+  public CreatePlayerDialog(JFrame parentFrame, ViewModel model, GameControllerNew controller) {
     super(parentFrame, "Create Player", true);
     this.model = model;
     initComponents();
     addComponents();
-    addListeners();
+    addListeners(controller);
     setInputVerifier();
     pack();
     setLocationRelativeTo(parentFrame);
@@ -98,8 +112,24 @@ public class CreatePlayerDialog extends JDialog {
         System.out.println(getInitialLocation());
         System.out.println(getItemCapacity());
         System.out.println(getControlMode());
-        // setVisible(false);
+        setVisible(false);
 
+        playerNameField.setText("");
+        initialLocationField.setText("");
+        itemCapacityField.setSelectedItem(DEFAULT_CAPACITY);
+      }
+    });
+  }
+
+  private void addListeners(GameControllerNew controller) {
+    addButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+
+
+        controller.setNewPlayer(getPlayerName(), getInitialLocation(), getItemCapacity(),
+            getControlMode());
+        
         playerNameField.setText("");
         initialLocationField.setText("");
         itemCapacityField.setSelectedItem(DEFAULT_CAPACITY);
@@ -128,7 +158,7 @@ public class CreatePlayerDialog extends JDialog {
         if (location >= 0 && location < model.getRoomCount()) {
           return true;
         } else {
-          showError("Location must be between 0 and 21.");
+          showError(String.format("Location must be between 0 and %d.", model.getRoomCount() - 1));
           return false;
         }
       } catch (NumberFormatException e) {
@@ -167,11 +197,11 @@ public class CreatePlayerDialog extends JDialog {
     return playerNameField.getText().trim();
   }
 
-  public String getInitialLocation() {
-    return initialLocationField.getText();
+  public int getInitialLocation() {
+    return Integer.parseInt(initialLocationField.getText().trim());
   }
 
-  public Integer getItemCapacity() {
+  public int getItemCapacity() {
     return (Integer) itemCapacityField.getSelectedItem();
   }
 
@@ -189,7 +219,7 @@ public class CreatePlayerDialog extends JDialog {
       openDialogButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-          CreatePlayerDialog dialog = new CreatePlayerDialog(frame, null);
+          CreatePlayerDialog dialog = new CreatePlayerDialog(frame, null, null);
           dialog.setPreferredSize(new Dimension(300, 300));
           dialog.setVisible(true);
         }

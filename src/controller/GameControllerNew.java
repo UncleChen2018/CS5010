@@ -44,4 +44,14 @@ public interface GameControllerNew {
    */
   void exitGame();
 
+  /**
+   * @param playerName
+   * @param initialLocation
+   * @param itemCapacity
+   * @param controlMode
+   */
+  void setNewPlayer(String playerName, int initialLocation, int itemCapacity,
+      String controlMode);
+  
+
 }

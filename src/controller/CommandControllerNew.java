@@ -127,6 +127,8 @@ public class CommandControllerNew implements GameControllerNew {
       worldData = new FileReader(filePath);
       model.setupNewWorld(worldData);
       view.drawMap();
+      // fix here, try to add one player.
+      view.displayAddPlayer(this);
       view.refresh();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -177,6 +179,18 @@ public class CommandControllerNew implements GameControllerNew {
     view.display();
     view.showWelcomeMessage();
 
+  }
+  
+  
+
+  @Override
+  public void setNewPlayer(String playerName, int initialLocation, int itemCapacity,
+      String controlMode) {
+    
+    model.addNewPlayer(playerName, initialLocation, itemCapacity, "HUMAN".equals(controlMode));
+    System.out.println("Add new player has been called");
+    System.out.println(model.queryPlayerDetails(0));
+    
   }
 
   private void processTextGame() {

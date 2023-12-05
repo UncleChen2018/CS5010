@@ -30,5 +30,7 @@ public interface GameView {
 
   void drawMap();
 
+  void displayAddPlayer(GameControllerNew controller);
+
   
 }

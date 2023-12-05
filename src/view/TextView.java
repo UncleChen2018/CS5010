@@ -65,6 +65,14 @@ public class TextView implements GameView {
     // TODO Auto-generated method stub
     
   }
+
+  @Override
+  public void displayAddPlayer(GameControllerNew controller) {
+    // TODO Auto-generated method stub
+    
+  }
+  
+  
   
   
 
