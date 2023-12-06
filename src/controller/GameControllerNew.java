@@ -66,8 +66,9 @@ public interface GameControllerNew {
    * the method to process the player's command.
    * 
    * @param command the command from the player.
+   * @param extraId extra id the command needs.
    * @return the result of the command.
    */
-  String processPlayerCommand(String command);
+  String processPlayerCommand(String command, int extraId);
 
 }

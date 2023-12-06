@@ -133,7 +133,7 @@ public class CommandControllerNew implements GameControllerNew {
         worldData = new FileReader(lastFilePath);
         model.setupNewWorld(worldData);
       }
-      
+
       restartGame();
 
     } catch (FileNotFoundException e) {
@@ -223,12 +223,36 @@ public class CommandControllerNew implements GameControllerNew {
     }
 
   }
-  
+
   @Override
-  public String processPlayerCommand(String command) {
-    return null;
+  public String processPlayerCommand(String command, int extraId) {
+    if (command == null) {
+      return "No command sent";
+    }
+    SimpleCommand cmd = null;
+    int currentPlayer = model.getCurrentPlayer();
+    switch (command.toLowerCase()) {
+      case "attack":
+        cmd = new AttackTarget(currentPlayer, extraId);
+        break;
+      case "pickup":
+        cmd = new PickUpItem(currentPlayer, extraId);
+        break;
+      case "movepet":
+        cmd = new MovePet(currentPlayer, extraId);
+        break;
+      case "lookaroud":
+        cmd = new LookAround(currentPlayer);
+        break;
+      default:
+        break;
+    }
+    if (cmd != null) {
+      return cmd.execute(model);
+    } else {
+      return "not valid command";
+    }
   }
-  
 
   private void processTextGame() {
 
