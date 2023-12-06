@@ -123,20 +123,37 @@ public class CommandControllerNew implements GameControllerNew {
     try {
       worldData = new FileReader(filePath);
       model.setupNewWorld(worldData);
-      view.drawMap();
-      // fix here, try to add one player.
-      while (model.getPlayerCount() == 0) {
-        view.displayAddPlayer(this);
-      }
-      view.refresh();
+      restartGame();
+
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
   }
 
   @Override
-  public void setMaxTurn(int turnLimit) {
-    this.maxTurn = turnLimit;
+  public void restartGame() {
+    view.drawMap();
+    // fix here, try to add one player.
+    while (model.getPlayerCount() == 0) {
+      view.displayAddPlayer(this);
+    }
+    // then make the view to setMaxTurn
+    while (maxTurn == 0) {
+      view.disPlaySetGameMaxTurn(this);
+    }
+
+    view.refresh();
+  }
+
+  @Override
+  public boolean setMaxTurn(int turnLimit) {
+    if (turnLimit > 0) {
+      this.maxTurn = turnLimit;
+      return true;
+    } else {
+      return false;
+    }
+
   }
 
   @Override
@@ -183,8 +200,6 @@ public class CommandControllerNew implements GameControllerNew {
     try {
       model.addNewPlayer(playerName, initialLocation, itemCapacity, "HUMAN".equals(controlMode));
       view.refresh();
-      
-     
       return true;
     } catch (IllegalArgumentException e) {
       return false;

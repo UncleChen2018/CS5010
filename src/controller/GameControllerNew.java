@@ -24,7 +24,7 @@ public interface GameControllerNew {
   /**
    * @param turnLimit
    */
-  void setMaxTurn(int turnLimit);
+  boolean setMaxTurn(int turnLimit);
 
   /**
    * This is the game runner.
@@ -53,5 +53,7 @@ public interface GameControllerNew {
    */
   boolean setNewPlayer(String playerName, int initialLocation, int itemCapacity,
       String controlMode);
+
+  void restartGame();
 
 }

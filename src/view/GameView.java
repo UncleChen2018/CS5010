@@ -32,5 +32,7 @@ public interface GameView {
 
   void displayAddPlayer(GameControllerNew controller);
 
-  
+  void updateGameStatus(String gameStatus, int currentTurn, int maxTurn, String currentPlayer);
+
+  void disPlaySetGameMaxTurn(GameControllerNew controller);
 }

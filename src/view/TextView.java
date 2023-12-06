@@ -7,6 +7,9 @@ import controller.GameControllerNew;
 /**
  * The text-based view.
  */
+/**
+ * 
+ */
 public class TextView implements GameView {
 
   private Readable input;
@@ -71,6 +74,23 @@ public class TextView implements GameView {
     // TODO Auto-generated method stub
     
   }
+
+  @Override
+  public void updateGameStatus(String gameStatus, int currentTurn, int maxTurn,
+      String currentPlayer) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void disPlaySetGameMaxTurn(GameControllerNew controller) {
+    // TODO Auto-generated method stub
+    
+  }
+  
+  
+  
+  
   
   
   

@@ -58,6 +58,10 @@ public class GraphView implements GameView {
 
   private JMenuBar menuBar;
 
+  private JLabel gameStatus;
+  private JLabel turnLabel;
+  private JLabel currentPlayerLabel;
+
   private Font largerFont = new Font("Arial", Font.BOLD, 16);
 
   /**
@@ -150,7 +154,7 @@ public class GraphView implements GameView {
 
   }
 
-  // TODO: there should be status that is passed from the controller,\.
+  // TODO: there should be status that is passed from the controller,
   private JPanel createGameStatusPanel() {
     // Create a panel for game status
     JPanel gameStatusPanel = new JPanel();
@@ -158,28 +162,18 @@ public class GraphView implements GameView {
     gameStatusPanel.setLayout(new BoxLayout(gameStatusPanel, BoxLayout.Y_AXIS));
 
     // Add components to the game status panel
-    JLabel gameStatus = new JLabel("Not begin yet");
+    gameStatus = new JLabel("Not begin yet");
     gameStatus.setFont(largerFont);
     gameStatusPanel.add(gameStatus);
 
     // Add components to the game status panel
-    JLabel turnLabel = new JLabel("Turn: ");
+    turnLabel = new JLabel("Turn: 0");
     turnLabel.setFont(largerFont);
     gameStatusPanel.add(turnLabel);
 
-    // Add a label to display current turn (get from model)
-    JLabel currentTurnLabel = new JLabel(Integer.toString(1));
-    currentTurnLabel.setFont(largerFont);
-    gameStatusPanel.add(currentTurnLabel);
-
-    JLabel currentPlayerLabel = new JLabel("Current Player: ");
+    currentPlayerLabel = new JLabel("Current Player:");
     currentPlayerLabel.setFont(largerFont);
     gameStatusPanel.add(currentPlayerLabel);
-
-    // Add a label to display the current player (get from model)
-    JLabel currentPlayerNameLabel = new JLabel("XX");
-    currentPlayerNameLabel.setFont(largerFont);
-    gameStatusPanel.add(currentPlayerNameLabel);
 
     // Add a restart button
     JButton restartButton = new JButton("Restart");
@@ -187,7 +181,6 @@ public class GraphView implements GameView {
 
     return gameStatusPanel;
   }
-
 
   private JPanel createPlayerInfoPanel() {
     playerInfoPanel = new JPanel(new BorderLayout());
@@ -265,13 +258,14 @@ public class GraphView implements GameView {
       }
     });
   }
-  
+
   // wait the controller's call to update the panel
   // gameStatus: -1 prepare, 0 ongoing, 1 finished.
-  public void updateGameStatus(int currentTurn, String currentPlayerName, int gameStatus) {
-    
+  @Override
+  public void updateGameStatus(String gameStatus, int currentTurn, int maxTurn,
+      String currentPlayer) {
+
   }
-  
 
   @Override
   public void displayAddPlayer(GameControllerNew controller) {
@@ -281,6 +275,19 @@ public class GraphView implements GameView {
     PlayerCreationDialog dialog = new PlayerCreationDialog(frame, model, controller);
     dialog.setVisible(true);
 
+  }
+  
+  
+  
+
+  @Override
+  public void disPlaySetGameMaxTurn(GameControllerNew controller) {
+    JOptionPane.showMessageDialog(frame,
+        "You must set the game Max Turn before the game begins", "Max Turn not Set",
+        JOptionPane.INFORMATION_MESSAGE);
+    SetMaxTurnDialog dialog = new SetMaxTurnDialog(frame, model, controller);
+    dialog.setVisible(true);
+    
   }
 
   @Override
