@@ -79,17 +79,21 @@ public class SetMaxTurnDialog extends JDialog {
             JOptionPane.showMessageDialog(SetMaxTurnDialog.this,
                 "Max turns set to " + maxTurn + ". The game is now ready to begin!",
                 "Setting Successful", JOptionPane.INFORMATION_MESSAGE);
+            setVisible(false);
+            dispose();
           } else {
             // Dialog for unsuccessful setting
             JOptionPane.showMessageDialog(SetMaxTurnDialog.this,
                 "Please enter an integer greater than 0 for max turns.", "Setting Error",
                 JOptionPane.ERROR_MESSAGE);
+            maxTurnsField.setText("");
           }
         } catch (NumberFormatException ex) {
           // Dialog for non-integer input
           JOptionPane.showMessageDialog(SetMaxTurnDialog.this,
               "Invalid input. Please enter a valid integer for max turns.", "Setting Error",
               JOptionPane.ERROR_MESSAGE);
+          maxTurnsField.setText("");
         }
       }
 
