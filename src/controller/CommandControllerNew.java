@@ -154,6 +154,7 @@ public class CommandControllerNew implements GameControllerNew {
     while (model.getMaxTurn() == 0) {
       view.disPlaySetGameMaxTurn(this);
     }
+    
 
     // need to make the initial status update.
     view.updateStatusLabel();

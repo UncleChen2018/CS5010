@@ -12,6 +12,10 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -101,6 +105,7 @@ public class GraphView implements GameView {
 
     createWorldPanel();
     createInfoPanel();
+    
 
   }
 
@@ -209,6 +214,8 @@ public class GraphView implements GameView {
     playerLabel = new JTextArea("Player Information");
     playerLabel.setFont(largerFont);
     playerLabel.setEditable(false);
+    
+    playerLabel.setFocusable(false);
 
     JScrollPane playerScrollPane = new JScrollPane(playerLabel);
     playerScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -227,6 +234,8 @@ public class GraphView implements GameView {
     resultLabel = new JTextArea("World Information");
     resultLabel.setFont(largerFont);
     resultLabel.setEditable(false);
+    //not take focus from the world panel.
+    resultLabel.setFocusable(false);
 
     JScrollPane resultScrollPane = new JScrollPane(resultLabel);
     resultScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -252,6 +261,8 @@ public class GraphView implements GameView {
   // draw the world based on the model.
   @Override
   public void drawMap(GameControllerNew controller) {
+
+    
     worldlPanel.removeAll();
     worldlPanel.setModel(model);
     worldlPanel.getRoomRect(model);
@@ -308,7 +319,7 @@ public class GraphView implements GameView {
                   "Move to Room", JOptionPane.YES_NO_OPTION);
 
               if (option == JOptionPane.YES_OPTION) {
-                String result= controller.processPlayerCommand("moveto", clickedRoom.getIndex());
+                String result = controller.processPlayerCommand("moveto", clickedRoom.getIndex());
                 resultLabel.setText(result);
               }
             }
@@ -342,6 +353,36 @@ public class GraphView implements GameView {
         worldlPanel.setToolTipText(tooltipText);
       }
     });
+
+    worldlPanel.addKeyListener(new KeyAdapter() {
+      @Override
+      public void keyPressed(KeyEvent e) {
+        //controller.handleKeyPress(e);
+        
+        int keyCode = e.getKeyCode();
+        char keyChar = e.getKeyChar();
+
+        System.out.println("Key Pressed - Code: " + keyCode + ", Char: " + keyChar);
+
+      }
+      
+      @Override
+      public void keyReleased(KeyEvent e) {
+        //handleKeyRelease(e);
+        
+        int keyCode = e.getKeyCode();
+        char keyChar = e.getKeyChar();
+
+        System.out.println("Key Released - Code: " + keyCode + ", Char: " + keyChar);
+      }
+    });
+    
+    
+    
+
+    worldlPanel.setFocusable(true); // Make sure the panel is focused to receive key events
+    worldlPanel.requestFocusInWindow();
+
   }
 
   // wait the controller's call to update the panel
@@ -456,6 +497,7 @@ public class GraphView implements GameView {
         if (option == JOptionPane.YES_OPTION) {
           // User clicked Yes, restart the game
           controller.loadWorldFile(null);
+          
           frame.repaint();
         }
       }
