@@ -145,7 +145,7 @@ public class CommandControllerNew implements GameControllerNew {
   public void restartGame() {
 
     // completely new begin.
-    view.drawMap();
+    view.drawMap(this);
     // fix here, try to add one player.
     while (model.getPlayerCount() == 0) {
       view.displayAddPlayer(this);
@@ -238,7 +238,10 @@ public class CommandControllerNew implements GameControllerNew {
       case "pickup":
         cmd = new PickUpItem(currentPlayer, extraId);
         break;
-      case "movepet":
+      case "moveto":
+        cmd = new MoveToNeighbor(currentPlayer, extraId);
+        break;
+      case "movepetto":
         cmd = new MovePet(currentPlayer, extraId);
         break;
       case "lookaroud":
@@ -248,7 +251,13 @@ public class CommandControllerNew implements GameControllerNew {
         break;
     }
     if (cmd != null) {
-      return cmd.execute(model);
+      String resultString = cmd.execute(model);
+      currentTurn++;
+      model.moveNextTurn();
+      view.updateStatusLabel();
+      model.moveTargetNextRoom();
+      model.movePetNextRoom();
+      return resultString;
     } else {
       return "not valid command";
     }
@@ -287,7 +296,7 @@ public class CommandControllerNew implements GameControllerNew {
       int activePlayer = model.getCurrentPlayer(currentTurn);
 
       // begin to take turn.
-      while (currentTurn < maxTurn && !model.isGameOver()) {
+      while (currentTurn < maxTurn && !model.isGameOverWithWinner()) {
         out.append(String.format("[TURN %d]\n", currentTurn + 1));
         activePlayer = model.getCurrentPlayer(currentTurn);
         out.append(String.format("Player %s's turn", model.getPlayerString(activePlayer)))
@@ -518,7 +527,7 @@ public class CommandControllerNew implements GameControllerNew {
           cmd = null;
         }
       }
-      if (model.isGameOver()) {
+      if (model.isGameOverWithWinner()) {
         out.append(String.format("Opps, %s is dead, %s is the winner!\n", model.getTargetString(),
             model.getPlayerString(activePlayer)));
       } else {

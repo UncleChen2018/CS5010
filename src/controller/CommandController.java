@@ -133,7 +133,7 @@ public class CommandController implements GameController {
       int activePlayer = model.getCurrentPlayer(currentTurn);
 
       // begin to take turn.
-      while (currentTurn < maxTurn && !model.isGameOver()) {
+      while (currentTurn < maxTurn && !model.isGameOverWithWinner()) {
         out.append(String.format("[TURN %d]\n", currentTurn + 1));
         activePlayer = model.getCurrentPlayer(currentTurn);
         out.append(String.format("Player %s's turn", model.getPlayerString(activePlayer)))
@@ -363,7 +363,7 @@ public class CommandController implements GameController {
           cmd = null;
         }
       }
-      if (model.isGameOver()) {
+      if (model.isGameOverWithWinner()) {
         out.append(String.format("Opps, %s is dead, %s is the winner!\n", model.getTargetString(),
             model.getPlayerString(activePlayer)));
       } else {

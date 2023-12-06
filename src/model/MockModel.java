@@ -793,7 +793,7 @@ public class MockModel implements GameModel {
   }
 
   @Override
-  public boolean isGameOver() {
+  public boolean isGameOverWithWinner() {
     log.append(String.format("gameOver called")).append("\n");
     return winnerId != -1;
   }

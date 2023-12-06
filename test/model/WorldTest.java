@@ -749,19 +749,19 @@ public class WorldTest {
   @Test
   public void testSetWinnerAndGetWinner() {
     // Test setWinner and getWinner methods
-    assertFalse(model.isGameOver()); // Game should not be over initially
+    assertFalse(model.isGameOverWithWinner()); // Game should not be over initially
 
     int playerId = 0;
     model.setWinner(playerId);
 
     assertEquals(playerId, model.getWinner()); // Check if the winner is set correctly
-    assertTrue(model.isGameOver()); // Game should be over after setting the winner
+    assertTrue(model.isGameOverWithWinner()); // Game should be over after setting the winner
   }
 
   @Test
   public void testIsGameOverWithoutWinner() {
     // Test isGameOver method without setting a winner
-    assertFalse(model.isGameOver()); // Game should not be over initially
+    assertFalse(model.isGameOverWithWinner()); // Game should not be over initially
   }
 
 }

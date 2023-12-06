@@ -719,7 +719,7 @@ public class World implements GameModel, ViewModel {
   }
 
   @Override
-  public boolean isGameOver() {
+  public boolean isGameOverWithWinner() {
     return winnerId != -1;
   }
 
@@ -817,5 +817,7 @@ public class World implements GameModel, ViewModel {
     resetPetTrace(roomList.get(location));
     pet.setStunned();
   }
+  
+  
 
 }

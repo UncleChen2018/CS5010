@@ -64,7 +64,7 @@ public class TextView implements GameView {
   }
 
   @Override
-  public void drawMap() {
+  public void drawMap(GameControllerNew controller) {
     // TODO Auto-generated method stub
     
   }

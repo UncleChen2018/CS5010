@@ -295,7 +295,7 @@ public interface GameModel extends ViewModel {
    *
    * @return {@code true} if the game is over, {@code false} otherwise.
    */
-  boolean isGameOver();
+  boolean isGameOverWithWinner();
 
   /**
    * Checks if the player is currently visible by other player. A room is visible

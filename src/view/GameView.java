@@ -27,7 +27,7 @@ public interface GameView {
 
   void showFarewellMessage();
 
-  void drawMap();
+  void drawMap(GameControllerNew controller);
 
   void displayAddPlayer(GameControllerNew controller);
 

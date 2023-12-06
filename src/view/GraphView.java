@@ -221,7 +221,7 @@ public class GraphView implements GameView {
 
   // draw the world based on the model.
   @Override
-  public void drawMap() {
+  public void drawMap(GameControllerNew controller) {
     worldlPanel.removeAll();
     worldlPanel.setModel(model);
     worldlPanel.getRoomRect(model);
@@ -234,6 +234,17 @@ public class GraphView implements GameView {
         for (WorldPanel.RoomRect room : worldlPanel.getStoredRoomRect()) {
           if (room.containsPoint(mousePoint)) {
             resultLabel.setText(model.queryRoomDetails(room.getIndex()));
+            if (e.getButton() == MouseEvent.BUTTON3) {
+              int option = JOptionPane.showConfirmDialog(frame,
+                  "Do you want to move to Room " + room.getIndex() + "?\n\n"
+                      + model.getRoomName(room.getIndex()),
+                  "Move to Room", JOptionPane.YES_NO_OPTION);
+
+              if (option == JOptionPane.YES_OPTION) {
+                controller.processPlayerCommand("moveto", room.getIndex());
+              }
+            }
+
             break;
           }
         }
@@ -255,13 +266,14 @@ public class GraphView implements GameView {
       @Override
       public void mouseMoved(MouseEvent e) {
         Point mousePoint = e.getPoint();
+        String tooltipText = null;
         for (WorldPanel.RoomRect room : worldlPanel.getStoredRoomRect()) {
           if (room.containsPoint(mousePoint)) {
-            // System.out.println("Hovering over Room " + room.getIndex());
-            // Add your logic here to handle the mouse move event
+            tooltipText = "Room " + room.getIndex() + ": " + model.getRoomName(room.getIndex());
             break;
           }
         }
+        worldlPanel.setToolTipText(tooltipText);
       }
     });
   }
@@ -293,9 +305,9 @@ public class GraphView implements GameView {
       currentPlayerLabel
           .setText(String.format("Currnt Player: %s", model.getPlayerString(currentPlayer)));
     }
-    
+
     playerLabel.setText(model.queryPlayerDetails(model.getCurrentPlayer()));
-    
+
     refresh();
 
   }
