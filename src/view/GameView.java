@@ -37,4 +37,6 @@ public interface GameView {
   void disPlaySetGameMaxTurn(GameControllerNew controller);
 
   void rest();
+
+  void showGameEnd(GameControllerNew controller);
 }

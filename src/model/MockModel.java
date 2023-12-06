@@ -794,8 +794,15 @@ public class MockModel implements GameModel {
 
   @Override
   public boolean isGameOverWithWinner() {
-    log.append(String.format("gameOver called")).append("\n");
+    log.append(String.format("isGameOverWithWinner called")).append("\n");
     return winnerId != -1;
+  }
+  
+  
+  @Override
+  public boolean isGameOverWithMaxTurn() {
+    log.append(String.format("isGameOverWithMaxTurn called")).append("\n");
+    return currentTurn >= maxTurn;
   }
 
   @Override

@@ -57,7 +57,7 @@ public interface ViewModel {
    * @return players number.
    */
   int getPlayerCount();
-  
+
   /**
    * Gets a list of character IDs present in the room at the specified location.
    *
@@ -66,7 +66,7 @@ public interface ViewModel {
    */
 
   ArrayList<Integer> getRoomCharacter(int location);
-  
+
   /**
    * Queries and retrieves detailed information about the target.
    *
@@ -74,7 +74,7 @@ public interface ViewModel {
    */
 
   String queryTargetDetails();
-  
+
   /**
    * Queries and retrieves detailed information about the player with the
    * specified ID.
@@ -84,8 +84,7 @@ public interface ViewModel {
    */
 
   String queryPlayerDetails(int playerId);
-  
-  
+
   /**
    * Get String represent the information INSIDE the room.
    * 
@@ -97,25 +96,24 @@ public interface ViewModel {
 
   /**
    * Get the current turn for the game.If 0, the game has not started yet.
+   * 
    * @return the current turn for the game.
    */
   int getCurrentTurn();
 
-  
-
   /**
    * Get the max turn for the game.
+   * 
    * @return the max turn for the game.
    */
   int getMaxTurn();
-  
+
   /**
    * Retrieves the ID of the player who is the winner of the game.
    *
    * @return An integer representing the ID of the winning player.
    */
   int getWinner();
-  
 
   /**
    * Gets a formatted string representation of the player with the specified ID.
@@ -126,10 +124,25 @@ public interface ViewModel {
 
   String getPlayerString(int playerId);
 
-  /** 
+  /**
    * Get the current playe's id from the model.
+   * 
    * @return the current turn player's id.
    */
   int getCurrentPlayer();
+
+  /**
+   * Checks if the game is over with some winner.
+   *
+   * @return {@code true} if the game is over, {@code false} otherwise.
+   */
+  boolean isGameOverWithWinner();
+
+  /**
+   * Checks if the game is over with the max turn.
+   * 
+   * @return {@code true} if the game is over, {@code false} otherwise.
+   */
+  boolean isGameOverWithMaxTurn();
 
 }

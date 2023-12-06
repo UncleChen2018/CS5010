@@ -80,14 +80,13 @@ public class World implements GameModel, ViewModel {
     playerList = new ArrayList<Player>();
     winnerId = -1;
     Scanner scanner = new Scanner(source);
-    System.out.println("Scanner right");
+
 
     // parse the World
     this.rowSize = scanner.nextInt();
     this.colSize = scanner.nextInt();
     this.worldName = scanner.nextLine().trim();
     
-    System.out.println("Parse 1 right");
 
     // parse the target character
     int fullHealth = scanner.nextInt();
@@ -151,7 +150,6 @@ public class World implements GameModel, ViewModel {
         }
       }
     }
-    System.out.println("finishe set up new world");
   }
 
   // test if [beg1,end1] and [beg2, end2] has over lap
@@ -721,6 +719,11 @@ public class World implements GameModel, ViewModel {
   @Override
   public boolean isGameOverWithWinner() {
     return winnerId != -1;
+  }
+  
+  @Override
+  public boolean isGameOverWithMaxTurn() {
+    return currentTurn >= maxTurn;
   }
 
   @Override

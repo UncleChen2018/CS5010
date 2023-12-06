@@ -18,7 +18,7 @@ import model.ViewModel;
 
 
 class WorldPanel extends JPanel {
-  private static final int MIN_SCALE_PER_CELL = 15;
+  private static final int MIN_SCALE_PER_CELL = 18;
   private static final int MAX_PLAYER_NUM = 10;
   private static final long serialVersionUID = 5374257364893332638L;
   public ArrayList<RoomRect> roomList;

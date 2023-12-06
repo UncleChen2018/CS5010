@@ -252,11 +252,21 @@ public class CommandControllerNew implements GameControllerNew {
     }
     if (cmd != null) {
       String resultString = cmd.execute(model);
+      view.refresh();
+      if (model.isGameOverWithWinner()) {
+        view.showGameEnd(this);
+        view.updateStatusLabel();
+        return resultString;
+      }
       currentTurn++;
       model.moveNextTurn();
-      view.updateStatusLabel();
       model.moveTargetNextRoom();
       model.movePetNextRoom();
+      view.updateStatusLabel();
+      if (model.isGameOverWithMaxTurn()) {
+        view.showGameEnd(this);
+      }      
+      
       return resultString;
     } else {
       return "not valid command";

@@ -16,6 +16,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -63,6 +65,8 @@ public class GraphView implements GameView {
   private JButton restartButton;
 
   private Font largerFont = new Font("Arial", Font.BOLD, 16);
+
+  private boolean isGameGoing = false;
 
   /**
    * The default constructor.
@@ -161,7 +165,7 @@ public class GraphView implements GameView {
   }
 
   // TODO: there should be status that is passed from the controller,
-  private JPanel createGameStatusPanel() {
+  private JScrollPane createGameStatusPanel() {
     // Create a panel for game status
     JPanel gameStatusPanel = new JPanel();
     gameStatusPanel.setBackground(Color.WHITE);
@@ -181,12 +185,20 @@ public class GraphView implements GameView {
     currentPlayerLabel.setFont(largerFont);
     gameStatusPanel.add(currentPlayerLabel);
 
-    // Add a restart button only when gam
+    // Add a restart button only when game
     restartButton = new JButton("Restart");
     gameStatusPanel.add(restartButton);
     restartButton.setVisible(false); // Initially invisible
 
-    return gameStatusPanel;
+    // Wrap the gameStatusPanel in a JScrollPane
+    JScrollPane gameStatusScrollPane = new JScrollPane(gameStatusPanel);
+    gameStatusScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    gameStatusScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+    gameStatusScrollPane
+        .setPreferredSize(new Dimension(200, gameStatusScrollPane.getPreferredSize().height));
+
+    return gameStatusScrollPane;
   }
 
   private JPanel createPlayerInfoPanel() {
@@ -199,6 +211,9 @@ public class GraphView implements GameView {
     JScrollPane playerScrollPane = new JScrollPane(playerLabel);
     playerScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
+    playerScrollPane
+        .setPreferredSize(new Dimension(200, playerScrollPane.getPreferredSize().height));
+
     playerInfoPanel.add(playerScrollPane, BorderLayout.CENTER);
     return playerInfoPanel;
 
@@ -210,8 +225,12 @@ public class GraphView implements GameView {
     resultLabel = new JTextArea("World Information");
     resultLabel.setFont(largerFont);
     resultLabel.setEditable(false);
+
     JScrollPane resultScrollPane = new JScrollPane(resultLabel);
     resultScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+    resultScrollPane
+        .setPreferredSize(new Dimension(200, resultScrollPane.getPreferredSize().height));
 
     resultPanel.add(resultScrollPane, BorderLayout.CENTER);
 
@@ -228,23 +247,23 @@ public class GraphView implements GameView {
     worldlPanel.revalidate();
     worldlPanel.repaint();
     worldlPanel.addMouseListener(new MouseAdapter() {
+      private boolean dialogShown = false;
+
       @Override
       public void mouseClicked(MouseEvent e) {
         Point mousePoint = e.getPoint();
+
+        if (e.getButton() == MouseEvent.BUTTON1) {
+          handleLeftClick(mousePoint);
+        } else if (e.getButton() == MouseEvent.BUTTON3) {
+          handleRightClick(mousePoint);
+        }
+      }
+
+      private void handleLeftClick(Point mousePoint) {
         for (WorldPanel.RoomRect room : worldlPanel.getStoredRoomRect()) {
           if (room.containsPoint(mousePoint)) {
             resultLabel.setText(model.queryRoomDetails(room.getIndex()));
-            if (e.getButton() == MouseEvent.BUTTON3) {
-              int option = JOptionPane.showConfirmDialog(frame,
-                  "Do you want to move to Room " + room.getIndex() + "?\n\n"
-                      + model.getRoomName(room.getIndex()),
-                  "Move to Room", JOptionPane.YES_NO_OPTION);
-
-              if (option == JOptionPane.YES_OPTION) {
-                controller.processPlayerCommand("moveto", room.getIndex());
-              }
-            }
-
             break;
           }
         }
@@ -254,9 +273,38 @@ public class GraphView implements GameView {
         }
 
         for (int i = 0; i < model.getPlayerCount(); i++) {
-          System.out.println(String.format("check player %d", i));
           if (worldlPanel.playerMarkList.get(i).containsPoint(mousePoint)) {
             playerLabel.setText(model.queryPlayerDetails(i));
+          }
+        }
+      }
+
+      private void handleRightClick(Point mousePoint) {
+        if (!dialogShown) { // Check if the dialog has not been shown
+          for (WorldPanel.RoomRect room : worldlPanel.getStoredRoomRect()) {
+            if (room.containsPoint(mousePoint) && !model.isGameOverWithWinner()
+                && !model.isGameOverWithMaxTurn()) {
+              int option = JOptionPane.showConfirmDialog(frame,
+                  "Do you want to move to Room " + room.getIndex() + "?\n\n"
+                      + model.getRoomName(room.getIndex()),
+                  "Move to Room", JOptionPane.YES_NO_OPTION);
+
+              if (option == JOptionPane.YES_OPTION) {
+                controller.processPlayerCommand("moveto", room.getIndex());
+              }
+              dialogShown = true;
+              // Schedule a timer to reset the flag after a certain time (e.g., 2 seconds)
+              Timer timer = new Timer();
+              timer.schedule(new TimerTask() {
+                  @Override
+                  public void run() {
+                      dialogShown = false;  // Reset the flag after the specified time
+                      timer.cancel();  // Cancel the timer
+                  }
+              }, 200);  // 2000 milliseconds = 2 seconds
+              
+              break;
+            }
           }
         }
       }
@@ -286,28 +334,43 @@ public class GraphView implements GameView {
     int currentTurn = model.getCurrentTurn();
     restartButton.setVisible(true);
 
-    if (model.getWinner() != -1) {
+    if (model.isGameOverWithWinner()) {
       // here make the turn freeze to display the player.
       gameStatus.setText("Game Over, Target is killed");
-      turnLabel.setText(String.format("Turn ends in: %d", currentTurn - 1));
+      turnLabel.setText(String.format("Turn ends in: %d", currentTurn));
       int winnerId = model.getWinner();
       currentPlayerLabel
           .setText(String.format("Currnt Player: %s", model.getPlayerString(winnerId)));
     } else {
       if (model.getCurrentTurn() == model.getMaxTurn()) {
         gameStatus.setText("Game Over, Target wins");
-        turnLabel.setText(String.format("Turn ends in: %d", currentTurn - 1));
+        turnLabel.setText(String.format("Turn ends in: %d", currentTurn));
+        currentPlayerLabel.setText("No player can take turns");
+      } else {
+        int currentPlayer = model.getCurrentPlayer();
+        gameStatus.setText("Wait for the next move");
+        turnLabel.setText(String.format("Turn: %d (%d action(s) left)", currentTurn + 1,
+            model.getMaxTurn() - currentTurn));
+        currentPlayerLabel
+            .setText(String.format("Currnt Player: %s", model.getPlayerString(currentPlayer)));
       }
-      int currentPlayer = model.getCurrentPlayer();
-      gameStatus.setText("Wait for the next move");
-      turnLabel.setText(
-          String.format("Turn: %d (%d turn left)", currentTurn, model.getMaxTurn() - currentTurn));
-      currentPlayerLabel
-          .setText(String.format("Currnt Player: %s", model.getPlayerString(currentPlayer)));
     }
 
     playerLabel.setText(model.queryPlayerDetails(model.getCurrentPlayer()));
 
+    refresh();
+
+  }
+
+  @Override
+  public void showGameEnd(GameControllerNew controller) {
+    int option = JOptionPane.showConfirmDialog(frame, "The game has ended. Do you want to restart?",
+        "Game Over", JOptionPane.YES_NO_OPTION);
+
+    if (option == JOptionPane.YES_OPTION) {
+      controller.loadWorldFile(null);
+
+    }
     refresh();
 
   }

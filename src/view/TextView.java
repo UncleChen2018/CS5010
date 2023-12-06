@@ -94,6 +94,13 @@ public class TextView implements GameView {
     // TODO Auto-generated method stub
     
   }
+
+  @Override
+  public void showGameEnd(GameControllerNew controller) {
+    // TODO Auto-generated method stub
+    
+  }
+  
   
   
   
