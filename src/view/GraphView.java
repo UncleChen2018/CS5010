@@ -32,7 +32,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import model.ViewModel;
 
-
 /**
  * The GUI view based on Jframe.
  */
@@ -130,11 +129,9 @@ public class GraphView implements GameView {
     constraints.fill = GridBagConstraints.BOTH;
 
     infoScrollPane = new JScrollPane();
-    //infoScrollPane.setMinimumSize(new Dimension(90, 300));
+    // infoScrollPane.setMinimumSize(new Dimension(90, 300));
     infoScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     infoScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-
 
     // Create a panel to be added to the JScrollPane's viewport
     JPanel infoPanelView = new JPanel();
@@ -148,17 +145,22 @@ public class GraphView implements GameView {
     // Set the view component for the JScrollPane
     infoScrollPane.setViewportView(infoPanelView);
     frame.revalidate();
-    
+
     frame.add(infoPanelView, constraints);
 
   }
-  
-  
+
+  // TODO: there should be status that is passed from the controller,\.
   private JPanel createGameStatusPanel() {
     // Create a panel for game status
     JPanel gameStatusPanel = new JPanel();
     gameStatusPanel.setBackground(Color.WHITE);
     gameStatusPanel.setLayout(new BoxLayout(gameStatusPanel, BoxLayout.Y_AXIS));
+
+    // Add components to the game status panel
+    JLabel gameStatus = new JLabel("Not begin yet");
+    gameStatus.setFont(largerFont);
+    gameStatusPanel.add(gameStatus);
 
     // Add components to the game status panel
     JLabel turnLabel = new JLabel("Turn: ");
@@ -184,8 +186,8 @@ public class GraphView implements GameView {
     gameStatusPanel.add(restartButton);
 
     return gameStatusPanel;
-}
-  
+  }
+
 
   private JPanel createPlayerInfoPanel() {
     playerInfoPanel = new JPanel(new BorderLayout());
@@ -193,15 +195,13 @@ public class GraphView implements GameView {
     playerLabel = new JTextArea("Player Information");
     playerLabel.setFont(largerFont);
     playerLabel.setEditable(false);
-    
-    
-    
+
     JScrollPane playerScrollPane = new JScrollPane(playerLabel);
     playerScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
     playerInfoPanel.add(playerScrollPane, BorderLayout.CENTER);
     return playerInfoPanel;
-   
+
   }
 
   private JPanel createResultPanel() {
@@ -265,6 +265,13 @@ public class GraphView implements GameView {
       }
     });
   }
+  
+  // wait the controller's call to update the panel
+  // gameStatus: -1 prepare, 0 ongoing, 1 finished.
+  public void updateGameStatus(int currentTurn, String currentPlayerName, int gameStatus) {
+    
+  }
+  
 
   @Override
   public void displayAddPlayer(GameControllerNew controller) {
