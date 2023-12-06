@@ -293,6 +293,9 @@ public class GraphView implements GameView {
       currentPlayerLabel
           .setText(String.format("Currnt Player: %s", model.getPlayerString(currentPlayer)));
     }
+    
+    playerLabel.setText(model.queryPlayerDetails(model.getCurrentPlayer()));
+    
     refresh();
 
   }

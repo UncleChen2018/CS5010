@@ -40,20 +40,34 @@ public interface GameControllerNew {
   void loadWorldFile(String filePath);
 
   /**
-   * 
+   * Exits the game.
    */
   void exitGame();
 
   /**
-   * @param playerName
-   * @param initialLocation
-   * @param itemCapacity
-   * @param controlMode
+   * This method is used to set the player's name, initial location, item
+   * capacity.
+   * 
+   * @param playerName      the name of the player.
+   * @param initialLocation the initial location of the player.
+   * @param itemCapacity    the item capacity of the player.
+   * @param controlMode     the control mode of the player.
    * @return if the set is successfully.
    */
   boolean setNewPlayer(String playerName, int initialLocation, int itemCapacity,
       String controlMode);
 
+  /**
+   * This method is used to restart the game.
+   */
   void restartGame();
+
+  /**
+   * the method to process the player's command.
+   * 
+   * @param command the command from the player.
+   * @return the result of the command.
+   */
+  String processPlayerCommand(String command);
 
 }

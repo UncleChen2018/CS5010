@@ -223,6 +223,12 @@ public class CommandControllerNew implements GameControllerNew {
     }
 
   }
+  
+  @Override
+  public String processPlayerCommand(String command) {
+    return null;
+  }
+  
 
   private void processTextGame() {
 
