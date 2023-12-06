@@ -55,22 +55,9 @@ public interface GameModel extends ViewModel {
    */
   void setPetLocation(int location);
 
-  /**
-   * Returns the current location of the player with the specified ID.
-   * 
-   * @param playerId The ID of the player.
-   * @return The index of the space where the player is located.
-   */
-  int getPlayerLocation(int playerId);
 
-  /**
-   * Check if two room are neighbors.
-   * 
-   * @param quest which room index to check.
-   * @param base  which room is the check based.
-   * @return true if these two are neighbors.
-   */
-  boolean isNeighbor(int quest, int base);
+
+
 
   /**
    * Decides which player should take action on the turn.

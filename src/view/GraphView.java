@@ -190,6 +190,8 @@ public class GraphView implements GameView {
     gameStatusPanel.add(restartButton);
     restartButton.setVisible(false); // Initially invisible
 
+    //
+
     // Wrap the gameStatusPanel in a JScrollPane
     JScrollPane gameStatusScrollPane = new JScrollPane(gameStatusPanel);
     gameStatusScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -238,6 +240,15 @@ public class GraphView implements GameView {
 
   }
 
+  private WorldPanel.RoomRect getClickedRoomRect(Point mousePoint) {
+    for (WorldPanel.RoomRect room : worldlPanel.getStoredRoomRect()) {
+      if (room.containsPoint(mousePoint)) {
+        return room;
+      }
+    }
+    return null;
+  }
+
   // draw the world based on the model.
   @Override
   public void drawMap(GameControllerNew controller) {
@@ -261,11 +272,9 @@ public class GraphView implements GameView {
       }
 
       private void handleLeftClick(Point mousePoint) {
-        for (WorldPanel.RoomRect room : worldlPanel.getStoredRoomRect()) {
-          if (room.containsPoint(mousePoint)) {
-            resultLabel.setText(model.queryRoomDetails(room.getIndex()));
-            break;
-          }
+        WorldPanel.RoomRect clickedRoom = getClickedRoomRect(mousePoint);
+        if (clickedRoom != null) {
+          resultLabel.setText(model.queryRoomDetails(clickedRoom.getIndex()));
         }
 
         if (worldlPanel.targetMark.containsPoint(mousePoint)) {
@@ -281,31 +290,40 @@ public class GraphView implements GameView {
 
       private void handleRightClick(Point mousePoint) {
         if (!dialogShown) { // Check if the dialog has not been shown
-          for (WorldPanel.RoomRect room : worldlPanel.getStoredRoomRect()) {
-            if (room.containsPoint(mousePoint) && !model.isGameOverWithWinner()
-                && !model.isGameOverWithMaxTurn()) {
+          WorldPanel.RoomRect clickedRoom = getClickedRoomRect(mousePoint);
+          if (clickedRoom != null && !model.isGameOverWithWinner()
+              && !model.isGameOverWithMaxTurn()) {
+
+            int toMove = clickedRoom.getIndex();
+            int base = model.getPlayerLocation(model.getCurrentPlayer());
+            if (!model.isNeighbor(toMove, base)) {
+              JOptionPane.showMessageDialog(frame, "You must choose a neighbor room to move.",
+                  "Invalid Move", JOptionPane.WARNING_MESSAGE);
+            }
+
+            else {
               int option = JOptionPane.showConfirmDialog(frame,
-                  "Do you want to move to Room " + room.getIndex() + "?\n\n"
-                      + model.getRoomName(room.getIndex()),
+                  "Do you want to move to Room " + clickedRoom.getIndex() + "?\n\n"
+                      + model.getRoomName(clickedRoom.getIndex()),
                   "Move to Room", JOptionPane.YES_NO_OPTION);
 
               if (option == JOptionPane.YES_OPTION) {
-                controller.processPlayerCommand("moveto", room.getIndex());
+                String result= controller.processPlayerCommand("moveto", clickedRoom.getIndex());
+                resultLabel.setText(result);
               }
-              dialogShown = true;
-              // Schedule a timer to reset the flag after a certain time (e.g., 2 seconds)
-              Timer timer = new Timer();
-              timer.schedule(new TimerTask() {
-                  @Override
-                  public void run() {
-                      dialogShown = false;  // Reset the flag after the specified time
-                      timer.cancel();  // Cancel the timer
-                  }
-              }, 200);  // 2000 milliseconds = 2 seconds
-              
-              break;
             }
+            dialogShown = true;
+            // Schedule a timer to reset the flag after a certain time (e.g., 2 seconds)
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+              @Override
+              public void run() {
+                dialogShown = false; // Reset the flag after the specified time
+                timer.cancel(); // Cancel the timer
+              }
+            }, 200); // 200 milliseconds = 0.2 seconds
           }
+
         }
       }
     });

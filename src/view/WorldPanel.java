@@ -167,7 +167,6 @@ class WorldPanel extends JPanel {
   // TODO: the room should know its target and player list.
   private void drawAllMarks(RoomRect room, int ratio, Graphics g) {
     int location = room.getIndex();
-    int marksToDraw = 0;
     ArrayList<CharcterMark> toDrawList = new ArrayList<>();
     if (model.getTargetLocation() == location) {
       toDrawList.add(targetMark);
@@ -186,6 +185,7 @@ class WorldPanel extends JPanel {
     }
 
   }
+
 
 }
 
