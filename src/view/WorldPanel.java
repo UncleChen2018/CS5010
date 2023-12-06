@@ -18,7 +18,7 @@ import model.ViewModel;
 
 
 class WorldPanel extends JPanel {
-  private static final int MIN_SCALE_PER_CELL = 10;
+  private static final int MIN_SCALE_PER_CELL = 15;
   private static final int MAX_PLAYER_NUM = 10;
   private static final long serialVersionUID = 5374257364893332638L;
   public ArrayList<RoomRect> roomList;
@@ -59,7 +59,6 @@ class WorldPanel extends JPanel {
     int ratioY = getHeight() / verticalCell;
 
     int ratio = Math.max(Math.min(ratioX, ratioY), MIN_SCALE_PER_CELL);
-    int iconSize = ratio;
 
     for (int i = 0; i < roomList.size(); i++) {
       RoomRect room = roomList.get(i);

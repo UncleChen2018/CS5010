@@ -37,6 +37,10 @@ public class MockModel implements GameModel {
 
   private int winnerId;
 
+  private int currentTurn = 0;
+
+  private int maxTurn;
+
   /**
    * Constructor for creating a MockModel with a specified log.
    *
@@ -227,6 +231,30 @@ public class MockModel implements GameModel {
   public ArrayList<RoomRect> getWorldSpace() {
     return roomList;
   }
+
+
+  @Override
+  public int getCurrentTurn() {
+    return currentTurn;
+  }
+  
+  @Override
+  public void moveNextTurn() {
+    currentTurn++;
+  }
+  
+  @Override
+  public void setMaxTurn(int maxTurn) {
+    this.maxTurn = maxTurn;
+  }
+  
+  
+  @Override 
+  public int getMaxTurn() {
+    return this.maxTurn;
+  }
+  
+  
 
   @Override
   public String getWorldName() {
@@ -524,6 +552,13 @@ public class MockModel implements GameModel {
   public int getCurrentPlayer(int turn) {
     log.append(String.format("getCurrentPlayer called, turn = %d", turn)).append("\n");
     return turn % getPlayerCount();
+  }
+  
+  
+  @Override
+  public int getCurrentPlayer() {
+    log.append(String.format("getCurrentPlayer called, turn = %d", currentTurn)).append("\n");
+    return currentTurn % getPlayerCount();
   }
 
   /**

@@ -123,12 +123,14 @@ public class SetMaxTurnDialog extends JDialog {
           return true;
         } else {
           showError("Max turns must be greater than 0.");
+          maxTurnsField.setText("");
           return false;
         }
       } catch (NumberFormatException e) {
         showError("Invalid input. Please enter a valid integer.");
+        maxTurnsField.setText("");
         return false; // Not a valid integer
-      }
+      } 
     }
 
     private void showError(String message) {

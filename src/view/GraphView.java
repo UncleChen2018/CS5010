@@ -53,7 +53,6 @@ public class GraphView implements GameView {
   private JTextArea resultLabel;
 
   private JMenuItem loadWorld;
-  private JMenuItem restartGame;
   private JMenuItem quitItem;
 
   private JMenuBar menuBar;
@@ -61,6 +60,7 @@ public class GraphView implements GameView {
   private JLabel gameStatus;
   private JLabel turnLabel;
   private JLabel currentPlayerLabel;
+  private JButton restartButton;
 
   private Font largerFont = new Font("Arial", Font.BOLD, 16);
 
@@ -71,6 +71,12 @@ public class GraphView implements GameView {
    */
   public GraphView(ViewModel model) {
     this.model = model;
+    initializeFrame();
+  }
+
+  @Override
+  public void rest() {
+    frame.removeAll();
     initializeFrame();
   }
 
@@ -96,13 +102,13 @@ public class GraphView implements GameView {
 
   private void createMenuBar() {
     loadWorld = new JMenuItem("Load World");
-    restartGame = new JMenuItem("Restart Game");
+
     quitItem = new JMenuItem("Quit");
 
     menuBar = new JMenuBar();
     menuBar.setLayout(new FlowLayout(FlowLayout.LEFT));
     menuBar.add(loadWorld);
-    menuBar.add(restartGame);
+
     menuBar.add(quitItem);
     frame.setJMenuBar(menuBar);
 
@@ -162,22 +168,23 @@ public class GraphView implements GameView {
     gameStatusPanel.setLayout(new BoxLayout(gameStatusPanel, BoxLayout.Y_AXIS));
 
     // Add components to the game status panel
-    gameStatus = new JLabel("Not begin yet");
+    gameStatus = new JLabel("Game not begin yet");
     gameStatus.setFont(largerFont);
     gameStatusPanel.add(gameStatus);
 
     // Add components to the game status panel
-    turnLabel = new JLabel("Turn: 0");
+    turnLabel = new JLabel("Turn not begin");
     turnLabel.setFont(largerFont);
     gameStatusPanel.add(turnLabel);
 
-    currentPlayerLabel = new JLabel("Current Player:");
+    currentPlayerLabel = new JLabel("Not any players yet.");
     currentPlayerLabel.setFont(largerFont);
     gameStatusPanel.add(currentPlayerLabel);
 
-    // Add a restart button
-    JButton restartButton = new JButton("Restart");
+    // Add a restart button only when gam
+    restartButton = new JButton("Restart");
     gameStatusPanel.add(restartButton);
+    restartButton.setVisible(false); // Initially invisible
 
     return gameStatusPanel;
   }
@@ -260,10 +267,33 @@ public class GraphView implements GameView {
   }
 
   // wait the controller's call to update the panel
-  // gameStatus: -1 prepare, 0 ongoing, 1 finished.
+  // that is also when game begins
+
   @Override
-  public void updateGameStatus(String gameStatus, int currentTurn, int maxTurn,
-      String currentPlayer) {
+  public void updateStatusLabel() {
+    int currentTurn = model.getCurrentTurn();
+    restartButton.setVisible(true);
+
+    if (model.getWinner() != -1) {
+      // here make the turn freeze to display the player.
+      gameStatus.setText("Game Over, Target is killed");
+      turnLabel.setText(String.format("Turn ends in: %d", currentTurn - 1));
+      int winnerId = model.getWinner();
+      currentPlayerLabel
+          .setText(String.format("Currnt Player: %s", model.getPlayerString(winnerId)));
+    } else {
+      if (model.getCurrentTurn() == model.getMaxTurn()) {
+        gameStatus.setText("Game Over, Target wins");
+        turnLabel.setText(String.format("Turn ends in: %d", currentTurn - 1));
+      }
+      int currentPlayer = model.getCurrentPlayer();
+      gameStatus.setText("Wait for the next move");
+      turnLabel.setText(
+          String.format("Turn: %d (%d turn left)", currentTurn, model.getMaxTurn() - currentTurn));
+      currentPlayerLabel
+          .setText(String.format("Currnt Player: %s", model.getPlayerString(currentPlayer)));
+    }
+    refresh();
 
   }
 
@@ -276,18 +306,14 @@ public class GraphView implements GameView {
     dialog.setVisible(true);
 
   }
-  
-  
-  
 
   @Override
   public void disPlaySetGameMaxTurn(GameControllerNew controller) {
-    JOptionPane.showMessageDialog(frame,
-        "You must set the game Max Turn before the game begins", "Max Turn not Set",
-        JOptionPane.INFORMATION_MESSAGE);
+    JOptionPane.showMessageDialog(frame, "You must set the game Max Turn before the game begins",
+        "Max Turn not Set", JOptionPane.INFORMATION_MESSAGE);
     SetMaxTurnDialog dialog = new SetMaxTurnDialog(frame, model, controller);
     dialog.setVisible(true);
-    
+
   }
 
   @Override
@@ -316,17 +342,26 @@ public class GraphView implements GameView {
       }
     });
 
-    restartGame.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-
-      }
-    });
-
     quitItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         controller.exitGame();
+      }
+    });
+
+    restartButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        int option = JOptionPane.showConfirmDialog(frame,
+            "Are you sure you want to restart the game?\n"
+                + "This will reset players and max turns.",
+            "Restart Game", JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.YES_OPTION) {
+          // User clicked Yes, restart the game
+          controller.loadWorldFile(null);
+          frame.repaint();
+        }
       }
     });
 

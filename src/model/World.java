@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,6 +35,8 @@ public class World implements GameModel, ViewModel {
   private Stack<RoomRect> petTrace = new Stack<>();
 
   private int winnerId;
+  private int currentTurn = 0;
+  private int maxTurn = 0;
 
   /**
    * Constructs an empty world.
@@ -69,16 +70,24 @@ public class World implements GameModel, ViewModel {
    */
   @Override
   public void setupNewWorld(Readable source) throws InputMismatchException {
+    System.out.println("Enter load workd");
+    winnerId = -1;
+    maxTurn = 0;
+    currentTurn = 0;
+    
     roomList = new ArrayList<RoomRect>();
     itemList = new ArrayList<Item>();
     playerList = new ArrayList<Player>();
     winnerId = -1;
     Scanner scanner = new Scanner(source);
+    System.out.println("Scanner right");
 
     // parse the World
     this.rowSize = scanner.nextInt();
     this.colSize = scanner.nextInt();
     this.worldName = scanner.nextLine().trim();
+    
+    System.out.println("Parse 1 right");
 
     // parse the target character
     int fullHealth = scanner.nextInt();
@@ -142,6 +151,7 @@ public class World implements GameModel, ViewModel {
         }
       }
     }
+    System.out.println("finishe set up new world");
   }
 
   // test if [beg1,end1] and [beg2, end2] has over lap
@@ -220,6 +230,26 @@ public class World implements GameModel, ViewModel {
   }
   
 
+  @Override
+  public int getCurrentTurn() {
+    return currentTurn;
+  }
+  
+  @Override
+  public void moveNextTurn() {
+    currentTurn++;
+  }
+  
+  @Override
+  public void setMaxTurn(int maxTurn) {
+    this.maxTurn = maxTurn;
+  }
+  
+  @Override 
+  public int getMaxTurn() {
+    return this.maxTurn;
+  }
+  
   @Override
   public String getWorldName() {
     return worldName;
@@ -492,6 +522,11 @@ public class World implements GameModel, ViewModel {
     return turn % getPlayerCount();
   }
 
+  @Override
+  public int getCurrentPlayer() {
+    return currentTurn % getPlayerCount();
+  }
+  
   /**
    * Queries the items available in the specified room.
    *

@@ -95,4 +95,41 @@ public interface ViewModel {
    */
   String queryRoomDetails(int location);
 
+  /**
+   * Get the current turn for the game.If 0, the game has not started yet.
+   * @return the current turn for the game.
+   */
+  int getCurrentTurn();
+
+  
+
+  /**
+   * Get the max turn for the game.
+   * @return the max turn for the game.
+   */
+  int getMaxTurn();
+  
+  /**
+   * Retrieves the ID of the player who is the winner of the game.
+   *
+   * @return An integer representing the ID of the winning player.
+   */
+  int getWinner();
+  
+
+  /**
+   * Gets a formatted string representation of the player with the specified ID.
+   *
+   * @param playerId the ID of the player
+   * @return a formatted string containing player information
+   */
+
+  String getPlayerString(int playerId);
+
+  /** 
+   * Get the current playe's id from the model.
+   * @return the current turn player's id.
+   */
+  int getCurrentPlayer();
+
 }

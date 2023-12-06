@@ -75,9 +75,10 @@ public class TextView implements GameView {
     
   }
 
+
+
   @Override
-  public void updateGameStatus(String gameStatus, int currentTurn, int maxTurn,
-      String currentPlayer) {
+  public void updateStatusLabel() {
     // TODO Auto-generated method stub
     
   }
@@ -87,6 +88,13 @@ public class TextView implements GameView {
     // TODO Auto-generated method stub
     
   }
+
+  @Override
+  public void rest() {
+    // TODO Auto-generated method stub
+    
+  }
+  
   
   
   

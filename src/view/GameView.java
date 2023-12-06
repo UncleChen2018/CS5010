@@ -1,6 +1,5 @@
 package view;
 
-import controller.GameController;
 import controller.GameControllerNew;
 
 /**
@@ -32,7 +31,10 @@ public interface GameView {
 
   void displayAddPlayer(GameControllerNew controller);
 
-  void updateGameStatus(String gameStatus, int currentTurn, int maxTurn, String currentPlayer);
+
+  void updateStatusLabel();
 
   void disPlaySetGameMaxTurn(GameControllerNew controller);
+
+  void rest();
 }

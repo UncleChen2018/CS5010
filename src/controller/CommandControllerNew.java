@@ -12,6 +12,9 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import org.hamcrest.core.Is;
+
 import model.GameModel;
 import view.GameView;
 
@@ -33,6 +36,7 @@ public class CommandControllerNew implements GameControllerNew {
   private BufferedImage image;
   private JFrame frame;
   private NumberGenerator generator;
+  private String lastFilePath = null;
 
   // new constructor that accept view and model.
   /**
@@ -121,8 +125,15 @@ public class CommandControllerNew implements GameControllerNew {
   @Override
   public void loadWorldFile(String filePath) {
     try {
-      worldData = new FileReader(filePath);
-      model.setupNewWorld(worldData);
+      if (filePath != null) {
+        worldData = new FileReader(filePath);
+        model.setupNewWorld(worldData);
+        lastFilePath = filePath;
+      } else {
+        worldData = new FileReader(lastFilePath);
+        model.setupNewWorld(worldData);
+      }
+      
       restartGame();
 
     } catch (FileNotFoundException e) {
@@ -132,23 +143,29 @@ public class CommandControllerNew implements GameControllerNew {
 
   @Override
   public void restartGame() {
+
+    // completely new begin.
     view.drawMap();
     // fix here, try to add one player.
     while (model.getPlayerCount() == 0) {
       view.displayAddPlayer(this);
     }
     // then make the view to setMaxTurn
-    while (maxTurn == 0) {
+    while (model.getMaxTurn() == 0) {
       view.disPlaySetGameMaxTurn(this);
     }
 
+    // need to make the initial status update.
+    view.updateStatusLabel();
     view.refresh();
+
   }
 
   @Override
   public boolean setMaxTurn(int turnLimit) {
     if (turnLimit > 0) {
       this.maxTurn = turnLimit;
+      model.setMaxTurn(turnLimit);
       return true;
     } else {
       return false;
@@ -463,6 +480,7 @@ public class CommandControllerNew implements GameControllerNew {
             model.moveTargetNextRoom();
             model.movePetNextRoom();
             currentTurn += 1;
+            model.moveNextTurn();
           } catch (IllegalArgumentException | IllegalStateException e) {
             out.append(e.getMessage()).append("\n");
           }

@@ -199,14 +199,6 @@ public interface GameModel extends ViewModel {
 
   ArrayList<Integer> getRoomItems(int location);
 
-  /**
-   * Gets a formatted string representation of the player with the specified ID.
-   *
-   * @param playerId the ID of the player
-   * @return a formatted string containing player information
-   */
-
-  String getPlayerString(int playerId);
 
   /**
    * Gets a formatted string representation of the room at the specified location.
@@ -296,12 +288,7 @@ public interface GameModel extends ViewModel {
    */
   void setWinner(int playerId);
 
-  /**
-   * Retrieves the ID of the player who is the winner of the game.
-   *
-   * @return An integer representing the ID of the winning player.
-   */
-  int getWinner();
+
 
   /**
    * Checks if the game is over.
@@ -349,5 +336,17 @@ public interface GameModel extends ViewModel {
    * @param location room's index.
    */
   void teleportPetLocation(int location);
+
+  
+  /**
+   * Make the next turn.
+   */
+  void moveNextTurn();
+
+  /**
+   * Get the max turn for the game.
+   * @param maxTurn the max turn for the game.
+   */
+  void setMaxTurn(int maxTurn);
 
 }
