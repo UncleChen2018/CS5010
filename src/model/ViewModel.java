@@ -201,4 +201,10 @@ public interface ViewModel {
    * @return An integer representing the health of the target.
    */
   int getTargetHealth();
+  /**
+   * Returns the current location of the pet.
+   * 
+   * @return The index of the space where the pet is located.
+   */
+  int getPetLocation();
 }

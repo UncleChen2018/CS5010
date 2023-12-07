@@ -371,7 +371,7 @@ public class GraphView implements GameView {
       private void handleLeftClick(Point mousePoint) {
         WorldPanel.RoomRect clickedRoom = getClickedRoomRect(mousePoint);
         if (clickedRoom != null) {
-          resultLabel.setText(model.queryRoomDetails(clickedRoom.getIndex()));
+          //resultLabel.setText(model.(clickedRoom.getIndex()));
         }
 
         if (worldlPanel.targetMark.containsPoint(mousePoint)) {

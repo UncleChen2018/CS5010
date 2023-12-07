@@ -279,12 +279,7 @@ public interface GameModel extends ViewModel {
    */
   void movePetNextRoom();
 
-  /**
-   * Returns the current location of the pet.
-   * 
-   * @return The index of the space where the pet is located.
-   */
-  int getPetLocation();
+
 
   /**
    * Teleport pet to the next room. Pet will lose all its memory, and begin a new

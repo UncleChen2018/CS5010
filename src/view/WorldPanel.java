@@ -63,9 +63,19 @@ class WorldPanel extends JPanel {
       RoomRect room = roomList.get(i);
       room.setBounds(ratio);
 
-      // Draw room index and name with a semi-transparent background
-      g.setColor(new Color(255, 255, 255, 192)); // Semi-transparent white
-      g.fillRect(room.getRealBounds().x, room.getRealBounds().y, ratio, ratio);
+      // Fill the room with light green color if the pet is in
+      if (model.getPetLocation() == i) {
+        g.setColor(new Color(144, 238, 144)); // Light Green
+        g.fillRect(room.getRealBounds().x, room.getRealBounds().y, room.getRealBounds().width,
+            room.getRealBounds().height);
+      }
+//
+//      // Draw different borders based on the presence of target and current player
+//      g.setColor(Color.BLACK); // Default border color
+//
+//      // Draw room index and name with a semi-transparent background
+//      g.setColor(new Color(255, 255, 255, 192)); // Semi-transparent white
+//      g.fillRect(room.getRealBounds().x, room.getRealBounds().y, ratio, ratio);
 
       g.setColor(Color.BLACK);
       g.drawString(String.valueOf(room.getIndex()), room.getRealBounds().x + 5,
@@ -166,6 +176,8 @@ class WorldPanel extends JPanel {
     public void draw(Graphics g) {
       g.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height, null);
     }
+    
+   
   }
 
   public ArrayList<RoomRect> getStoredRoomRect() {
