@@ -154,14 +154,7 @@ public interface GameModel extends ViewModel {
 
   int getRoomItemCount(int location);
 
-  /**
-   * Checks if the player with the specified ID is a human player.
-   *
-   * @param playerId the ID of the player
-   * @return true if the player is a human player, otherwise false
-   */
 
-  boolean isHumanPlayer(int playerId);
 
 
 

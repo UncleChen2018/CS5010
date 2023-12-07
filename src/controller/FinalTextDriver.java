@@ -44,7 +44,7 @@ public class FinalTextDriver {
 
       // GameController controller = new CommandController(input, output,
       // worldDataSource, maxTurn);
-      controllerNew.executeGmae();
+      controllerNew.executeGame();
     } catch (IOException e) {
       System.out.println(e);
       return;

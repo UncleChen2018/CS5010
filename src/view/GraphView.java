@@ -367,6 +367,9 @@ public class GraphView implements GameView {
       }
 
       private void handleLeftClick(Point mousePoint) {
+        if (!model.isHumanPlayer(model.getCurrentPlayer())) {
+          return ;
+        }
         WorldPanel.RoomRect clickedRoom = getClickedRoomRect(mousePoint);
         if (clickedRoom != null) {
           // resultLabel.setText(model.(clickedRoom.getIndex()));
@@ -384,6 +387,9 @@ public class GraphView implements GameView {
       }
 
       private void handleRightClick(Point mousePoint) {
+        if (!model.isHumanPlayer(model.getCurrentPlayer())) {
+          return ;
+        }
         if (!dialogShown) { // Check if the dialog has not been shown
           WorldPanel.RoomRect clickedRoom = getClickedRoomRect(mousePoint);
           if (clickedRoom != null && !model.isGameOverWithWinner()
@@ -434,7 +440,6 @@ public class GraphView implements GameView {
             break;
           }
         }
-        e.consume();
         worldlPanel.setToolTipText(tooltipText);
       }
     });
@@ -467,7 +472,6 @@ public class GraphView implements GameView {
           default:
             break;
         }
-        e.consume();
         // Set a timer to allow key presses after a delay
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -484,6 +488,9 @@ public class GraphView implements GameView {
       }
 
       private void handlePickup() {
+        if (!model.isHumanPlayer(model.getCurrentPlayer())) {
+          return ;
+        }
         int playerLocation = model.getPlayerLocation(model.getCurrentPlayer());
         ArrayList<Integer> items = model.getRoomItems(playerLocation);
 
@@ -517,6 +524,9 @@ public class GraphView implements GameView {
       }
 
       private void handleAttack() {
+        if (!model.isHumanPlayer(model.getCurrentPlayer())) {
+          return ;
+        }
         int currentPlayer = model.getCurrentPlayer();
         int playerLocation = model.getPlayerLocation(currentPlayer);
         int targetLocation = model.getTargetLocation();
@@ -576,6 +586,9 @@ public class GraphView implements GameView {
       }
 
       private void handleTeleportPet() {
+        if (!model.isHumanPlayer(model.getCurrentPlayer())) {
+          return ;
+        }
         JOptionPane.showMessageDialog(worldlPanel, "Left-click a room to teleport the pet.",
             "Teleport Pet", JOptionPane.INFORMATION_MESSAGE);
 
@@ -613,6 +626,9 @@ public class GraphView implements GameView {
       }
 
       private void handleLookAround() {
+        if (!model.isHumanPlayer(model.getCurrentPlayer())) {
+          return ;
+        }
         JOptionPane.showMessageDialog(worldlPanel,
             "Click on a neighboring room to look inside.\nPress ESC to exit.", "Look Around",
             JOptionPane.INFORMATION_MESSAGE);

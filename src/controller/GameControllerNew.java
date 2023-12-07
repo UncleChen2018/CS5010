@@ -29,7 +29,7 @@ public interface GameControllerNew {
   /**
    * This is the game runner.
    */
-  void executeGmae();
+  void executeGame();
 
   /**
    * Loads the game map data from a specified file path. And let the view connect
@@ -70,5 +70,11 @@ public interface GameControllerNew {
    * @return the result of the command.
    */
   String processPlayerCommand(String command, int extraId);
+
+  /**
+   * Generate the computer player's turn.
+   * This is a call back method for the view to ask order from the controller.
+   */
+  void generateComputerPlayerTurn();
 
 }

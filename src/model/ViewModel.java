@@ -201,14 +201,13 @@ public interface ViewModel {
    * @return An integer representing the health of the target.
    */
   int getTargetHealth();
+
   /**
    * Returns the current location of the pet.
    * 
    * @return The index of the space where the pet is located.
    */
   int getPetLocation();
-  
-  
 
   /**
    * Gets a list of neighboring room IDs for the specified location.
@@ -218,4 +217,13 @@ public interface ViewModel {
    */
 
   ArrayList<Integer> getRoomNeighbors(int location);
+
+  /**
+   * Checks if the player with the specified ID is a human player.
+   *
+   * @param playerId the ID of the player
+   * @return true if the player is a human player, otherwise false
+   */
+
+  boolean isHumanPlayer(int playerId);
 }

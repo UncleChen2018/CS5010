@@ -13,7 +13,7 @@ public class FinalGraphDriver {
       GameControllerNew controllerNew = new CommandControllerNew(model, graphView);
       // GameController controller = new CommandController(input, output,
       // worldDataSource, maxTurn);
-      controllerNew.executeGmae();
+      controllerNew.executeGame();
     }
 
   }
