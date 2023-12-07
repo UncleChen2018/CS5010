@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -32,6 +33,7 @@ class WorldPanel extends JPanel {
     // addMouseListener(new RoomClickListener());
     targetMark = new CharcterMark("./res/graph/targetIcon.png");
     playerMarkList = new ArrayList<>(MAX_PLAYER_NUM);
+    this.setBackground(Color.WHITE);
     for (int i = 0; i < MAX_PLAYER_NUM; i++) {
       CharcterMark playerMarks = new CharcterMark("./res/graph/player" + i + ".png");
       playerMarkList.add(playerMarks);

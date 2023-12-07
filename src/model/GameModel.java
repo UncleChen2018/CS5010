@@ -216,12 +216,7 @@ public interface GameModel extends ViewModel {
    */
   boolean isLocationValid(int location);
 
-  /**
-   * Retrieves the health value of the target.
-   *
-   * @return An integer representing the health of the target.
-   */
-  int getTargetHealth();
+
 
   /**
    * Retrieves the damage value of the specified item.

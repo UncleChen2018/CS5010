@@ -17,9 +17,12 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,8 +76,10 @@ public class GraphView implements GameView {
   private JButton restartButton;
 
   private Font largerFont = new Font("Arial", Font.BOLD, 16);
+  private Font regularFont = new Font("Arial", Font.PLAIN, 16);
 
-  private boolean isGameGoing = false;
+  private final Color titleColor = new Color(70, 70, 70);
+  private JLabel targetHealthLabel;
 
   /**
    * The default constructor.
@@ -137,7 +142,7 @@ public class GraphView implements GameView {
 
     worldScrollPane = new JScrollPane(worldlPanel);
     // worldScrollPane.setMinimumSize(new Dimension(300, 300));
-    worldScrollPane.setBackground(Color.GRAY);
+    worldScrollPane.setBackground(Color.WHITE);
     worldScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     worldScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -158,7 +163,7 @@ public class GraphView implements GameView {
     // Create a panel to be added to the JScrollPane's viewport
     JPanel infoPanelView = new JPanel();
     infoPanelView.setLayout(new GridLayout(3, 1)); // Two rows (top and bottom)
-    infoPanelView.setBackground(Color.GREEN);
+    infoPanelView.setBackground(Color.WHITE);
 
     infoPanelView.add(createGameStatusPanel());
     infoPanelView.add(createPlayerInfoPanel());
@@ -172,26 +177,44 @@ public class GraphView implements GameView {
 
   }
 
-  // TODO: there should be status that is passed from the controller,
   private JScrollPane createGameStatusPanel() {
     // Create a panel for game status
     JPanel gameStatusPanel = new JPanel();
-    gameStatusPanel.setBackground(Color.WHITE);
+    gameStatusPanel.setBackground(new Color(220, 200, 255));
     gameStatusPanel.setLayout(new BoxLayout(gameStatusPanel, BoxLayout.Y_AXIS));
+
+    // Add a title for Game Status
+    JLabel titleLabel = new JLabel("Game Status");
+    titleLabel.setFont(largerFont);
+    titleLabel.setOpaque(true);
+    titleLabel.setForeground(titleColor);
+    titleLabel.setBackground(new Color(220, 200, 255)); // Light Blue background
+    titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    titleLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    titleLabel.setMaximumSize(new Dimension(20000, titleLabel.getPreferredSize().height));
+    gameStatusPanel.add(titleLabel);
 
     // Add components to the game status panel
     gameStatus = new JLabel("Game not begin yet");
-    gameStatus.setFont(largerFont);
+    gameStatus.setFont(regularFont);
     gameStatusPanel.add(gameStatus);
 
     // Add components to the game status panel
     turnLabel = new JLabel("Turn not begin");
-    turnLabel.setFont(largerFont);
+    turnLabel.setFont(regularFont);
     gameStatusPanel.add(turnLabel);
 
     currentPlayerLabel = new JLabel("Not any players yet.");
-    currentPlayerLabel.setFont(largerFont);
+    currentPlayerLabel.setFont(regularFont);
     gameStatusPanel.add(currentPlayerLabel);
+
+    //Add a target health label
+    targetHealthLabel = new JLabel("Target Health Remain: ");
+    targetHealthLabel.setFont(regularFont);
+    gameStatusPanel.add(targetHealthLabel);
+    targetHealthLabel.setVisible(false);
+
+    
 
     // Add a restart button only when game
     restartButton = new JButton("Restart");
@@ -205,7 +228,15 @@ public class GraphView implements GameView {
     spacingLabel.setPreferredSize(new Dimension(spacingLabel.getPreferredSize().width, 20));
     gameStatusPanel.add(spacingLabel);
 
-    addMenuItem(gameStatusPanel, "Manual");
+    JLabel manuaLabel = new JLabel("Manual");
+    manuaLabel.setFont(largerFont);
+    manuaLabel.setOpaque(true);
+    manuaLabel.setForeground(Color.WHITE);
+    manuaLabel.setBackground(new Color(220, 200, 255)); // Light Blue background
+    manuaLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    manuaLabel.setMaximumSize(new Dimension(20000, manuaLabel.getPreferredSize().height));
+
+    gameStatusPanel.add(manuaLabel);
     addMenuItem(gameStatusPanel, "Right click: move");
     addMenuItem(gameStatusPanel, "Press Q: pick up an item");
     addMenuItem(gameStatusPanel, "Press W: look around");
@@ -223,24 +254,42 @@ public class GraphView implements GameView {
     return gameStatusScrollPane;
   }
 
+  private void setGmamStatusPanelInitial() {
+    gameStatus.setText("Game not begin yet");
+    turnLabel.setText("Turn not begin");
+    currentPlayerLabel.setText("Not any players yet.");
+    playerLabel.setText("");
+    resultLabel.setText("");
+  }
+
   private void addMenuItem(JPanel panel, String text) {
     // Add the actual menu item
     JLabel menuItemLabel = new JLabel(text);
     menuItemLabel.setFont(largerFont.deriveFont(Font.BOLD)); // Customize the style
     menuItemLabel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
     menuItemLabel.setOpaque(true);
-    menuItemLabel.setForeground(new Color(135, 206, 250));
+    menuItemLabel.setBackground(new Color(220, 200, 255));
+    menuItemLabel.setForeground(Color.WHITE);
+    menuItemLabel.setMaximumSize(new Dimension(20000, menuItemLabel.getPreferredSize().height));
 
     panel.add(menuItemLabel);
   }
 
   private JPanel createPlayerInfoPanel() {
-    playerInfoPanel = new JPanel(new BorderLayout());
-    playerInfoPanel.setBackground(Color.LIGHT_GRAY);
-    playerLabel = new JTextArea("Player Information");
-    playerLabel.setFont(largerFont);
+    JPanel playerInfoPanel = new JPanel(new BorderLayout());
+    playerInfoPanel.setBackground(new Color(255, 200, 100));
+
+    // Title for Character Information
+    JLabel titleLabel = new JLabel("Character Information");
+    titleLabel.setForeground(new Color(70, 70, 70));
+    titleLabel.setFont(largerFont);
+    playerInfoPanel.add(titleLabel, BorderLayout.NORTH);
+
+    playerLabel = new JTextArea();
+    playerLabel.setFont(regularFont);
     playerLabel.setText("");
     playerLabel.setEditable(false);
+    playerLabel.setBackground(new Color(255, 200, 100));
 
     playerLabel.setFocusable(false);
 
@@ -251,17 +300,25 @@ public class GraphView implements GameView {
         .setPreferredSize(new Dimension(200, playerScrollPane.getPreferredSize().height));
 
     playerInfoPanel.add(playerScrollPane, BorderLayout.CENTER);
+
     return playerInfoPanel;
 
   }
 
   private JPanel createResultPanel() {
     resultPanel = new JPanel(new BorderLayout());
-    resultPanel.setBackground(Color.WHITE);
+    resultPanel.setBackground(new Color(200, 255, 200));
+    // Title for Character Information
+    JLabel titleLabel = new JLabel("World Information");
+    titleLabel.setForeground(new Color(70, 70, 70));
+    titleLabel.setFont(largerFont);
+    resultPanel.add(titleLabel, BorderLayout.NORTH);
+
     resultLabel = new JTextArea("World Information");
-    resultLabel.setFont(largerFont);
+    resultLabel.setFont(regularFont);
     resultLabel.setText("");
     resultLabel.setEditable(false);
+    resultLabel.setBackground(new Color(200, 255, 200));
     // not take focus from the world panel.
     resultLabel.setFocusable(false);
 
@@ -304,8 +361,10 @@ public class GraphView implements GameView {
 
         if (e.getButton() == MouseEvent.BUTTON1) {
           handleLeftClick(mousePoint);
+          e.consume();
         } else if (e.getButton() == MouseEvent.BUTTON3) {
           handleRightClick(mousePoint);
+          e.consume();
         }
       }
 
@@ -377,6 +436,7 @@ public class GraphView implements GameView {
             break;
           }
         }
+        e.consume();
         worldlPanel.setToolTipText(tooltipText);
       }
     });
@@ -410,6 +470,7 @@ public class GraphView implements GameView {
           default:
             break;
         }
+        e.consume();
         // Set a timer to allow key presses after a delay
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -418,7 +479,7 @@ public class GraphView implements GameView {
             keyPressedRecently = false;
             timer.cancel();
           }
-        }, 200); // 200 milliseconds = 0.2 seconds
+        }, 500); // 200 milliseconds = 0.2 seconds
 
         // Mark that a key was pressed recently
         keyPressedRecently = true;
@@ -572,6 +633,7 @@ public class GraphView implements GameView {
   public void updateStatusLabel() {
     int currentTurn = model.getCurrentTurn();
     restartButton.setVisible(true);
+    targetHealthLabel.setVisible(true);
 
     if (model.isGameOverWithWinner()) {
       // here make the turn freeze to display the player.
@@ -594,9 +656,10 @@ public class GraphView implements GameView {
             .setText(String.format("Currnt Player: %s", model.getPlayerString(currentPlayer)));
       }
     }
+    targetHealthLabel.setText(String.format("Target Health Remain: %d", model.getTargetHealth()));
 
     playerLabel.setText(model.queryPlayerDetails(model.getCurrentPlayer()));
-
+    
     refresh();
 
   }
@@ -675,13 +738,34 @@ public class GraphView implements GameView {
             "Restart Game", JOptionPane.YES_NO_OPTION);
 
         if (option == JOptionPane.YES_OPTION) {
-          // User clicked Yes, restart the game
+          removeAllListeners(worldlPanel);
+          // make status to the original.
+          
+          setGmamStatusPanelInitial();
           controller.loadWorldFile(null);
 
           frame.repaint();
         }
       }
-    });
+
+      private void removeAllListeners(Component component) {
+        for (MouseListener listener : component.getMouseListeners()) {
+          component.removeMouseListener(listener);
+        }
+
+        for (MouseMotionListener listener : component.getMouseMotionListeners()) {
+          component.removeMouseMotionListener(listener);
+        }
+
+        for (KeyListener listener : component.getKeyListeners()) {
+          component.removeKeyListener(listener);
+        }
+
+        // Add more listener types as needed based on your requirements
+      }
+    }
+
+    );
 
   }
 
