@@ -15,9 +15,6 @@ import javax.swing.JPanel;
 
 import model.ViewModel;
 
-
-
-
 class WorldPanel extends JPanel {
   private static final int MIN_SCALE_PER_CELL = 18;
   private static final int MAX_PLAYER_NUM = 10;
@@ -40,7 +37,7 @@ class WorldPanel extends JPanel {
     }
     System.out.println("Marks finished");
   }
-  
+
   public void setModel(ViewModel model) {
     this.model = model;
   }
@@ -65,6 +62,17 @@ class WorldPanel extends JPanel {
     for (int i = 0; i < roomList.size(); i++) {
       RoomRect room = roomList.get(i);
       room.setBounds(ratio);
+
+      // Draw room index and name with a semi-transparent background
+      g.setColor(new Color(255, 255, 255, 192)); // Semi-transparent white
+      g.fillRect(room.getRealBounds().x, room.getRealBounds().y, ratio, ratio);
+
+      g.setColor(Color.BLACK);
+      g.drawString(String.valueOf(room.getIndex()), room.getRealBounds().x + 5,
+          room.getRealBounds().y + 15);
+      g.drawString(model.getRoomName(room.getIndex()), room.getRealBounds().x + 5,
+          room.getRealBounds().y + 30);
+
       g.drawRect(room.getRealBounds().x, room.getRealBounds().y, room.getRealBounds().width,
           room.getRealBounds().height);
 
@@ -97,8 +105,7 @@ class WorldPanel extends JPanel {
     return roomList;
 
   }
-  
-  
+
   public class RoomRect {
     public final Rectangle bounds;
     private int index;
@@ -169,6 +176,7 @@ class WorldPanel extends JPanel {
   // TODO: the room should know its target and player list.
   private void drawAllMarks(RoomRect room, int ratio, Graphics g) {
     int location = room.getIndex();
+
     ArrayList<CharcterMark> toDrawList = new ArrayList<>();
     if (model.getTargetLocation() == location) {
       toDrawList.add(targetMark);
@@ -188,7 +196,4 @@ class WorldPanel extends JPanel {
 
   }
 
-
 }
-
-
