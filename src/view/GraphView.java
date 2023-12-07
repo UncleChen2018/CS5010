@@ -3,6 +3,7 @@ package view;
 import controller.GameControllerNew;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -23,6 +24,7 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -105,7 +107,6 @@ public class GraphView implements GameView {
 
     createWorldPanel();
     createInfoPanel();
-    
 
   }
 
@@ -195,7 +196,20 @@ public class GraphView implements GameView {
     gameStatusPanel.add(restartButton);
     restartButton.setVisible(false); // Initially invisible
 
-    //
+    // Add a manual area at the bottom of the status panel.
+
+    JLabel spacingLabel = new JLabel("  ");
+    spacingLabel.setAlignmentY(Component.TOP_ALIGNMENT);
+    spacingLabel.setPreferredSize(new Dimension(spacingLabel.getPreferredSize().width, 20));
+    gameStatusPanel.add(spacingLabel);
+    
+    
+    addMenuItem(gameStatusPanel, "Manual");
+    addMenuItem(gameStatusPanel, "Right click: move");
+    addMenuItem(gameStatusPanel, "Press Q: pick up an item");
+    addMenuItem(gameStatusPanel, "Press W: look around");
+    addMenuItem(gameStatusPanel, "Press E: teleport pet");
+    addMenuItem(gameStatusPanel, "Press A: make an attack attempt");
 
     // Wrap the gameStatusPanel in a JScrollPane
     JScrollPane gameStatusScrollPane = new JScrollPane(gameStatusPanel);
@@ -208,13 +222,24 @@ public class GraphView implements GameView {
     return gameStatusScrollPane;
   }
 
+  private void addMenuItem(JPanel panel, String text) {
+    // Add the actual menu item
+    JLabel menuItemLabel = new JLabel(text);
+    menuItemLabel.setFont(largerFont.deriveFont(Font.BOLD)); // Customize the style
+    menuItemLabel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+    menuItemLabel.setOpaque(true);
+    menuItemLabel.setForeground(new Color(135, 206, 250));
+
+    panel.add(menuItemLabel);
+  }
+
   private JPanel createPlayerInfoPanel() {
     playerInfoPanel = new JPanel(new BorderLayout());
     playerInfoPanel.setBackground(Color.LIGHT_GRAY);
     playerLabel = new JTextArea("Player Information");
     playerLabel.setFont(largerFont);
     playerLabel.setEditable(false);
-    
+
     playerLabel.setFocusable(false);
 
     JScrollPane playerScrollPane = new JScrollPane(playerLabel);
@@ -234,7 +259,7 @@ public class GraphView implements GameView {
     resultLabel = new JTextArea("World Information");
     resultLabel.setFont(largerFont);
     resultLabel.setEditable(false);
-    //not take focus from the world panel.
+    // not take focus from the world panel.
     resultLabel.setFocusable(false);
 
     JScrollPane resultScrollPane = new JScrollPane(resultLabel);
@@ -262,7 +287,6 @@ public class GraphView implements GameView {
   @Override
   public void drawMap(GameControllerNew controller) {
 
-    
     worldlPanel.removeAll();
     worldlPanel.setModel(model);
     worldlPanel.getRoomRect(model);
@@ -357,28 +381,25 @@ public class GraphView implements GameView {
     worldlPanel.addKeyListener(new KeyAdapter() {
       @Override
       public void keyPressed(KeyEvent e) {
-        //controller.handleKeyPress(e);
-        
+        // controller.handleKeyPress(e);
+
         int keyCode = e.getKeyCode();
         char keyChar = e.getKeyChar();
 
         System.out.println("Key Pressed - Code: " + keyCode + ", Char: " + keyChar);
 
       }
-      
+
       @Override
       public void keyReleased(KeyEvent e) {
-        //handleKeyRelease(e);
-        
+        // handleKeyRelease(e);
+
         int keyCode = e.getKeyCode();
         char keyChar = e.getKeyChar();
 
         System.out.println("Key Released - Code: " + keyCode + ", Char: " + keyChar);
       }
     });
-    
-    
-    
 
     worldlPanel.setFocusable(true); // Make sure the panel is focused to receive key events
     worldlPanel.requestFocusInWindow();
@@ -497,7 +518,7 @@ public class GraphView implements GameView {
         if (option == JOptionPane.YES_OPTION) {
           // User clicked Yes, restart the game
           controller.loadWorldFile(null);
-          
+
           frame.repaint();
         }
       }
