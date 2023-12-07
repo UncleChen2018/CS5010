@@ -41,6 +41,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import model.ViewModel;
@@ -59,7 +60,6 @@ public class GraphView implements GameView {
 
   private WorldPanel worldlPanel;
 
-  private JPanel playerInfoPanel;
   private JTextArea playerLabel;
 
   private JPanel resultPanel;
@@ -208,13 +208,11 @@ public class GraphView implements GameView {
     currentPlayerLabel.setFont(regularFont);
     gameStatusPanel.add(currentPlayerLabel);
 
-    //Add a target health label
+    // Add a target health label
     targetHealthLabel = new JLabel("Target Health Remain: ");
     targetHealthLabel.setFont(regularFont);
     gameStatusPanel.add(targetHealthLabel);
     targetHealthLabel.setVisible(false);
-
-    
 
     // Add a restart button only when game
     restartButton = new JButton("Restart");
@@ -371,7 +369,7 @@ public class GraphView implements GameView {
       private void handleLeftClick(Point mousePoint) {
         WorldPanel.RoomRect clickedRoom = getClickedRoomRect(mousePoint);
         if (clickedRoom != null) {
-          //resultLabel.setText(model.(clickedRoom.getIndex()));
+          // resultLabel.setText(model.(clickedRoom.getIndex()));
         }
 
         if (worldlPanel.targetMark.containsPoint(mousePoint)) {
@@ -443,6 +441,8 @@ public class GraphView implements GameView {
 
     worldlPanel.addKeyListener(new KeyAdapter() {
       private boolean keyPressedRecently = false;
+      private MouseAdapter worldLookAroundMouseListener;
+      private KeyAdapter worldLookAroundKeyListener;
 
       @Override
       public void keyPressed(KeyEvent e) {
@@ -463,9 +463,6 @@ public class GraphView implements GameView {
             break;
           case KeyEvent.VK_A:
             handleAttack();
-            break;
-          case KeyEvent.VK_SPACE:
-            // Handle the SPACE key press
             break;
           default:
             break;
@@ -616,7 +613,56 @@ public class GraphView implements GameView {
       }
 
       private void handleLookAround() {
+        JOptionPane.showMessageDialog(worldlPanel,
+            "Click on a neighboring room to look inside.\nPress ESC to exit.", "Look Around",
+            JOptionPane.INFORMATION_MESSAGE);
 
+        worldLookAroundMouseListener = new MouseAdapter() {
+          @Override
+          public void mouseClicked(MouseEvent e) {
+            if (SwingUtilities.isLeftMouseButton(e)) {
+              Point mousePoint = e.getPoint();
+              int playerRoom = model.getPlayerLocation(model.getCurrentPlayer());
+              for (WorldPanel.RoomRect room : worldlPanel.getStoredRoomRect()) {
+                if (room.containsPoint(mousePoint)) {
+                  if ((model.getRoomNeighbors(playerRoom).contains(room.getIndex())
+                      && model.getPetLocation() != room.getIndex())
+                      || room.getIndex() == playerRoom) {
+                    // Handle the look around logic for the selected room
+                    int roomIndex = room.getIndex();
+                    String roomContents = model.queryRoomDetails(roomIndex);
+                    resultLabel.setText(roomContents);
+                  } else {
+                    int roomIndex = room.getIndex();
+                    String roomContents = "Hardly to see anything!";
+                    resultLabel.setText(roomContents);
+                  }
+                }
+              }
+            }
+          }
+        };
+
+        worldLookAroundKeyListener = new KeyAdapter() {
+          @Override
+          public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+              // Exit the look around mode
+              JOptionPane.showMessageDialog(worldlPanel, "Look around mode exited. Turn end.",
+                  "Look Around", JOptionPane.INFORMATION_MESSAGE);
+              controller.processPlayerCommand("lookaroud", -1);
+              resetLookAroundMode();
+            }
+          }
+        };
+
+        worldlPanel.addMouseListener(worldLookAroundMouseListener);
+        worldlPanel.addKeyListener(worldLookAroundKeyListener);
+      }
+
+      private void resetLookAroundMode() {
+        worldlPanel.removeMouseListener(worldLookAroundMouseListener);
+        worldlPanel.removeKeyListener(worldLookAroundKeyListener);
       }
 
     });
@@ -659,7 +705,7 @@ public class GraphView implements GameView {
     targetHealthLabel.setText(String.format("Target Health Remain: %d", model.getTargetHealth()));
 
     playerLabel.setText(model.queryPlayerDetails(model.getCurrentPlayer()));
-    
+
     refresh();
 
   }
@@ -740,7 +786,7 @@ public class GraphView implements GameView {
         if (option == JOptionPane.YES_OPTION) {
           removeAllListeners(worldlPanel);
           // make status to the original.
-          
+
           setGmamStatusPanelInitial();
           controller.loadWorldFile(null);
 

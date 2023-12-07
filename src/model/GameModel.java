@@ -135,14 +135,6 @@ public interface GameModel extends ViewModel {
 
   String queryRoomNeighbors(int playerLocation);
 
-  /**
-   * Gets a list of neighboring room IDs for the specified location.
-   *
-   * @param location the location for which to retrieve neighboring rooms
-   * @return a list of neighboring room IDs
-   */
-
-  ArrayList<Integer> getRoomNeighbors(int location);
 
   /**
    * Checks if the player with the specified ID has reached their item capacity.

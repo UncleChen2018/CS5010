@@ -207,4 +207,15 @@ public interface ViewModel {
    * @return The index of the space where the pet is located.
    */
   int getPetLocation();
+  
+  
+
+  /**
+   * Gets a list of neighboring room IDs for the specified location.
+   *
+   * @param location the location for which to retrieve neighboring rooms
+   * @return a list of neighboring room IDs
+   */
+
+  ArrayList<Integer> getRoomNeighbors(int location);
 }
