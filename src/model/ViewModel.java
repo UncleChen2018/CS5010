@@ -144,7 +144,7 @@ public interface ViewModel {
    * @return {@code true} if the game is over, {@code false} otherwise.
    */
   boolean isGameOverWithMaxTurn();
-  
+
   /**
    * Check if two room are neighbors.
    * 
@@ -153,7 +153,7 @@ public interface ViewModel {
    * @return true if these two are neighbors.
    */
   boolean isNeighbor(int quest, int base);
-  
+
   /**
    * Returns the current location of the player with the specified ID.
    * 
@@ -161,5 +161,38 @@ public interface ViewModel {
    * @return The index of the space where the player is located.
    */
   int getPlayerLocation(int playerId);
+
+  /**
+   * Gets a list of item IDs present in the room at the specified location.
+   *
+   * @param location the location of the room
+   * @return a list of item IDs in the room
+   */
+
+  ArrayList<Integer> getRoomItems(int location);
+
+  /**
+   * Queries and retrieves detailed information about the item with the specified.
+   * 
+   * @param itemId the ID of the item
+   * @return a formatted string containing item details.
+   */
+  String querryItemInfo(int itemId);
+
+  /**
+   * Gets a list of item IDs associated with the specified player.
+   *
+   * @param playerId the ID of the player
+   * @return a list of item IDs
+   */
+  ArrayList<Integer> getPlayerItems(int playerId);
+
+  /**
+   * Retrieves the name of the item with the specified ID.
+   *
+   * @param itemId The ID of the item to retrieve the name for.
+   * @return A String representing the name of the item.
+   */
+  String getItemName(int itemId);
 
 }

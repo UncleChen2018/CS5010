@@ -821,6 +821,11 @@ public class World implements GameModel, ViewModel {
     pet.setStunned();
   }
   
+  @Override
+  public String querryItemInfo(int itemId) {
+    return itemList.get(itemId).toString();
+  }
+  
   
 
 }

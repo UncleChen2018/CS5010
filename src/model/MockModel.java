@@ -904,4 +904,11 @@ public class MockModel implements GameModel {
     pet.setStunned();
   }
 
+  @Override
+  public String querryItemInfo(int itemId) {
+    log.append(String.format("querryItemInfo called, itemId = %d", itemId)).append("\n");
+    return itemList.get(itemId).toString();
+  }
+  
+
 }

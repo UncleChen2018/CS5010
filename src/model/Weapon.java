@@ -49,6 +49,7 @@ public class Weapon implements Item {
   public String toString() {
     return String.format("No.%d \"%s\" Damage:%d", itemId, itemName, itemDamage);
   }
+  
 
   /**
    * Retrieves the damage value of the item.

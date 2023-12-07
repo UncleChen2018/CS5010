@@ -108,13 +108,7 @@ public interface GameModel extends ViewModel {
    */
   void pickUpitem(int playerId, int itemId);
 
-  /**
-   * Gets a list of item IDs associated with the specified player.
-   *
-   * @param playerId the ID of the player
-   * @return a list of item IDs
-   */
-  ArrayList<Integer> getPlayerItems(int playerId);
+
 
   /**
    * Gets the location index of the item if it is in a room.
@@ -177,14 +171,7 @@ public interface GameModel extends ViewModel {
 
   boolean isHumanPlayer(int playerId);
 
-  /**
-   * Gets a list of item IDs present in the room at the specified location.
-   *
-   * @param location the location of the room
-   * @return a list of item IDs in the room
-   */
 
-  ArrayList<Integer> getRoomItems(int location);
 
 
   /**
@@ -244,13 +231,7 @@ public interface GameModel extends ViewModel {
    */
   int getItemDamage(int itemId);
 
-  /**
-   * Retrieves the name of the item with the specified ID.
-   *
-   * @param itemId The ID of the item to retrieve the name for.
-   * @return A String representing the name of the item.
-   */
-  String getItemName(int itemId);
+
 
   /**
    * Performs an attack on the target with the specified amount of damage.

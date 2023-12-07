@@ -21,6 +21,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -202,8 +204,7 @@ public class GraphView implements GameView {
     spacingLabel.setAlignmentY(Component.TOP_ALIGNMENT);
     spacingLabel.setPreferredSize(new Dimension(spacingLabel.getPreferredSize().width, 20));
     gameStatusPanel.add(spacingLabel);
-    
-    
+
     addMenuItem(gameStatusPanel, "Manual");
     addMenuItem(gameStatusPanel, "Right click: move");
     addMenuItem(gameStatusPanel, "Press Q: pick up an item");
@@ -238,6 +239,7 @@ public class GraphView implements GameView {
     playerInfoPanel.setBackground(Color.LIGHT_GRAY);
     playerLabel = new JTextArea("Player Information");
     playerLabel.setFont(largerFont);
+    playerLabel.setText("");
     playerLabel.setEditable(false);
 
     playerLabel.setFocusable(false);
@@ -258,6 +260,7 @@ public class GraphView implements GameView {
     resultPanel.setBackground(Color.WHITE);
     resultLabel = new JTextArea("World Information");
     resultLabel.setFont(largerFont);
+    resultLabel.setText("");
     resultLabel.setEditable(false);
     // not take focus from the world panel.
     resultLabel.setFocusable(false);
@@ -379,26 +382,182 @@ public class GraphView implements GameView {
     });
 
     worldlPanel.addKeyListener(new KeyAdapter() {
+      private boolean keyPressedRecently = false;
+
       @Override
       public void keyPressed(KeyEvent e) {
-        // controller.handleKeyPress(e);
 
+        if (keyPressedRecently) {
+          return; // Ignore key presses if a key was pressed recently
+        }
         int keyCode = e.getKeyCode();
-        char keyChar = e.getKeyChar();
+        switch (keyCode) {
+          case KeyEvent.VK_Q:
+            handlePickup();
+            break;
+          case KeyEvent.VK_W:
+            handleLookAround();
+            break;
+          case KeyEvent.VK_E:
+            handleTeleportPet();
+            break;
+          case KeyEvent.VK_A:
+            handleAttack();
+            break;
+          case KeyEvent.VK_SPACE:
+            // Handle the SPACE key press
+            break;
+          default:
+            break;
+        }
+        // Set a timer to allow key presses after a delay
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+          @Override
+          public void run() {
+            keyPressedRecently = false;
+            timer.cancel();
+          }
+        }, 200); // 200 milliseconds = 0.2 seconds
 
-        System.out.println("Key Pressed - Code: " + keyCode + ", Char: " + keyChar);
+        // Mark that a key was pressed recently
+        keyPressedRecently = true;
 
       }
 
-      @Override
-      public void keyReleased(KeyEvent e) {
-        // handleKeyRelease(e);
+      private void handlePickup() {
+        int playerLocation = model.getPlayerLocation(model.getCurrentPlayer());
+        ArrayList<Integer> items = model.getRoomItems(playerLocation);
 
-        int keyCode = e.getKeyCode();
-        char keyChar = e.getKeyChar();
+        if (!items.isEmpty()) {
+          // If there are items, show them in buttons vertically
+          StringBuilder message = new StringBuilder("Select an item:\n");
+          for (Integer itemId : items) {
+            message.append("- ").append(model.querryItemInfo(itemId)).append("\n");
+          }
 
-        System.out.println("Key Released - Code: " + keyCode + ", Char: " + keyChar);
+          // Convert ArrayList<Integer> to an array of Strings
+          String[] options = new String[items.size()];
+          for (int i = 0; i < items.size(); i++) {
+            options[i] = model.getItemName(items.get(i));
+          }
+
+          int choice = JOptionPane.showOptionDialog(worldlPanel, message.toString(),
+              "Item Selection", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+              options, options[0]);
+
+          if (choice >= 0) {
+            controller.processPlayerCommand("pickup", items.get(choice));
+
+          }
+        } else {
+          // If no items, inform the user
+          JOptionPane.showMessageDialog(worldlPanel, "No items available.", "Item Selection",
+              JOptionPane.INFORMATION_MESSAGE);
+        }
+
       }
+
+      private void handleAttack() {
+        int currentPlayer = model.getCurrentPlayer();
+        int playerLocation = model.getPlayerLocation(currentPlayer);
+        int targetLocation = model.getTargetLocation();
+
+        // Check if the player is in the same location as the target
+        if (playerLocation != targetLocation) {
+          JOptionPane.showMessageDialog(worldlPanel,
+              "You are not in the same location as the target. Move closer to attack.",
+              "Invalid Attack", JOptionPane.WARNING_MESSAGE);
+          return; // Exit the method, as the attack is not valid
+        }
+
+        ArrayList<Integer> items = model.getPlayerItems(model.getCurrentPlayer());
+        System.out.println("player carries" + items);
+
+        // If there are items, show them in buttons for attack selection
+        if (!items.isEmpty()) {
+          // Add other items as attack options
+          String[] options = new String[items.size() + 1];
+
+          for (int i = 0; i < items.size(); i++) {
+            options[i] = model.getItemName(items.get(i));
+          }
+
+          // Add the "Poke in the eye" option as the last option
+          options[items.size()] = "Poke in the eye";
+
+          StringBuilder message = new StringBuilder("Select an item for attack:\n");
+          for (Integer itemId : items) {
+            message.append("- ").append(model.querryItemInfo(itemId)).append("\n");
+          }
+
+          int choice = JOptionPane.showOptionDialog(worldlPanel, message.toString(),
+              "Attack Selection", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+              options, options[0]);
+
+          if (choice >= 0) {
+            System.out.println(String.format("Attack choice is %d", choice));
+            int itemId = -1;
+            if (choice != items.size()) {
+              itemId = items.get(choice);
+            }
+
+            controller.processPlayerCommand("attack", itemId);
+
+          }
+        } else {
+          // If no items, ask the user to reconsider
+          int reconsiderChoice = JOptionPane.showConfirmDialog(worldlPanel,
+              "No items available for attack. Do you want to use poking in the eye?",
+              "Attack Selection", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+          if (reconsiderChoice == JOptionPane.YES_OPTION) {
+            controller.processPlayerCommand("attack", -1);
+          }
+        }
+      }
+
+      private void handleTeleportPet() {
+        JOptionPane.showMessageDialog(worldlPanel, "Left-click a room to teleport the pet.",
+            "Teleport Pet", JOptionPane.INFORMATION_MESSAGE);
+
+        worldlPanel.addMouseListener(new MouseAdapter() {
+          @Override
+          public void mouseClicked(MouseEvent e) {
+            Point mousePoint = e.getPoint();
+            if (e.getButton() == MouseEvent.BUTTON1) { // Change to BUTTON1 (left-click)
+              WorldPanel.RoomRect clickedRoom = getClickedRoomRect(mousePoint);
+
+              if (clickedRoom != null) {
+                // Teleport pet logic here
+                // Assuming model.teleportPetToRoom is a method in your model class
+                // "not valid command"
+                int index = clickedRoom.getIndex();
+
+                String resultString = controller.processPlayerCommand("movepetto", index);
+
+                if (!"not valid command".equals(resultString)) {
+                  JOptionPane.showMessageDialog(worldlPanel,
+                      "Pet successfully teleported to Room " + clickedRoom.getIndex(),
+                      "Teleport Pet Success", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                  JOptionPane.showMessageDialog(worldlPanel,
+                      "Pet teleportation failed. Please try again.", "Teleport Pet Failed",
+                      JOptionPane.WARNING_MESSAGE);
+                }
+
+                // Remove the mouse listener after handling the teleportation
+                worldlPanel.removeMouseListener(this);
+              }
+            }
+          }
+        });
+      }
+
+      private void handleLookAround() {
+
+      }
+
     });
 
     worldlPanel.setFocusable(true); // Make sure the panel is focused to receive key events
