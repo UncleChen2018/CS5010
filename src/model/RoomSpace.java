@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * room name, arrays of containing item, neighbor rooms and other visible rooms.
  * Also contain the pet's infomation.
  */
-public class RoomSpace implements RoomRect {
+public class RoomSpace implements Space {
 
   private int spaceIndex;
   private int[] rectCordinate; // the coordinate of the room rectangle
@@ -15,8 +15,8 @@ public class RoomSpace implements RoomRect {
 
   // Not final here, later may need to change
   private ArrayList<Item> itemList;
-  private ArrayList<RoomRect> neighboRoomSpaces;
-  private ArrayList<RoomRect> visbleRoomSpaces;
+  private ArrayList<Space> neighboRoomSpaces;
+  private ArrayList<Space> visbleRoomSpaces;
   private ArrayList<Player> characterList;
   private boolean isTargetIn;
   private boolean isPetIn;
@@ -41,8 +41,8 @@ public class RoomSpace implements RoomRect {
     rectCordinate[3] = colEnd + 1;
     this.name = name;
     this.itemList = new ArrayList<Item>();
-    this.neighboRoomSpaces = new ArrayList<RoomRect>();
-    this.visbleRoomSpaces = new ArrayList<RoomRect>();
+    this.neighboRoomSpaces = new ArrayList<Space>();
+    this.visbleRoomSpaces = new ArrayList<Space>();
     this.characterList = new ArrayList<Player>();
     isTargetIn = false;
     isPetIn = false;
@@ -136,7 +136,7 @@ public class RoomSpace implements RoomRect {
    *
    * @return An ArrayList of Room objects representing the neighbor rooms.
    */
-  public ArrayList<RoomRect> getNeighbors() {
+  public ArrayList<Space> getNeighbors() {
     return neighboRoomSpaces;
   }
 
@@ -145,7 +145,7 @@ public class RoomSpace implements RoomRect {
    *
    * @return An ArrayList of Room objects representing the visible rooms.
    */
-  public ArrayList<RoomRect> getVisibles() {
+  public ArrayList<Space> getVisibles() {
     return visbleRoomSpaces;
   }
 
@@ -257,7 +257,7 @@ public class RoomSpace implements RoomRect {
   public String queryRoomNeighbors() {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("-------------------Neighbor Info-------------------\n");
-    for (RoomRect room : neighboRoomSpaces) {
+    for (Space room : neighboRoomSpaces) {
       stringBuilder.append(room).append("\n");
     }
     return stringBuilder.toString();
@@ -276,7 +276,7 @@ public class RoomSpace implements RoomRect {
     if (isPetIn) {
       return true;
     }
-    for (RoomRect neighbor : neighboRoomSpaces) {
+    for (Space neighbor : neighboRoomSpaces) {
       if (neighbor.getCharacterList().size() >= 1) {
         return false;
       }

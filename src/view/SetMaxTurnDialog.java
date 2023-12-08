@@ -140,6 +140,10 @@ public class SetMaxTurnDialog extends JDialog {
     }
   }
 
+  /**
+   * Get the max turn.
+   * @return the max turn.
+   */
   public Integer getMaxTurn() {
     return Integer.parseInt(maxTurnsField.getText().trim());
   }

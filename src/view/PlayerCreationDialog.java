@@ -196,18 +196,34 @@ public class PlayerCreationDialog extends JDialog {
     }
   }
 
+  /**
+   * get player name.
+   * @return player name
+   */
   public String getPlayerName() {
     return playerNameField.getText().trim();
   }
 
+  /**
+   * get initial location.
+   * @return initial location
+   */
   public int getInitialLocation() {
     return Integer.parseInt(initialLocationField.getText().trim());
   }
 
+  /**
+   * get item capacity.
+   * @return item capacity
+   */
   public int getItemCapacity() {
     return (Integer) itemCapacityField.getSelectedItem();
   }
 
+  /**
+   * get control mode.
+   * @return control mode
+   */
   public String getControlMode() {
     return (String) controlModeComboBox.getSelectedItem();
   }

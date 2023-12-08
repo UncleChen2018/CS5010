@@ -10,6 +10,11 @@ public class TextView implements GameView {
   private Readable input;
   private Appendable output;
 
+  /**
+   * Constructor for TextView.
+   * @param input the input
+   * @param output the output
+   */
   public TextView(Readable input, Appendable output) {
     this.input = input;
     this.output = output;

@@ -1,4 +1,50 @@
 # Milestone Projects of  CS5010
+## MileStone4
+
+### Update
+
+- Add graphic view, now the game is completely MVC pattern.
+- Add Mouse and Keyboard support, you can easily control the game.
+- Support load different map and restart the current game.
+- Friendly user interface.
+
+
+
+### How to use
+
+1. **Open the root directory (not ./res)**. There are three files:
+   1. **FinalGraphDriver.jar,** which is used to run the graphic demo.
+2. **Execute the jar,**  java -jar FinalGraphDriver.jar
+3. **Interact with the program:**
+   1. Click Load World menu button and choose a map (txt file) in the res folder to start a game. 
+   2. Enjoy the game and try every button, pay attention to the right panel also, it gives you important game messages.
+   3. ***Note: green area is where the pet is in, pink area is where the current turn player is in*.**
+   4. Brief manual
+      - Right click: move   
+      - Press Q: pick up an item
+      - Press W: look around
+      - Press E: teleport pet
+      - Press A: make an attack attempt
+
+### Assumption
+
+1. No new assumption, every thing is reasonable enough.
+2. Look around can also see the player is now in, but can not see where the pet is.
+
+### Limitations
+
+1. The GUI can be better, for example the marks hide the name of the room, and sometimes it is hard to find the current player. The instructions is easy to be omitted sometimes.
+2. Some small bugs for the game resizing, but not effect game play.
+3. The view and controller design is not perfect, so it might be difficult to read.
+
+### Reference
+
+- git hub: https://github.com/UncleChen2018/CS5010MileStone
+- UML in lucid chart(updated) :https://lucid.app/lucidchart/70fa68f2-bdda-4c57-87b6-745ffea26f3e/edit?viewport_loc=3142%2C105%2C1923%2C849%2CHWEp-vi-RSFO&invitationId=inv_2cbb0114-547c-4170-9e6e-ba3dbcde144c
+- citation: https://northeastern.instructure.com/courses/157069/assignments/1943045
+
+
+
 ## MileStone3
 
 ### Update

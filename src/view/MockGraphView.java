@@ -9,6 +9,11 @@ public class MockGraphView implements GameView {
 
   private StringBuilder log;
 
+  /**
+   * Constructor for MockGraphView.
+   * 
+   * @param log the log to be checked later.
+   */
   public MockGraphView(StringBuilder log) {
     this.log = log;
   }

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jardesc>
-    <jar path="CS5010MileStone/res/NewDriver.jar"/>
+    <jar path="CS5010MileStone/res/FinalGraphDriver.jar"/>
     <options buildIfNeeded="true" compress="true" descriptionLocation="/CS5010MileStone/create_jar.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
-    <manifest generateManifest="true" mainClassHandleIdentifier="=CS5010MileStone/src&lt;controller{NewDriver.java[NewDriver" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+    <manifest generateManifest="true" mainClassHandleIdentifier="=CS5010MileStone/src&lt;controller{FinalGraphDriver.java[FinalGraphDriver" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
         <sealing sealJar="true">
             <packagesToSeal/>
             <packagesToUnSeal/>
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
-        <file path="/CS5010MileStone/res/map.txt"/>
         <javaElement handleIdentifier="=CS5010MileStone/src"/>
     </selectedElements>
 </jardesc>

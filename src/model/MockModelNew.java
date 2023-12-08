@@ -13,14 +13,29 @@ public class MockModelNew implements GameModel {
   private boolean gameOverWithMaxTurn;
   private boolean gameOverWithWinner;
 
+  /**
+   * Constructor for MockModelNew.
+   * 
+   * @param log the log
+   */
   public MockModelNew(StringBuilder log) {
     this.log = log;
   }
 
+  /**
+   * setGameOverWithMaxTurn.
+   * 
+   * @param gameOverWithMaxTurn the gameOverWithMaxTurn to set
+   */
   public void setGameOverWithMaxTurn(boolean gameOverWithMaxTurn) {
     this.gameOverWithMaxTurn = gameOverWithMaxTurn;
   }
 
+  /**
+   * setGameOverWithWinner.
+   * 
+   * @param gameOverWithWinner the gameOverWithWinner to set
+   */
   public void setGameOverWithWinner(boolean gameOverWithWinner) {
     this.gameOverWithWinner = gameOverWithWinner;
   }

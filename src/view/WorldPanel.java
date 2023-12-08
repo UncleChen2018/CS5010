@@ -23,6 +23,9 @@ class WorldPanel extends JPanel {
   public ArrayList<CharcterMark> playerMarkList;
   private ViewModel model;
 
+  /**
+   *  Constructor for WorldPanel.
+   */
   public WorldPanel() {
     this.roomList = new ArrayList<>();
     // addMouseListener(new RoomClickListener());
@@ -36,6 +39,10 @@ class WorldPanel extends JPanel {
 
   }
 
+  /**
+   * set the model
+   * @param model the model
+   */
   public void setModel(ViewModel model) {
     this.model = model;
   }
@@ -99,6 +106,11 @@ class WorldPanel extends JPanel {
     revalidate();
   }
 
+  /**
+   * get the room rectangle list
+   * @param model the model
+   * @return the room rectangle list
+   */
   public ArrayList<RoomRect> getRoomRect(ViewModel model) {
     roomList = new ArrayList<>();
     for (int i = 0; i < model.getRoomCount(); i++) {
@@ -121,7 +133,11 @@ class WorldPanel extends JPanel {
     public final Rectangle bounds;
     private int index;
     private Rectangle realBounds;
-
+    /**
+     * Constructor for RoomRect.
+     * @param index the index
+     * @param bounds the bounds
+     */
     public RoomRect(int index, Rectangle bounds) {
       this.index = index;
       this.bounds = bounds;
@@ -129,14 +145,26 @@ class WorldPanel extends JPanel {
 
     }
 
+    /**
+     * get the room index
+     * @return  the room index
+     */
     public int getIndex() {
       return index;
     }
 
+    /**
+     * get the real bounds to draw
+     * @return the real bounds to draw
+     */
     public Rectangle getRealBounds() {
       return realBounds;
     }
 
+    /**
+     * set the bounds
+     * @param ratio the ratio
+     */
     public void setBounds(int ratio) {
       realBounds.x = bounds.x * ratio;
       realBounds.y = bounds.y * ratio;
@@ -145,6 +173,11 @@ class WorldPanel extends JPanel {
 
     }
 
+    /**
+     * check if the point is in the room
+     * @param point the point
+     * @return true if the point is in the room
+     */
     public boolean containsPoint(Point point) {
       return realBounds.contains(point);
     }
@@ -156,6 +189,10 @@ class WorldPanel extends JPanel {
     // public int size;
     public Rectangle bounds;
 
+    /**
+     * Constructor for CharcterMark.
+     * @param imagePath the image path
+     */
     public CharcterMark(String imagePath) {
       try {
         this.image = ImageIO.read(new File(imagePath));
@@ -164,27 +201,44 @@ class WorldPanel extends JPanel {
       }
     }
 
+    /**
+     * set the bounds
+     * @param x the x
+     * @param y the y
+     * @param size the size
+     */
     public void setBounds(int x, int y, int size) {
       // this.image = this.image.getScaledInstance(size, size, Image.SCALE_SMOOTH);
       this.bounds = new Rectangle(x, y, size, size);
     }
 
+    /**
+     * get the bounds
+     * @param point the point
+     * @return true if the point is in the bounds
+     */
     public boolean containsPoint(Point point) {
       return bounds.contains(point);
     }
 
+    /**
+     * draw the image
+     * @param g the graphics
+     */
     public void draw(Graphics g) {
       g.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height, null);
     }
 
   }
 
+   /**
+     * get the stored room rectangle list
+     */
   public ArrayList<RoomRect> getStoredRoomRect() {
     return roomList;
   }
 
   // draw icon number N in room with index
-  // TODO: the room should know its target and player list.
   private void drawAllMarks(RoomRect room, int ratio, Graphics g) {
     int location = room.getIndex();
 
