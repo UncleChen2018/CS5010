@@ -16,7 +16,7 @@ import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import org.hamcrest.core.Is;
+
 
 import model.GameModel;
 import view.GameView;
