@@ -35,7 +35,7 @@ class WorldPanel extends JPanel {
       CharcterMark playerMarks = new CharcterMark("./res/graph/player" + i + ".png");
       playerMarkList.add(playerMarks);
     }
-    System.out.println("Marks finished");
+
   }
 
   public void setModel(ViewModel model) {
@@ -69,13 +69,16 @@ class WorldPanel extends JPanel {
         g.fillRect(room.getRealBounds().x, room.getRealBounds().y, room.getRealBounds().width,
             room.getRealBounds().height);
       }
-//
-//      // Draw different borders based on the presence of target and current player
-//      g.setColor(Color.BLACK); // Default border color
-//
-//      // Draw room index and name with a semi-transparent background
-//      g.setColor(new Color(255, 255, 255, 192)); // Semi-transparent white
-//      g.fillRect(room.getRealBounds().x, room.getRealBounds().y, ratio, ratio);
+
+      // Fill the room with pale pink color if the current player is in
+      if (model.getMaxTurn() > 0) {
+        int currentPlayerLocation = model.getPlayerLocation(model.getCurrentPlayer());
+        if (currentPlayerLocation == i) {
+          g.setColor(new Color(255, 182, 193)); // Pale Pink
+          g.fillRect(room.getRealBounds().x, room.getRealBounds().y, room.getRealBounds().width,
+              room.getRealBounds().height);
+        }
+      }
 
       g.setColor(Color.BLACK);
       g.drawString(String.valueOf(room.getIndex()), room.getRealBounds().x + 5,
@@ -158,7 +161,6 @@ class WorldPanel extends JPanel {
     public CharcterMark(String imagePath) {
       try {
         this.image = ImageIO.read(new File(imagePath));
-        System.out.println(imagePath);
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -176,8 +178,7 @@ class WorldPanel extends JPanel {
     public void draw(Graphics g) {
       g.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height, null);
     }
-    
-   
+
   }
 
   public ArrayList<RoomRect> getStoredRoomRect() {
@@ -202,8 +203,6 @@ class WorldPanel extends JPanel {
 
       toDrawList.get(iconToDraw).setBounds(x, y, ratio);
       toDrawList.get(iconToDraw).draw(g);
-      // System.out.println(String.format("In draw marks, %d, %d, %d", iconToDraw, x,
-      // y));
     }
 
   }

@@ -70,7 +70,6 @@ public class World implements GameModel, ViewModel {
    */
   @Override
   public void setupNewWorld(Readable source) throws InputMismatchException {
-    System.out.println("Enter load workd");
     winnerId = -1;
     maxTurn = 0;
     currentTurn = 0;

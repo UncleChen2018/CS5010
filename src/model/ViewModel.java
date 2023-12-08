@@ -226,4 +226,11 @@ public interface ViewModel {
    */
 
   boolean isHumanPlayer(int playerId);
+  
+  /**
+   * Gets a formatted string representation of the target.
+   *
+   * @return a formatted string containing target information
+   */
+  String getTargetString();
 }

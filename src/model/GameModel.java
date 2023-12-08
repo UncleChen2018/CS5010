@@ -168,12 +168,7 @@ public interface GameModel extends ViewModel {
 
   String getRoomString(int location);
 
-  /**
-   * Gets a formatted string representation of the target.
-   *
-   * @return a formatted string containing target information
-   */
-  String getTargetString();
+
 
   /**
    * Gets a formatted string representation of the item with the specified ID.

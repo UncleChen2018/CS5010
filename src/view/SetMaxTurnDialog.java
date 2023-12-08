@@ -76,9 +76,9 @@ public class SetMaxTurnDialog extends JDialog {
 
           if (settingSuccessfully) {
             // Dialog for successful setting
-            JOptionPane.showMessageDialog(SetMaxTurnDialog.this,
-                "Max turns set to " + maxTurn + ". The game is now ready to begin!",
-                "Setting Successful", JOptionPane.INFORMATION_MESSAGE);
+//            JOptionPane.showMessageDialog(SetMaxTurnDialog.this,
+//                "Max turns set to " + maxTurn + ". The game is now ready to begin!",
+//                "Setting Successful", JOptionPane.INFORMATION_MESSAGE);
             setVisible(false);
             dispose();
           } else {

@@ -368,7 +368,7 @@ public class GraphView implements GameView {
 
       private void handleLeftClick(Point mousePoint) {
         if (!model.isHumanPlayer(model.getCurrentPlayer())) {
-          return ;
+          return;
         }
         WorldPanel.RoomRect clickedRoom = getClickedRoomRect(mousePoint);
         if (clickedRoom != null) {
@@ -388,7 +388,7 @@ public class GraphView implements GameView {
 
       private void handleRightClick(Point mousePoint) {
         if (!model.isHumanPlayer(model.getCurrentPlayer())) {
-          return ;
+          return;
         }
         if (!dialogShown) { // Check if the dialog has not been shown
           WorldPanel.RoomRect clickedRoom = getClickedRoomRect(mousePoint);
@@ -409,7 +409,8 @@ public class GraphView implements GameView {
                   "Move to Room", JOptionPane.YES_NO_OPTION);
 
               if (option == JOptionPane.YES_OPTION) {
-                String resultString = controller.processPlayerCommand("moveto", clickedRoom.getIndex());
+                String resultString = controller.processPlayerCommand("moveto",
+                    clickedRoom.getIndex());
                 resultLabel.setText(resultString);
               }
             }
@@ -489,7 +490,7 @@ public class GraphView implements GameView {
 
       private void handlePickup() {
         if (!model.isHumanPlayer(model.getCurrentPlayer())) {
-          return ;
+          return;
         }
         int playerLocation = model.getPlayerLocation(model.getCurrentPlayer());
         ArrayList<Integer> items = model.getRoomItems(playerLocation);
@@ -525,7 +526,7 @@ public class GraphView implements GameView {
 
       private void handleAttack() {
         if (!model.isHumanPlayer(model.getCurrentPlayer())) {
-          return ;
+          return;
         }
         int currentPlayer = model.getCurrentPlayer();
         int playerLocation = model.getPlayerLocation(currentPlayer);
@@ -540,7 +541,6 @@ public class GraphView implements GameView {
         }
 
         ArrayList<Integer> items = model.getPlayerItems(model.getCurrentPlayer());
-        System.out.println("player carries" + items);
 
         // If there are items, show them in buttons for attack selection
         if (!items.isEmpty()) {
@@ -564,7 +564,7 @@ public class GraphView implements GameView {
               options, options[0]);
 
           if (choice >= 0) {
-            System.out.println(String.format("Attack choice is %d", choice));
+
             int itemId = -1;
             if (choice != items.size()) {
               itemId = items.get(choice);
@@ -588,7 +588,7 @@ public class GraphView implements GameView {
 
       private void handleTeleportPet() {
         if (!model.isHumanPlayer(model.getCurrentPlayer())) {
-          return ;
+          return;
         }
         JOptionPane.showMessageDialog(worldlPanel, "Left-click a room to teleport the pet.",
             "Teleport Pet", JOptionPane.INFORMATION_MESSAGE);
@@ -629,7 +629,7 @@ public class GraphView implements GameView {
 
       private void handleLookAround() {
         if (!model.isHumanPlayer(model.getCurrentPlayer())) {
-          return ;
+          return;
         }
         JOptionPane.showMessageDialog(worldlPanel,
             "Click on a neighboring room to look inside.\nPress ESC to exit.", "Look Around",
@@ -728,20 +728,27 @@ public class GraphView implements GameView {
     refresh();
 
   }
-  
-  
+
   @Override
   public void upateResult(String resultString) {
     resultLabel.setText(resultString);
-    
+
   }
-  
-  
 
   @Override
   public void showGameEnd(GameControllerNew controller) {
-    int option = JOptionPane.showConfirmDialog(frame, "The game has ended. Do you want to restart?",
-        "Game Over", JOptionPane.YES_NO_OPTION);
+    String gameResultString = "";
+    if (model.isGameOverWithWinner()) {
+      gameResultString = "The game has ended. " + "Winner is "
+          + model.getPlayerString(model.getWinner()) + "\nDo you want to restart?";
+    } else {
+      if (model.isGameOverWithMaxTurn()) {
+        gameResultString = "The game has ended. " + "No one wins and " + model.getTargetString()
+            + " had escaped." + "\nDo you want to restart?";
+      }
+    }
+    int option = JOptionPane.showConfirmDialog(frame, gameResultString, "Game Over",
+        JOptionPane.YES_NO_OPTION);
 
     if (option == JOptionPane.YES_OPTION) {
       controller.loadWorldFile(null);
@@ -790,7 +797,7 @@ public class GraphView implements GameView {
           if (controller != null) {
 
             controller.loadWorldFile(selectedFile.getPath());
-            // System.out.println(model.getWorldName());
+
           }
         }
       }
