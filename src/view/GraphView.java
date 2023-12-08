@@ -409,8 +409,8 @@ public class GraphView implements GameView {
                   "Move to Room", JOptionPane.YES_NO_OPTION);
 
               if (option == JOptionPane.YES_OPTION) {
-                String result = controller.processPlayerCommand("moveto", clickedRoom.getIndex());
-                resultLabel.setText(result);
+                String resultString = controller.processPlayerCommand("moveto", clickedRoom.getIndex());
+                resultLabel.setText(resultString);
               }
             }
             dialogShown = true;
@@ -512,8 +512,8 @@ public class GraphView implements GameView {
               options, options[0]);
 
           if (choice >= 0) {
-            controller.processPlayerCommand("pickup", items.get(choice));
-
+            String resultString = controller.processPlayerCommand("pickup", items.get(choice));
+            resultLabel.setText(resultString);
           }
         } else {
           // If no items, inform the user
@@ -570,8 +570,8 @@ public class GraphView implements GameView {
               itemId = items.get(choice);
             }
 
-            controller.processPlayerCommand("attack", itemId);
-
+            String resultString = controller.processPlayerCommand("attack", itemId);
+            resultLabel.setText(resultString);
           }
         } else {
           // If no items, ask the user to reconsider
@@ -580,7 +580,8 @@ public class GraphView implements GameView {
               "Attack Selection", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
           if (reconsiderChoice == JOptionPane.YES_OPTION) {
-            controller.processPlayerCommand("attack", -1);
+            String resultString = controller.processPlayerCommand("attack", -1);
+            resultLabel.setText(resultString);
           }
         }
       }
@@ -606,6 +607,7 @@ public class GraphView implements GameView {
                 int index = clickedRoom.getIndex();
 
                 String resultString = controller.processPlayerCommand("movepetto", index);
+                resultLabel.setText(resultString);
 
                 if (!"not valid command".equals(resultString)) {
                   JOptionPane.showMessageDialog(worldlPanel,
@@ -666,7 +668,8 @@ public class GraphView implements GameView {
               // Exit the look around mode
               JOptionPane.showMessageDialog(worldlPanel, "Look around mode exited. Turn end.",
                   "Look Around", JOptionPane.INFORMATION_MESSAGE);
-              controller.processPlayerCommand("lookaroud", -1);
+              String resultString = controller.processPlayerCommand("lookaroud", -1);
+              resultLabel.setText(resultString);
               resetLookAroundMode();
             }
           }
@@ -725,6 +728,15 @@ public class GraphView implements GameView {
     refresh();
 
   }
+  
+  
+  @Override
+  public void upateResult(String resultString) {
+    resultLabel.setText(resultString);
+    
+  }
+  
+  
 
   @Override
   public void showGameEnd(GameControllerNew controller) {

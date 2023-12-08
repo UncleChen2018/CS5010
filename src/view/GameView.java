@@ -39,4 +39,6 @@ public interface GameView {
   void rest();
 
   void showGameEnd(GameControllerNew controller);
+
+  void upateResult(String resultString);
 }

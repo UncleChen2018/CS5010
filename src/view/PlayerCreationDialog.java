@@ -48,7 +48,7 @@ public class PlayerCreationDialog extends JDialog {
     Integer[] capacities = { 1, 2, 3, 4, 5, 6 };
     itemCapacityField = new JComboBox<Integer>(capacities);
     itemCapacityField.setSelectedItem(DEFAULT_CAPACITY);
-    controlModeComboBox = new JComboBox<>(new String[] { "Human", "Computer" });
+    controlModeComboBox = new JComboBox<>(new String[] { "HUMAN", "COMPUTER" });
     addButton = new JButton("Add Player");
 
     // Set initial width for text fields

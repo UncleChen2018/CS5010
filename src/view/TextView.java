@@ -100,6 +100,14 @@ public class TextView implements GameView {
     // TODO Auto-generated method stub
     
   }
+
+  @Override
+  public void upateResult(String resultString) {
+    // TODO Auto-generated method stub
+    
+  }
+  
+  
   
   
   

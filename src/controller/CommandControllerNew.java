@@ -12,6 +12,9 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import org.hamcrest.core.Is;
 
@@ -37,6 +40,8 @@ public class CommandControllerNew implements GameControllerNew {
   private JFrame frame;
   private NumberGenerator generator;
   private String lastFilePath = null;
+
+  private Timer computerPlayerTimer;
 
   // new constructor that accept view and model.
   /**
@@ -158,11 +163,36 @@ public class CommandControllerNew implements GameControllerNew {
     // need to make the initial status update.
     view.updateStatusLabel();
     view.refresh();
-    // TODO if player is AI, controller can generate auto command.
-    // could put it in the view, when meet computer, it will call back
-    //while (!model.isHumanPlayer(model.getCurrentPlayer(currentTurn))) {
-      //generateComputerPlayerTurn();
-    //}
+
+    startComputerPlayerTimer();
+
+    // }
+  }
+
+  private void startComputerPlayerTimer() {
+    int delay = 2000; // Adjust the delay (milliseconds) based on your requirements
+    computerPlayerTimer = new Timer(delay, new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if(model.getMaxTurn() == 0 ||  model.getPlayerCount() == 0
+            || model.isGameOverWithMaxTurn() || model.isGameOverWithWinner()) {
+          return;
+        }
+        // Check if it's a computer player's turn
+        int currentPlayer = model.getCurrentPlayer();
+
+        System.out.println("Timer check: isHumanPlayer = " + model.isHumanPlayer(currentPlayer));
+        System.out.println(model.queryPlayerDetails(currentPlayer));
+        if (!model.isHumanPlayer(currentPlayer)) {
+          // It's a computer player's turn, generate and execute the command
+          System.out.println("Enter player");
+          generateComputerPlayerTurn();
+        }
+      }
+    });
+
+    // Start the timer
+    computerPlayerTimer.start();
   }
 
   // generate computer player command and execute it
@@ -243,6 +273,7 @@ public class CommandControllerNew implements GameControllerNew {
             throw new IllegalStateException("Computer made invaild choice");
         }
       }
+
     }
   }
 
@@ -300,6 +331,8 @@ public class CommandControllerNew implements GameControllerNew {
   public boolean setNewPlayer(String playerName, int initialLocation, int itemCapacity,
       String controlMode) {
     try {
+      System.out.println("set up new player");
+      System.out.println(controlMode);
       model.addNewPlayer(playerName, initialLocation, itemCapacity, "HUMAN".equals(controlMode));
       view.refresh();
       return true;
@@ -313,6 +346,9 @@ public class CommandControllerNew implements GameControllerNew {
   public String processPlayerCommand(String command, int extraId) {
     if (command == null) {
       return "No command sent";
+    }
+    if (model.isGameOverWithMaxTurn() || model.isGameOverWithWinner()) {
+      computerPlayerTimer.stop();
     }
     SimpleCommand cmd = null;
     int currentPlayer = model.getCurrentPlayer();
@@ -338,10 +374,13 @@ public class CommandControllerNew implements GameControllerNew {
     // TODO here , if a command will execute, and should peek for the next command.
     if (cmd != null) {
       String resultString = cmd.execute(model);
+      System.out.println(resultString);
       view.refresh();
+      // here freeze the turn
       if (model.isGameOverWithWinner()) {
         view.showGameEnd(this);
         view.updateStatusLabel();
+        view.upateResult(resultString);
         return resultString;
       }
       currentTurn++;
@@ -352,9 +391,11 @@ public class CommandControllerNew implements GameControllerNew {
       if (model.isGameOverWithMaxTurn()) {
         view.showGameEnd(this);
       }
+      view.upateResult(resultString);
 
       return resultString;
     } else {
+      view.upateResult(command + "is not supported");
       return "not valid command";
     }
   }
