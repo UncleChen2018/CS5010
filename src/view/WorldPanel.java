@@ -24,7 +24,7 @@ class WorldPanel extends JPanel {
   private ViewModel model;
 
   /**
-   *  Constructor for WorldPanel.
+   * Constructor for WorldPanel.
    */
   public WorldPanel() {
     this.roomList = new ArrayList<>();
@@ -40,7 +40,8 @@ class WorldPanel extends JPanel {
   }
 
   /**
-   * set the model
+   * set the model.
+   * 
    * @param model the model
    */
   public void setModel(ViewModel model) {
@@ -107,7 +108,8 @@ class WorldPanel extends JPanel {
   }
 
   /**
-   * get the room rectangle list
+   * get the room rectangle list.
+   * 
    * @param model the model
    * @return the room rectangle list
    */
@@ -133,9 +135,11 @@ class WorldPanel extends JPanel {
     public final Rectangle bounds;
     private int index;
     private Rectangle realBounds;
+
     /**
      * Constructor for RoomRect.
-     * @param index the index
+     * 
+     * @param index  the index
      * @param bounds the bounds
      */
     public RoomRect(int index, Rectangle bounds) {
@@ -146,15 +150,17 @@ class WorldPanel extends JPanel {
     }
 
     /**
-     * get the room index
-     * @return  the room index
+     * get the room index.
+     * 
+     * @return the room index
      */
     public int getIndex() {
       return index;
     }
 
     /**
-     * get the real bounds to draw
+     * get the real bounds to draw.
+     * 
      * @return the real bounds to draw
      */
     public Rectangle getRealBounds() {
@@ -162,7 +168,8 @@ class WorldPanel extends JPanel {
     }
 
     /**
-     * set the bounds
+     * set the bounds.
+     * 
      * @param ratio the ratio
      */
     public void setBounds(int ratio) {
@@ -174,7 +181,8 @@ class WorldPanel extends JPanel {
     }
 
     /**
-     * check if the point is in the room
+     * check if the point is in the room.
+     * 
      * @param point the point
      * @return true if the point is in the room
      */
@@ -191,6 +199,7 @@ class WorldPanel extends JPanel {
 
     /**
      * Constructor for CharcterMark.
+     * 
      * @param imagePath the image path
      */
     public CharcterMark(String imagePath) {
@@ -202,9 +211,10 @@ class WorldPanel extends JPanel {
     }
 
     /**
-     * set the bounds
-     * @param x the x
-     * @param y the y
+     * set the bounds.
+     * 
+     * @param x    the x
+     * @param y    the y
      * @param size the size
      */
     public void setBounds(int x, int y, int size) {
@@ -213,7 +223,8 @@ class WorldPanel extends JPanel {
     }
 
     /**
-     * get the bounds
+     * get the bounds.
+     * 
      * @param point the point
      * @return true if the point is in the bounds
      */
@@ -222,7 +233,8 @@ class WorldPanel extends JPanel {
     }
 
     /**
-     * draw the image
+     * draw the image.
+     * 
      * @param g the graphics
      */
     public void draw(Graphics g) {
@@ -231,9 +243,9 @@ class WorldPanel extends JPanel {
 
   }
 
-   /**
-     * get the stored room rectangle list
-     */
+  /**
+   * get the stored room rectangle list.
+   */
   public ArrayList<RoomRect> getStoredRoomRect() {
     return roomList;
   }
