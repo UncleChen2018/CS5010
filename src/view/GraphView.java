@@ -13,8 +13,6 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -25,10 +23,8 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -54,7 +50,7 @@ public class GraphView implements GameView {
   // the view model, which is the read only subset of game model.
   ViewModel model;
   private JFrame frame;
-  // TODO: maybe world panel should get its own class.
+
   private JScrollPane worldScrollPane;
   private JScrollPane infoScrollPane;
 
@@ -400,9 +396,7 @@ public class GraphView implements GameView {
             if (!model.isNeighbor(toMove, base)) {
               JOptionPane.showMessageDialog(frame, "You must choose a neighbor room to move.",
                   "Invalid Move", JOptionPane.WARNING_MESSAGE);
-            }
-
-            else {
+            } else {
               int option = JOptionPane.showConfirmDialog(frame,
                   "Do you want to move to Room " + clickedRoom.getIndex() + "?\n\n"
                       + model.getRoomName(clickedRoom.getIndex()),
@@ -651,7 +645,6 @@ public class GraphView implements GameView {
                     String roomContents = model.queryRoomDetails(roomIndex);
                     resultLabel.setText(roomContents);
                   } else {
-                    int roomIndex = room.getIndex();
                     String roomContents = "Hardly to see anything!";
                     resultLabel.setText(roomContents);
                   }

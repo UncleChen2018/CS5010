@@ -1,17 +1,31 @@
 package view;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
+/**
+ *  The panel to display player information.
+ */
 public class PlayerInfoPanel extends JPanel {
+
+  private static final long serialVersionUID = 1200975204838502497L;
   private JTextField playerNameField;
   private JTextField initialLocationField;
   private JTextField itemCapacityField;
   private JComboBox<String> controlModeComboBox;
   private JButton addButton;
 
+  /**
+   *  Constructor for PlayerInfoPanel.
+   */
   public PlayerInfoPanel() {
     initComponents();
     addComponents();
@@ -24,7 +38,7 @@ public class PlayerInfoPanel extends JPanel {
     itemCapacityField = new JTextField();
     controlModeComboBox = new JComboBox<>(new String[] { "Human", "Computer" });
     addButton = new JButton("Add Player");
-    
+
     // Set initial width for text fields
     playerNameField.setColumns(15);
     initialLocationField.setColumns(15);
@@ -80,11 +94,10 @@ public class PlayerInfoPanel extends JPanel {
     addButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        // Perform checks and add player logic here
-        String playerName = playerNameField.getText();
-        String initialLocation = initialLocationField.getText();
-        String itemCapacity = itemCapacityField.getText();
-        String controlMode = (String) controlModeComboBox.getSelectedItem();
+        playerNameField.getText();
+        initialLocationField.getText();
+        itemCapacityField.getText();
+        controlModeComboBox.getSelectedItem();
 
         // Add your logic to validate and add the player
         // For example, display an error message if fields are empty or invalid
@@ -97,17 +110,4 @@ public class PlayerInfoPanel extends JPanel {
     });
   }
 
-  public static void main(String[] args) {
-    SwingUtilities.invokeLater(() -> {
-      JFrame frame = new JFrame("Player Info Panel");
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-      PlayerInfoPanel playerInfoPanel = new PlayerInfoPanel();
-      frame.add(playerInfoPanel);
-
-      frame.pack();
-      frame.setLocationRelativeTo(null);
-      frame.setVisible(true);
-    });
-  }
 }

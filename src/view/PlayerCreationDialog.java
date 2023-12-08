@@ -1,12 +1,11 @@
 package view;
 
-import model.ViewModel;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import controller.GameControllerNew;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.InputVerifier;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -16,21 +15,28 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import model.ViewModel;
 
-import controller.GameControllerNew;
-
+/**
+ *  The dialog to create a player.
+ */
 public class PlayerCreationDialog extends JDialog {
 
   private static final long serialVersionUID = 4080458570669687911L;
+  private static final int DEFAULT_CAPACITY = 2;
   private JTextField playerNameField;
   private JTextField initialLocationField;
   private JComboBox<Integer> itemCapacityField;
   private JComboBox<String> controlModeComboBox;
   private JButton addButton;
   private ViewModel model;
-  private final int DEFAULT_CAPACITY = 2;
 
+  /**
+   * Constructor for PlayerCreationDialog.
+   * @param parentFrame the parent frame
+   * @param model the view model
+   * @param controller the game controller
+   */
   public PlayerCreationDialog(JFrame parentFrame, ViewModel model, GameControllerNew controller) {
     super(parentFrame, "Create Player", true);
     this.model = model;
@@ -129,7 +135,7 @@ public class PlayerCreationDialog extends JDialog {
           JOptionPane.showMessageDialog(PlayerCreationDialog.this,
               "Failed to add player. Please check the input.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+
       }
     });
   }

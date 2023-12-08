@@ -21,7 +21,6 @@ import view.GameView;
 public class CommandController implements GameController {
 
   private GameModel model;
-  private GameView view;
   private Appendable out;
   private Scanner scan;
   private int maxTurn;
@@ -31,16 +30,15 @@ public class CommandController implements GameController {
   private JFrame frame;
   private NumberGenerator generator;
 
-  //TODO rewrite t
+
   
   /**
-   * New standard controller, which 
-   * @param model
-   * @param view
+   * New standard controller, which aaccept view and model.
+   * @param model the model
+   * @param view the view
    */
   public CommandController(GameModel model, GameView view) {
     this.model = model;
-    this.view = view;
   }
 
   // Build a controller, so the in, out, and MaxTurn is set.

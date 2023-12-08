@@ -1,9 +1,10 @@
 package view;
 
-import java.util.List;
-
 import controller.GameControllerNew;
 
+/**
+ * The mock view for test controller.
+ */
 public class MockGraphView implements GameView {
 
   private StringBuilder log;
@@ -11,7 +12,6 @@ public class MockGraphView implements GameView {
   public MockGraphView(StringBuilder log) {
     this.log = log;
   }
-
 
   @Override
   public void drawMap(GameControllerNew controller) {
@@ -58,7 +58,7 @@ public class MockGraphView implements GameView {
   @Override
   public boolean requiresGuiOutput() {
     log.append("requiresGuiOutput called").append("\n");
-    return true; 
+    return true;
   }
 
   @Override

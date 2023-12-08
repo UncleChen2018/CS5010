@@ -1,11 +1,11 @@
 package view;
 
+import controller.GameControllerNew;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.InputVerifier;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -14,19 +14,24 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-
-import controller.GameControllerNew;
 import model.ViewModel;
 
+/**
+ * The dialog to set max turn.
+ */
 public class SetMaxTurnDialog extends JDialog {
 
   private static final long serialVersionUID = -1013167432704287870L;
   private JTextField maxTurnsField;
   private JButton setButton;
 
-  private ViewModel model;
-
+  /**
+   * Constructor for SetMaxTurnDialog.
+   * 
+   * @param parentFrame the parent frame
+   * @param model       the view model
+   * @param controller  the game controller
+   */
   public SetMaxTurnDialog(JFrame parentFrame, ViewModel model, GameControllerNew controller) {
     super(parentFrame, "Set Max Turns", true);
     initComponents();
@@ -75,10 +80,6 @@ public class SetMaxTurnDialog extends JDialog {
           boolean settingSuccessfully = controller.setMaxTurn(maxTurn);
 
           if (settingSuccessfully) {
-            // Dialog for successful setting
-//            JOptionPane.showMessageDialog(SetMaxTurnDialog.this,
-//                "Max turns set to " + maxTurn + ". The game is now ready to begin!",
-//                "Setting Successful", JOptionPane.INFORMATION_MESSAGE);
             setVisible(false);
             dispose();
           } else {
@@ -130,7 +131,7 @@ public class SetMaxTurnDialog extends JDialog {
         showError("Invalid input. Please enter a valid integer.");
         maxTurnsField.setText("");
         return false; // Not a valid integer
-      } 
+      }
     }
 
     private void showError(String message) {

@@ -1,14 +1,9 @@
 package view;
 
-import java.io.InputStreamReader;
-import controller.GameController;
 import controller.GameControllerNew;
 
 /**
  * The text-based view.
- */
-/**
- * 
  */
 public class TextView implements GameView {
 
@@ -44,79 +39,63 @@ public class TextView implements GameView {
     // TODO Auto-generated method stub
     return this.output;
   }
-  
+
   @Override
   public boolean requiresGuiOutput() {
     return false;
   }
 
-  
-  
   @Override
   public void showWelcomeMessage() {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void showFarewellMessage() {
-    // TODO Auto-generated method stub 
+    // TODO Auto-generated method stub
   }
 
   @Override
   public void drawMap(GameControllerNew controller) {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void displayAddPlayer(GameControllerNew controller) {
     // TODO Auto-generated method stub
-    
+
   }
-
-
 
   @Override
   public void updateStatusLabel() {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void disPlaySetGameMaxTurn(GameControllerNew controller) {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void rest() {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void showGameEnd(GameControllerNew controller) {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void upateResult(String resultString) {
     // TODO Auto-generated method stub
-    
+
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 
 }

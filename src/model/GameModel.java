@@ -1,7 +1,6 @@
 package model;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 /**
@@ -39,7 +38,6 @@ public interface GameModel extends ViewModel {
    */
   String getName();
 
-
   /**
    * Set player to certain space.
    * 
@@ -54,10 +52,6 @@ public interface GameModel extends ViewModel {
    * @param location room's index.
    */
   void setPetLocation(int location);
-
-
-
-
 
   /**
    * Decides which player should take action on the turn.
@@ -81,15 +75,11 @@ public interface GameModel extends ViewModel {
   void addNewPlayer(String name, int initLocation, int capacity, boolean isHumanControl)
       throws IllegalArgumentException;
 
-
-
   /**
    * Move target to the next room. Target will move according to the index of
    * room.
    */
   void moveTargetNextRoom();
-
-
 
   /**
    * Given room location, query its item information.
@@ -108,8 +98,6 @@ public interface GameModel extends ViewModel {
    */
   void pickUpitem(int playerId, int itemId);
 
-
-
   /**
    * Gets the location index of the item if it is in a room.
    * 
@@ -118,12 +106,6 @@ public interface GameModel extends ViewModel {
    */
 
   int getItemLocation(int itemId);
-
-
-
-
-
-
 
   /**
    * Queries and retrieves information about the neighboring rooms of the
@@ -134,7 +116,6 @@ public interface GameModel extends ViewModel {
    */
 
   String queryRoomNeighbors(int playerLocation);
-
 
   /**
    * Checks if the player with the specified ID has reached their item capacity.
@@ -154,11 +135,6 @@ public interface GameModel extends ViewModel {
 
   int getRoomItemCount(int location);
 
-
-
-
-
-
   /**
    * Gets a formatted string representation of the room at the specified location.
    *
@@ -168,8 +144,6 @@ public interface GameModel extends ViewModel {
 
   String getRoomString(int location);
 
-
-
   /**
    * Gets a formatted string representation of the item with the specified ID.
    *
@@ -178,8 +152,6 @@ public interface GameModel extends ViewModel {
    */
 
   String getItemString(int itemId);
-
-
 
   /**
    * Gets a formatted string representation of the pet.
@@ -196,8 +168,6 @@ public interface GameModel extends ViewModel {
    */
   boolean isLocationValid(int location);
 
-
-
   /**
    * Retrieves the damage value of the specified item.
    *
@@ -205,8 +175,6 @@ public interface GameModel extends ViewModel {
    * @return An integer representing the damage of the item.
    */
   int getItemDamage(int itemId);
-
-
 
   /**
    * Performs an attack on the target with the specified amount of damage.
@@ -230,9 +198,6 @@ public interface GameModel extends ViewModel {
    * @param playerId The ID of the player to be set as the winner.
    */
   void setWinner(int playerId);
-
-
-
 
   /**
    * Checks if the player is currently visible by other player. A room is visible
@@ -259,8 +224,6 @@ public interface GameModel extends ViewModel {
    */
   void movePetNextRoom();
 
-
-
   /**
    * Teleport pet to the next room. Pet will lose all its memory, and begin a new
    * start to move according to the Depth First Search to different Room.
@@ -269,7 +232,6 @@ public interface GameModel extends ViewModel {
    */
   void teleportPetLocation(int location);
 
-  
   /**
    * Make the next turn.
    */
@@ -277,6 +239,7 @@ public interface GameModel extends ViewModel {
 
   /**
    * Get the max turn for the game.
+   * 
    * @param maxTurn the max turn for the game.
    */
   void setMaxTurn(int maxTurn);

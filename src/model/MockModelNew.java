@@ -9,33 +9,32 @@ import java.util.ArrayList;
 public class MockModelNew implements GameModel {
 
   private StringBuilder log;
-  
+
   private boolean gameOverWithMaxTurn;
   private boolean gameOverWithWinner;
 
+  public MockModelNew(StringBuilder log) {
+    this.log = log;
+  }
+
   public void setGameOverWithMaxTurn(boolean gameOverWithMaxTurn) {
-      this.gameOverWithMaxTurn = gameOverWithMaxTurn;
+    this.gameOverWithMaxTurn = gameOverWithMaxTurn;
   }
 
   public void setGameOverWithWinner(boolean gameOverWithWinner) {
-      this.gameOverWithWinner = gameOverWithWinner;
+    this.gameOverWithWinner = gameOverWithWinner;
   }
-  
+
   @Override
   public boolean isGameOverWithMaxTurn() {
-      log.append("isGameOverWithMaxTurn called\n");
-      return gameOverWithMaxTurn;
+    log.append("isGameOverWithMaxTurn called\n");
+    return gameOverWithMaxTurn;
   }
 
   @Override
   public boolean isGameOverWithWinner() {
-      log.append("isGameOverWithWinner called\n");
-      return gameOverWithWinner;
-  }
-  
-
-  public MockModelNew(StringBuilder log) {
-    this.log = log;
+    log.append("isGameOverWithWinner called\n");
+    return gameOverWithWinner;
   }
 
   @Override
@@ -75,6 +74,12 @@ public class MockModelNew implements GameModel {
   @Override
   public int getCurrentPlayer(int turn) {
     log.append(String.format("getCurrentPlayer called, turn = %d\n", turn));
+    return 0;
+  }
+
+  @Override
+  public int getCurrentPlayer() {
+    log.append("getCurrentPlayer called\n");
     return 0;
   }
 
@@ -241,13 +246,6 @@ public class MockModelNew implements GameModel {
     return null;
   }
 
-  @Override
-  public int getCurrentPlayer() {
-    log.append("getCurrentPlayer called\n");
-    return 0;
-  }
-
- 
   @Override
   public boolean isNeighbor(int quest, int base) {
     log.append(String.format("isNeighbor called, quest = %d, base = %d\n", quest, base));

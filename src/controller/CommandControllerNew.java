@@ -1,5 +1,7 @@
 package controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,11 +15,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-
-
 import model.GameModel;
 import view.GameView;
 
@@ -43,12 +40,11 @@ public class CommandControllerNew implements GameControllerNew {
 
   private Timer computerPlayerTimer;
 
-  // new constructor that accept view and model.
   /**
-   * @param model
-   * @param view
-   * @param worldSource
-   * @param turnLimit
+   * New constructor that receives a model and a view.
+   * 
+   * @param model the model
+   * @param view  the view
    */
   public CommandControllerNew(GameModel model, GameView view) {
     this.model = model;
@@ -57,9 +53,11 @@ public class CommandControllerNew implements GameControllerNew {
   }
 
   /**
-   * @param model
-   * @param view
-   * @param numbers
+   * New constructor that receives a model, a view, and custom numbers.
+   * 
+   * @param model   the model
+   * @param view    the view
+   * @param numbers custom numbers to be used by the generator
    */
   public CommandControllerNew(GameModel model, GameView view, int... numbers) {
     this.model = model;
@@ -197,81 +195,79 @@ public class CommandControllerNew implements GameControllerNew {
 
   @Override
   public void generateComputerPlayerTurn() {
-    {
 
-      int activePlayer = model.getCurrentPlayer(currentTurn);
+    int activePlayer = model.getCurrentPlayer(currentTurn);
 
-      int curLocation = model.getPlayerLocation(activePlayer);
+    int curLocation = model.getPlayerLocation(activePlayer);
 
-      // make the computer fierce so they attack the target each time possible
-      if (curLocation == model.getTargetLocation() && model.isAttackInvisible(activePlayer)) {
-        int itemToUse = -1;
-        int maxDamage = 1;
-        for (int itemId : model.getPlayerItems(activePlayer)) {
-          int damage = model.getItemDamage(itemId);
-          if (model.getItemDamage(itemId) > maxDamage) {
-            itemToUse = itemId;
-            maxDamage = damage;
-          }
-        }
-
-        processPlayerCommand("attack", itemToUse);
-        // cmd = new AttackTarget(activePlayer, itemToUse);
-      } else {
-        int nextInt = generator.getNextNumber();
-        // let computer choose which action to take
-        int actionChoice = -1;
-        // make computer smart, if not able to pickup, omit this option, not choose 1.
-        if (model.playerReachCapacity(activePlayer) || model.getRoomItemCount(curLocation) == 0) {
-          switch (nextInt % 3) {
-            case 0:
-              actionChoice = 0;
-              break;
-            case 1:
-              actionChoice = 2;
-              break;
-            case 2:
-              actionChoice = 3;
-              break;
-            default:
-              break;
-          }
-        } else {
-          actionChoice = nextInt % 4;
-        }
-
-        switch (actionChoice) {
-          case 0:
-            nextInt = generator.getNextNumber();
-            ArrayList<Integer> neighbors = model.getRoomNeighbors(curLocation);
-            int destLocation = nextInt % neighbors.size();
-            processPlayerCommand("moveto", neighbors.get(destLocation));
-            // cmd = new MoveToNeighbor(activePlayer, neighbors.get(destLocation));
-            break;
-          case 1:
-            nextInt = generator.getNextNumber();
-            ArrayList<Integer> items = model.getRoomItems(curLocation);
-            int pickId = nextInt % items.size();
-            processPlayerCommand("pickup", items.get(pickId));
-            // cmd = new PickUpItem(activePlayer, items.get(pickId));
-            break;
-          case 2:
-            processPlayerCommand("lookaroud", -1);
-            // cmd = new LookAround(activePlayer);
-            break;
-          case 3:
-            nextInt = generator.getNextNumber();
-            int moveTo = nextInt % model.getRoomCount();
-            processPlayerCommand("movepetto", moveTo);
-            // cmd = new MovePet(activePlayer, moveTo);
-            break;
-
-          default:
-            throw new IllegalStateException("Computer made invaild choice");
+    // make the computer fierce so they attack the target each time possible
+    if (curLocation == model.getTargetLocation() && model.isAttackInvisible(activePlayer)) {
+      int itemToUse = -1;
+      int maxDamage = 1;
+      for (int itemId : model.getPlayerItems(activePlayer)) {
+        int damage = model.getItemDamage(itemId);
+        if (model.getItemDamage(itemId) > maxDamage) {
+          itemToUse = itemId;
+          maxDamage = damage;
         }
       }
 
+      processPlayerCommand("attack", itemToUse);
+      // cmd = new AttackTarget(activePlayer, itemToUse);
+    } else {
+      int nextInt = generator.getNextNumber();
+      // let computer choose which action to take
+      int actionChoice = -1;
+      // make computer smart, if not able to pickup, omit this option, not choose 1.
+      if (model.playerReachCapacity(activePlayer) || model.getRoomItemCount(curLocation) == 0) {
+        switch (nextInt % 3) {
+          case 0:
+            actionChoice = 0;
+            break;
+          case 1:
+            actionChoice = 2;
+            break;
+          case 2:
+            actionChoice = 3;
+            break;
+          default:
+            break;
+        }
+      } else {
+        actionChoice = nextInt % 4;
+      }
+
+      switch (actionChoice) {
+        case 0:
+          nextInt = generator.getNextNumber();
+          ArrayList<Integer> neighbors = model.getRoomNeighbors(curLocation);
+          int destLocation = nextInt % neighbors.size();
+          processPlayerCommand("moveto", neighbors.get(destLocation));
+          // cmd = new MoveToNeighbor(activePlayer, neighbors.get(destLocation));
+          break;
+        case 1:
+          nextInt = generator.getNextNumber();
+          ArrayList<Integer> items = model.getRoomItems(curLocation);
+          int pickId = nextInt % items.size();
+          processPlayerCommand("pickup", items.get(pickId));
+          // cmd = new PickUpItem(activePlayer, items.get(pickId));
+          break;
+        case 2:
+          processPlayerCommand("lookaroud", -1);
+          // cmd = new LookAround(activePlayer);
+          break;
+        case 3:
+          nextInt = generator.getNextNumber();
+          int moveTo = nextInt % model.getRoomCount();
+          processPlayerCommand("movepetto", moveTo);
+          // cmd = new MovePet(activePlayer, moveTo);
+          break;
+
+        default:
+          throw new IllegalStateException("Computer made invaild choice");
+      }
     }
+
   }
 
   @Override
@@ -366,7 +362,7 @@ public class CommandControllerNew implements GameControllerNew {
       default:
         break;
     }
-    // TODO here , if a command will execute, and should peek for the next command.
+
     if (cmd != null) {
       String resultString = cmd.execute(model);
       view.upateResult(resultString);
@@ -388,7 +384,6 @@ public class CommandControllerNew implements GameControllerNew {
         computerPlayerTimer.stop();
         view.showGameEnd(this);
       }
-      
 
       return resultString;
     } else {
@@ -406,7 +401,6 @@ public class CommandControllerNew implements GameControllerNew {
       image = model.drawWorld();
       out.append("finished\n");
       displayGameInfo();
-
 
       // show the map and ask for save.
       String line;

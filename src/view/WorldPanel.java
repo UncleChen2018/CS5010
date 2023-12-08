@@ -9,10 +9,8 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-
 import model.ViewModel;
 
 class WorldPanel extends JPanel {

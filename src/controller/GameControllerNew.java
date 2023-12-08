@@ -17,12 +17,16 @@ public interface GameControllerNew {
   void start(GameModel model);
 
   /**
-   * @param worldSource
+   * Sets the world resource for the game.
+   * @param worldSource The world resource.
    */
   void setWorldResource(Readable worldSource);
 
+
   /**
-   * @param turnLimit
+   * Sets the maximum number of turns for the game.
+   * @param turnLimit The maximum number of turns.
+   * @return True if the maximum number of turns is successfully set
    */
   boolean setMaxTurn(int turnLimit);
 

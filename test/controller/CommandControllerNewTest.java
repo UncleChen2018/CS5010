@@ -156,7 +156,8 @@ public class CommandControllerNewTest {
     // when calling controller.setNewPlayer(String playerName, int initialLocation,
     // int itemCapacity, String controlMode)
     controller.setNewPlayer("Ai", 0, 1, "HUMAN");
-    String expectedLog = "addNewPlayer called, name = Ai, initLocation = 0, capacity = 1, isHumanControl = true\n";
+    String expectedLog = "addNewPlayer called, name = Ai, "
+        + "initLocation = 0, capacity = 1, isHumanControl = true\n";
     // assertEquals(log.toString(), expectedLog);
     assertTrue(log.toString().contains(expectedLog));
   }
@@ -168,7 +169,8 @@ public class CommandControllerNewTest {
     // when calling controller.setNewPlayer(String playerName, int initialLocation,
     // int itemCapacity, String controlMode)
     controller.setNewPlayer("Ai", 0, 1, "COMPUTER");
-    String expectedLog = "addNewPlayer called, name = Ai, initLocation = 0, capacity = 1, isHumanControl = false\n";
+    String expectedLog = "addNewPlayer called, name = Ai, initLocation = 0,"
+        + " capacity = 1, isHumanControl = false\n";
     // assertEquals(log.toString(), expectedLog);
     assertTrue(log.toString().contains(expectedLog));
   }
