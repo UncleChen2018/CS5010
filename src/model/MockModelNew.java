@@ -9,6 +9,30 @@ import java.util.ArrayList;
 public class MockModelNew implements GameModel {
 
   private StringBuilder log;
+  
+  private boolean gameOverWithMaxTurn;
+  private boolean gameOverWithWinner;
+
+  public void setGameOverWithMaxTurn(boolean gameOverWithMaxTurn) {
+      this.gameOverWithMaxTurn = gameOverWithMaxTurn;
+  }
+
+  public void setGameOverWithWinner(boolean gameOverWithWinner) {
+      this.gameOverWithWinner = gameOverWithWinner;
+  }
+  
+  @Override
+  public boolean isGameOverWithMaxTurn() {
+      log.append("isGameOverWithMaxTurn called\n");
+      return gameOverWithMaxTurn;
+  }
+
+  @Override
+  public boolean isGameOverWithWinner() {
+      log.append("isGameOverWithWinner called\n");
+      return gameOverWithWinner;
+  }
+  
 
   public MockModelNew(StringBuilder log) {
     this.log = log;
@@ -223,18 +247,7 @@ public class MockModelNew implements GameModel {
     return 0;
   }
 
-  @Override
-  public boolean isGameOverWithWinner() {
-    log.append("isGameOverWithWinner called\n");
-    return false;
-  }
-
-  @Override
-  public boolean isGameOverWithMaxTurn() {
-    log.append("isGameOverWithMaxTurn called\n");
-    return false;
-  }
-
+ 
   @Override
   public boolean isNeighbor(int quest, int base) {
     log.append(String.format("isNeighbor called, quest = %d, base = %d\n", quest, base));
@@ -286,7 +299,7 @@ public class MockModelNew implements GameModel {
   @Override
   public ArrayList<Integer> getRoomNeighbors(int location) {
     log.append(String.format("getRoomNeighbors called, location = %d\n", location));
-    return null;
+    return new ArrayList<Integer>();
   }
 
   @Override
