@@ -15,7 +15,7 @@ Fortune the Cat
 0 0 3 4 Gloom Hollow
 0 6 2 8 Shadowmire Vault
 0 9 1 13 Whispering Passage
-0 14 3 16 Grim Den
+0 14 2 16 Grim Den
 0 18 3 22 Ebon Nexus
 4 17 6 21 Phantom Chamber
 8 18 10 22 Spectral Sanctum
