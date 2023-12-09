@@ -61,8 +61,8 @@
    2. **map.txt**, the plain txt file which store the sample data of the world. Can also offer other files (like *dungeon.txt*).
    3. **WorldMap.png**, a sample picture representation that is generated according to the world data. Which will be overwrite automatically if you successfully runs the jar. Can also save in other name (like dungeon.png).
 2. **Execute the jar,** this run recommend using file for reading .
-   1. **Read from file:** java - jar Driver.jar -f [filename] [max Turn], 
-   2. **e. g.** java -jar Driver.jar -f map.txt 100
+   1. **Read from file:** java - jar NewDriver.jar -f [filename] [max Turn], 
+   2. **e. g.** java -jar NewDriver.jar -f map.txt 100
    3. **The last 100 means the max turn:** it should be positive 
 3. **Interact with the program:**
    1. First, a window will prompt out, show the map. The window can be put aside as reference as you further interact with the program. ***The window would turn off automatically after the game is ended or you choose to quit.*** 

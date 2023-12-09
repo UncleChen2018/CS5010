@@ -742,14 +742,34 @@ public class GraphView implements GameView {
     }
     int option = JOptionPane.showConfirmDialog(frame, gameResultString, "Game Over",
         JOptionPane.YES_NO_OPTION);
-
+    
     if (option == JOptionPane.YES_OPTION) {
+      removeAllListeners(worldlPanel);
+      // make status to the original.
+
+      setGmamStatusPanelInitial();
       controller.loadWorldFile(null);
 
+      frame.repaint();
     }
-    refresh();
-
   }
+  
+
+  private void removeAllListeners(Component component) {
+    for (MouseListener listener : component.getMouseListeners()) {
+      component.removeMouseListener(listener);
+    }
+
+    for (MouseMotionListener listener : component.getMouseMotionListeners()) {
+      component.removeMouseMotionListener(listener);
+    }
+
+    for (KeyListener listener : component.getKeyListeners()) {
+      component.removeKeyListener(listener);
+    }
+  }
+
+
 
   @Override
   public void displayAddPlayer(GameControllerNew controller) {
